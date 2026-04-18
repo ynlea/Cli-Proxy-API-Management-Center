@@ -6,55 +6,22 @@
   align-items: center;
   justify-content: center;
   gap: $spacing-sm;
-  position: relative;
-  overflow: hidden;
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   padding: 10px 16px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   cursor: pointer;
   transition:
     border-color $transition-fast,
     box-shadow $transition-fast,
     background-color $transition-fast,
     color $transition-fast;
-  background:
-    radial-gradient(
-      circle at top left,
-      color-mix(in srgb, var(--accent-sky) 12%, transparent),
-      transparent 42%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 54%, transparent),
-      transparent 68%
-    ),
-    color-mix(in srgb, var(--surface-layer) 94%, var(--bg-secondary));
+  background: var(--surface-layer);
   color: var(--text-primary);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--border-primary) 40%, transparent),
-    var(--shadow);
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      color-mix(in srgb, var(--accent-earth) 46%, transparent),
-      transparent
-    );
-    pointer-events: none;
-  }
+  box-shadow: none;
 
   > * {
-    position: relative;
-    z-index: 1;
     color: inherit;
   }
 
@@ -65,118 +32,48 @@
   }
 
   &.btn-primary {
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--primary-hover) 28%, transparent),
-      color-mix(in srgb, var(--primary-color) 82%, var(--bg-primary))
-    );
+    background: var(--primary-color);
     color: var(--primary-contrast, #fff);
-    border-color: color-mix(in srgb, var(--primary-color) 58%, var(--border-primary));
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--primary-color) 24%, transparent),
-      0 10px 22px color-mix(in srgb, var(--primary-color) 14%, transparent);
-
-    &::before {
-      background: linear-gradient(
-        90deg,
-        transparent,
-        color-mix(in srgb, var(--primary-active) 56%, transparent),
-        transparent
-      );
-    }
+    border-color: var(--primary-color);
 
     &:hover:not(:disabled) {
-      background: linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--primary-hover) 36%, transparent),
-        color-mix(in srgb, var(--primary-color) 92%, var(--bg-primary))
-      );
-      border-color: color-mix(in srgb, var(--primary-color) 72%, var(--border-primary));
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
       color: var(--primary-contrast);
     }
   }
 
   &.btn-secondary {
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--accent-earth) 14%, transparent),
-        color-mix(in srgb, var(--accent-sky) 10%, transparent)
-      ),
-      color-mix(in srgb, var(--surface-elevated, var(--surface-layer)) 96%, var(--bg-tertiary));
+    background: var(--surface-elevated, var(--surface-layer));
     border-color: color-mix(in srgb, var(--border-primary) 88%, transparent);
     color: var(--text-primary);
 
     &:hover:not(:disabled) {
-      background:
-        linear-gradient(
-          180deg,
-          color-mix(in srgb, var(--accent-earth) 20%, transparent),
-          color-mix(in srgb, var(--accent-sky) 14%, transparent)
-        ),
-        color-mix(
-          in srgb,
-          var(--surface-elevated, var(--surface-layer)) 96%,
-          var(--bg-hover, var(--bg-tertiary))
-        );
+      background: var(--bg-hover, var(--bg-tertiary));
       border-color: color-mix(in srgb, var(--accent-sky) 34%, var(--border-primary));
     }
   }
 
   &.btn-ghost {
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--surface-highlight) 42%, transparent),
-        transparent 72%
-      ),
-      color-mix(in srgb, var(--bg-secondary) 62%, transparent);
+    background: transparent;
     border-color: color-mix(in srgb, var(--border-color) 88%, transparent);
     color: var(--text-primary);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--surface-highlight) 56%, transparent);
-
-    &::before {
-      background: linear-gradient(
-        90deg,
-        transparent,
-        color-mix(in srgb, var(--accent-sky) 36%, transparent),
-        transparent
-      );
-    }
 
     &:hover:not(:disabled) {
       color: var(--text-primary);
-      background:
-        linear-gradient(
-          180deg,
-          color-mix(in srgb, var(--accent-sky) 16%, transparent),
-          color-mix(in srgb, var(--accent-earth) 6%, transparent)
-        ),
-        color-mix(in srgb, var(--bg-secondary) 78%, transparent);
+      background: color-mix(in srgb, var(--surface-highlight) 100%, transparent);
       border-color: color-mix(in srgb, var(--accent-sky) 26%, var(--border-color));
-      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-sky) 18%, transparent);
     }
   }
 
   &.btn-danger {
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--danger-color) 32%, transparent),
-      color-mix(in srgb, var(--danger-color) 82%, var(--bg-primary))
-    );
-    border-color: color-mix(in srgb, var(--danger-color) 60%, var(--border-primary));
+    background: var(--danger-color);
+    border-color: var(--danger-color);
     color: #fff;
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--danger-color) 24%, transparent),
-      0 10px 22px color-mix(in srgb, var(--danger-color) 14%, transparent);
 
     &:hover:not(:disabled) {
-      background: linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--danger-color) 42%, transparent),
-        color-mix(in srgb, var(--danger-color) 92%, var(--bg-primary))
-      );
-      border-color: color-mix(in srgb, var(--danger-color) 72%, var(--border-primary));
+      background: color-mix(in srgb, var(--danger-color) 88%, black);
+      border-color: color-mix(in srgb, var(--danger-color) 88%, black);
       color: #fff;
     }
   }
@@ -199,9 +96,7 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--accent-sky) 28%, transparent),
-      var(--shadow-lg);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-sky) 28%, transparent);
   }
 }
 
@@ -222,15 +117,9 @@ textarea {
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   padding: 12px 14px;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 44%, transparent),
-      transparent 70%
-    ),
-    color-mix(in srgb, var(--paper-tint) 90%, var(--bg-primary));
+  background: color-mix(in srgb, var(--paper-tint) 92%, var(--bg-primary));
   color: var(--text-primary);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--surface-highlight) 58%, transparent);
+  box-shadow: none;
   transition:
     border-color $transition-fast,
     box-shadow $transition-fast,
@@ -246,16 +135,8 @@ textarea {
   &:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--primary-color) 34%, transparent),
-      0 0 18px color-mix(in srgb, var(--primary-color) 12%, transparent);
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--accent-sky) 12%, transparent),
-        color-mix(in srgb, var(--accent-earth) 6%, transparent)
-      ),
-      color-mix(in srgb, var(--paper-tint) 92%, var(--bg-primary));
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 18%, transparent);
+    background: color-mix(in srgb, var(--paper-tint) 92%, var(--bg-primary));
   }
 }
 
@@ -283,59 +164,11 @@ textarea {
 }
 
 .card {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, var(--accent-earth) 10%, transparent),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 36%, transparent),
-      transparent 72%
-    ),
-    color-mix(in srgb, var(--surface-raised) 94%, var(--bg-primary));
+  background: color-mix(in srgb, var(--surface-raised) 96%, var(--bg-primary));
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius, #{$radius-lg});
-  box-shadow: var(--shadow);
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  box-shadow: none;
   padding: 20px;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, white 16%, transparent),
-      transparent 18%
-    );
-    pointer-events: none;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0 auto auto 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(
-      90deg,
-      var(--accent-earth),
-      var(--accent-sky),
-      var(--primary-color)
-    );
-    opacity: 0.72;
-    pointer-events: none;
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
 }
 
 .card-header {
@@ -397,13 +230,7 @@ textarea {
   font-size: 13px;
   border: 1px solid var(--border-primary);
   margin-bottom: $spacing-md;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 52%, transparent),
-      transparent 72%
-    ),
-    color-mix(in srgb, var(--surface-highlight) 28%, var(--bg-secondary));
+  background: color-mix(in srgb, var(--surface-highlight) 100%, var(--bg-secondary));
   letter-spacing: 0.08em;
   text-transform: uppercase;
 
@@ -471,22 +298,9 @@ textarea {
 .notification {
   padding: $spacing-md;
   border-radius: var(--surface-radius-sm, #{$radius-md});
-  box-shadow: var(--shadow-lg);
+  box-shadow: none;
   border: 1px solid var(--floating-border);
-  background:
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, var(--accent-sky) 10%, transparent),
-      transparent 36%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 42%, transparent),
-      transparent 72%
-    ),
-    color-mix(in srgb, var(--floating-surface) 90%, var(--bg-primary));
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  background: color-mix(in srgb, var(--floating-surface) 90%, var(--bg-primary));
   color: var(--text-primary);
   display: flex;
   justify-content: space-between;
@@ -539,7 +353,7 @@ textarea {
 
     &:hover {
       color: var(--accent-sky);
-      background: color-mix(in srgb, var(--surface-highlight) 68%, transparent);
+      background: color-mix(in srgb, var(--surface-highlight) 100%, transparent);
     }
   }
 }
@@ -561,13 +375,7 @@ textarea {
   .track {
     width: 44px;
     height: 24px;
-    background:
-      linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--surface-highlight) 48%, transparent),
-        transparent 72%
-      ),
-      color-mix(in srgb, var(--border-color) 70%, var(--bg-secondary));
+    background: color-mix(in srgb, var(--border-color) 70%, var(--bg-secondary));
     border-radius: $radius-full;
     position: relative;
     border: 1px solid var(--border-primary);
@@ -582,20 +390,14 @@ textarea {
     left: 2px;
     width: 18px;
     height: 18px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.2))
-      var(--bg-quinary);
+    background: var(--bg-quinary);
     border-radius: $radius-full;
     box-shadow: $shadow-sm;
     transition: transform $transition-fast;
   }
 
   input:checked + .track {
-    background: linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--primary-color) 30%, transparent),
-        color-mix(in srgb, var(--accent-earth) 12%, transparent)
-      )
-      color-mix(in srgb, var(--accent-gold) 4%, var(--primary-color));
+    background: color-mix(in srgb, var(--primary-color) 82%, white);
     border-color: color-mix(in srgb, var(--primary-color) 38%, transparent);
   }
 
@@ -618,13 +420,7 @@ textarea {
 .pill {
   padding: 5px 12px;
   border-radius: $radius-full;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 52%, transparent),
-      transparent 72%
-    ),
-    color-mix(in srgb, var(--surface-highlight) 24%, var(--bg-secondary));
+  background: color-mix(in srgb, var(--surface-highlight) 100%, var(--bg-secondary));
   color: var(--text-secondary);
   border: 1px solid var(--border-primary);
   font-size: 12px;
@@ -659,15 +455,7 @@ textarea {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(
-      circle at top,
-      color-mix(in srgb, var(--accent-sky) 14%, transparent),
-      transparent 40%
-    ),
-    color-mix(in srgb, var(--bg-quinary) 74%, rgba(4, 8, 18, 0.82));
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(15, 23, 42, 0.42);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -702,18 +490,7 @@ textarea {
 }
 
 .modal {
-  background:
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, var(--accent-earth) 10%, transparent),
-      transparent 34%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 42%, transparent),
-      transparent 72%
-    ),
-    color-mix(in srgb, var(--surface-raised) 92%, var(--bg-primary));
+  background: color-mix(in srgb, var(--surface-raised) 92%, var(--bg-primary));
   border-radius: var(--surface-radius, #{$radius-lg});
   border: 1px solid var(--border-primary);
   box-shadow: var(--shadow-lg);
@@ -725,9 +502,6 @@ textarea {
   position: relative;
   // 关闭按钮中心位置: right 12px + 16px = 28px, top 12px + 16px = 28px
   transform-origin: calc(100% - 28px) 28px;
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
-
   &.modal-entering {
     animation: modal-scale-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
@@ -766,13 +540,7 @@ textarea {
   width: 32px;
   height: 32px;
   padding: 0;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 52%, transparent),
-      transparent 72%
-    ),
-    color-mix(in srgb, var(--surface-layer) 82%, var(--bg-secondary));
+  background: var(--surface-layer);
   border: 1px solid var(--border-primary);
   color: var(--text-secondary);
   cursor: pointer;
@@ -899,9 +667,7 @@ textarea {
   border: 1px dashed var(--border-primary);
   border-radius: var(--surface-radius, #{$radius-lg});
   padding: $spacing-lg;
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-    color-mix(in srgb, var(--surface-layer) 84%, var(--bg-secondary));
+  background: var(--surface-layer);
   display: flex;
   justify-content: space-between;
   gap: $spacing-md;
@@ -971,9 +737,7 @@ textarea {
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   padding: $spacing-md;
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
-    color-mix(in srgb, var(--surface-layer) 90%, var(--bg-primary));
+  background: var(--surface-layer);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1006,8 +770,7 @@ textarea {
 }
 
 .error-box {
-  background:
-    linear-gradient(180deg, rgba(255, 93, 135, 0.08), transparent 72%), rgba($error-color, 0.12);
+  background: rgba($error-color, 0.1);
   border: 1px solid rgba($error-color, 0.32);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   padding: $spacing-sm $spacing-md;
@@ -1041,9 +804,7 @@ textarea {
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-    color-mix(in srgb, var(--surface-layer) 86%, var(--bg-primary));
+  background: var(--surface-layer);
 
   .table-header,
   .table-row {
@@ -1055,7 +816,7 @@ textarea {
   }
 
   .table-header {
-    background: rgba(57, 213, 255, 0.08);
+    background: var(--surface-elevated);
     font-weight: 700;
     color: var(--text-primary);
     text-transform: uppercase;
@@ -1085,9 +846,7 @@ textarea {
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   padding: $spacing-md;
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
-    color-mix(in srgb, var(--surface-layer) 90%, var(--bg-primary));
+  background: var(--surface-layer);
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
@@ -1105,9 +864,7 @@ textarea {
 }
 
 .log-viewer {
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
-    color-mix(in srgb, var(--surface-elevated) 88%, var(--bg-secondary));
+  background: var(--surface-elevated);
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   padding: $spacing-md;

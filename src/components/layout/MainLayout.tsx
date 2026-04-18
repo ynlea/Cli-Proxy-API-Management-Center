@@ -183,11 +183,11 @@ const THEME_CARDS: Array<{
     key: 'auto',
     labelKey: 'theme.auto',
     colors: {
-      bg: 'linear-gradient(135deg, #f4f7fb 0 50%, #0c1421 50% 100%)',
-      card: 'linear-gradient(135deg, #fbfcfe 0 50%, #121c2c 50% 100%)',
+      bg: 'linear-gradient(90deg, #f8fafc 0 50%, #0f172a 50% 100%)',
+      card: 'linear-gradient(90deg, #ffffff 0 50%, #111827 50% 100%)',
       border: '#6e87b7',
       text: '#f5f7fb',
-      textMuted: 'linear-gradient(135deg, #7d8ca2 0 50%, #8fb8ff 50% 100%)',
+      textMuted: 'linear-gradient(90deg, #94a3b8 0 50%, #60a5fa 50% 100%)',
     },
   },
   {

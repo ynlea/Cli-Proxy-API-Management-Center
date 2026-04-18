@@ -9,7 +9,7 @@
 @use './components.scss';
 @use './layout.scss';
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
 
 html,
 body {
@@ -17,11 +17,7 @@ body {
 }
 
 body {
-  background:
-    radial-gradient(circle at 10% 10%, var(--page-spot-1), transparent 0 24%),
-    radial-gradient(circle at 90% 16%, var(--page-spot-2), transparent 0 20%),
-    linear-gradient(180deg, color-mix(in srgb, var(--bg-primary) 96%, white), var(--bg-secondary));
-  background-attachment: fixed;
+  background: var(--bg-secondary);
   color: var(--text-primary);
   font-family: var(--font-sans);
   line-height: 1.5;
@@ -59,30 +55,11 @@ body.modal-open .content {
 }
 
 #root::before {
-  z-index: -2;
-  background:
-    radial-gradient(circle at 14% 18%, var(--page-spot-1), transparent 0 24%),
-    radial-gradient(circle at 84% 16%, var(--page-spot-2), transparent 0 18%),
-    radial-gradient(circle at 28% 88%, var(--page-spot-3), transparent 0 22%),
-    linear-gradient(180deg, color-mix(in srgb, var(--accent-sky) 8%, transparent), transparent 44%);
+  display: none;
 }
 
 #root::after {
-  z-index: -1;
-  opacity: 0.72;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, white 32%, transparent), transparent 18%),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, calc(var(--scanline-opacity) * 0.35)) 0 1px,
-      transparent 1px 4px
-    ),
-    repeating-linear-gradient(90deg, var(--grid-color) 0 1px, transparent 1px 32px),
-    repeating-linear-gradient(
-      0deg,
-      color-mix(in srgb, var(--grid-color) 82%, transparent) 0 1px,
-      transparent 1px 32px
-    );
+  display: none;
 }
 
 a {
@@ -112,7 +89,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 ::selection {
@@ -127,17 +104,17 @@ h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--accent-sky) 18%, var(--text-quaternary));
+  background: color-mix(in srgb, var(--text-tertiary) 72%, transparent);
   border-radius: 999px;
-  border: 2px solid color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  border: 2px solid var(--bg-secondary);
   background-clip: padding-box;
 
   &:hover {
-    background: color-mix(in srgb, var(--accent-sky) 32%, var(--text-tertiary));
+    background: color-mix(in srgb, var(--text-secondary) 78%, transparent);
   }
 }
 

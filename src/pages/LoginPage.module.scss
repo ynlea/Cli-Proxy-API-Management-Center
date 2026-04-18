@@ -12,57 +12,12 @@
 }
 
 .brandPanel {
-  position: relative;
-  overflow: hidden;
   display: flex;
   align-items: stretch;
   justify-content: center;
   padding: 40px;
-  background:
-    radial-gradient(
-      circle at 18% 18%,
-      color-mix(in srgb, var(--accent-sky) 18%, transparent),
-      transparent 24%
-    ),
-    radial-gradient(
-      circle at 82% 68%,
-      color-mix(in srgb, var(--accent-earth) 18%, transparent),
-      transparent 24%
-    ),
-    linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--bg-quinary) 78%, #08111d),
-      color-mix(in srgb, var(--bg-secondary) 92%, #0e1521) 52%,
-      color-mix(in srgb, var(--bg-primary) 96%, #162338)
-    );
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(180deg, color-mix(in srgb, white 10%, transparent), transparent 18%),
-      repeating-linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--grid-color) 52%, transparent) 0 1px,
-        transparent 1px 64px
-      );
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 2px;
-    background: linear-gradient(
-      90deg,
-      var(--accent-earth),
-      var(--accent-sky),
-      var(--primary-color)
-    );
-  }
+  background: color-mix(in srgb, var(--surface-layer) 92%, var(--bg-secondary));
+  border-right: 1px solid var(--border-secondary);
 
   @media (max-width: $breakpoint-mobile) {
     display: none;
@@ -96,14 +51,11 @@
   font-family: var(--font-display);
   font-size: clamp(56px, 10vw, 132px);
   font-weight: 700;
-  color: color-mix(in srgb, var(--text-primary) 96%, white);
+  color: var(--text-primary);
   letter-spacing: 0.04em;
   line-height: 0.92;
   text-transform: uppercase;
   text-align: right;
-  text-shadow:
-    0 12px 40px color-mix(in srgb, var(--accent-sky) 14%, transparent),
-    1px 0 0 color-mix(in srgb, var(--accent-earth) 12%, transparent);
   opacity: 0;
   animation: brandFadeIn 0.75s ease-out forwards;
 
@@ -124,35 +76,11 @@
 }
 
 .formPanel {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 32px;
-  background:
-    radial-gradient(
-      circle at 14% 20%,
-      color-mix(in srgb, var(--accent-sky) 12%, transparent),
-      transparent 20%
-    ),
-    radial-gradient(
-      circle at 88% 82%,
-      color-mix(in srgb, var(--accent-earth) 10%, transparent),
-      transparent 18%
-    ),
-    linear-gradient(180deg, color-mix(in srgb, white 36%, transparent), transparent 34%);
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, white 10%, transparent),
-      transparent 18%
-    );
-    pointer-events: none;
-  }
+  background: var(--bg-secondary);
 
   @media (max-width: $breakpoint-mobile) {
     min-height: 100vh;
@@ -181,13 +109,7 @@
   height: 76px;
   border-radius: var(--surface-radius-sm, #{$radius-md});
   object-fit: cover;
-  background:
-    radial-gradient(
-      circle at top,
-      color-mix(in srgb, var(--accent-sky) 14%, transparent),
-      transparent 60%
-    ),
-    color-mix(in srgb, var(--surface-highlight) 24%, var(--bg-primary));
+  background: var(--surface-layer);
   box-shadow: var(--shadow);
   border: 1px solid var(--border-primary);
   padding: 6px;
@@ -203,54 +125,8 @@
   padding: 24px;
   border-radius: var(--surface-radius, #{$radius-lg});
   border: 1px solid var(--border-primary);
-  background:
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, var(--accent-earth) 10%, transparent),
-      transparent 32%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--surface-highlight) 42%, transparent),
-      transparent 72%
-    ),
-    var(--surface-raised);
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, white 16%, transparent),
-      transparent 18%
-    );
-    pointer-events: none;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 2px;
-    background: linear-gradient(
-      90deg,
-      var(--accent-earth),
-      var(--accent-sky),
-      var(--primary-color)
-    );
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
+  background: var(--surface-raised);
+  box-shadow: var(--shadow);
 
   @media (max-width: $breakpoint-mobile) {
     padding: 24px 20px;
@@ -298,9 +174,7 @@
   padding: 14px 16px;
   border-radius: var(--surface-radius-sm, #{$radius-md});
   border: 1px solid var(--border-primary);
-  background:
-    linear-gradient(180deg, rgba(74, 123, 255, 0.06), transparent 72%),
-    color-mix(in srgb, var(--surface-layer) 84%, var(--bg-secondary));
+  background: var(--surface-layer);
 
   .label {
     color: var(--text-secondary);
@@ -341,8 +215,7 @@
 }
 
 .errorBox {
-  background:
-    linear-gradient(180deg, rgba(255, 93, 135, 0.08), transparent 72%), rgba($error-color, 0.12);
+  background: rgba($error-color, 0.1);
   border: 1px solid rgba($error-color, 0.3);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   padding: 10px 14px;
@@ -390,9 +263,8 @@
   padding: 36px 30px;
   border-radius: var(--surface-radius, #{$radius-lg});
   border: 1px solid var(--border-primary);
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%), var(--surface-raised);
-  box-shadow: var(--shadow-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow);
   animation: splashEnter 0.6s ease-out;
 }
 
@@ -422,7 +294,7 @@
   height: 8px;
   margin-top: 10px;
   border: 1px solid var(--border-primary);
-  background: rgba(57, 213, 255, 0.05);
+  background: var(--surface-layer);
   overflow: hidden;
   position: relative;
 }
@@ -431,7 +303,7 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: 58%;
-  background: linear-gradient(90deg, var(--accent-red), var(--accent-sky), var(--primary-color));
+  background: var(--primary-color);
   animation: splashLoading 1.4s ease-in-out infinite;
 }
 

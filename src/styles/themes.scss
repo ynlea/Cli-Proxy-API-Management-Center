@@ -4,30 +4,29 @@
 
 @use './variables.scss' as *;
 
-// 默认主题：冷静浅色控制台
+// 默认主题：扁平浅色
 :root {
   --font-sans: #{$font-family};
   --font-display: #{$font-display};
   --font-accent: #{$font-accent};
 
-  --bg-secondary: #eef2f7;
-  --bg-primary: #fbfcfe;
-  --bg-tertiary: #e5ebf3;
-  --bg-hover: #dbe4ef;
+  --bg-secondary: #f8fafc;
+  --bg-primary: #ffffff;
+  --bg-tertiary: #eef2ff;
+  --bg-hover: #e2e8f0;
   --bg-quinary: #ffffff;
   --bg-error-light: rgba(226, 85, 107, 0.1);
 
-  --surface-raised: rgba(255, 255, 255, 0.88);
-  --surface-layer: rgba(247, 250, 252, 0.92);
-  --surface-elevated: rgba(240, 245, 250, 0.96);
-  --surface-highlight: rgba(59, 130, 246, 0.08);
-  --paper-tint: rgba(251, 252, 254, 0.94);
-  --paper-speck: rgba(59, 130, 246, 0.05);
+  --surface-raised: #ffffff;
+  --surface-layer: #f8fafc;
+  --surface-elevated: #f1f5f9;
+  --surface-highlight: rgba(37, 99, 235, 0.04);
+  --paper-tint: #ffffff;
+  --paper-speck: transparent;
 
-  --floating-surface: rgba(255, 255, 255, 0.82);
-  --floating-border: rgba(110, 130, 160, 0.24);
-  --floating-shadow:
-    0 24px 70px -34px rgba(15, 23, 42, 0.28), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  --floating-surface: #ffffff;
+  --floating-border: rgba(148, 163, 184, 0.32);
+  --floating-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
 
   --text-primary: #132033;
   --text-secondary: #435167;
@@ -73,50 +72,49 @@
   --count-badge-bg: rgba(37, 99, 235, 0.1);
   --count-badge-text: #2453b8;
 
-  --shadow: 0 18px 54px -30px rgba(15, 23, 42, 0.22), 0 1px 0 rgba(255, 255, 255, 0.72) inset;
-  --shadow-lg: 0 36px 90px -40px rgba(15, 23, 42, 0.28), 0 1px 0 rgba(255, 255, 255, 0.74) inset;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 2px 6px rgba(15, 23, 42, 0.08);
 
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --surface-radius: 20px;
-  --surface-radius-sm: 14px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --surface-radius: 12px;
+  --surface-radius-sm: 8px;
   --accent-tertiary: var(--bg-tertiary);
 
-  --page-spot-1: rgba(37, 99, 235, 0.16);
-  --page-spot-2: rgba(249, 115, 22, 0.12);
-  --page-spot-3: rgba(15, 159, 122, 0.1);
-  --grid-color: rgba(148, 163, 184, 0.18);
-  --scanline-opacity: 0.08;
-  --grid-opacity: 0.12;
+  --page-spot-1: transparent;
+  --page-spot-2: transparent;
+  --page-spot-3: transparent;
+  --grid-color: transparent;
+  --scanline-opacity: 0;
+  --grid-opacity: 0;
 
-  --glass-blur: 22px;
-  --glass-backdrop-filter: blur(22px) saturate(135%);
-  --glass-filter: blur(18px);
-  --glass-bg: color-mix(in srgb, var(--surface-raised) 92%, transparent);
-  --glass-bg-secondary: color-mix(in srgb, var(--surface-elevated) 92%, transparent);
+  --glass-blur: 0px;
+  --glass-backdrop-filter: none;
+  --glass-filter: none;
+  --glass-bg: var(--surface-raised);
+  --glass-bg-secondary: var(--surface-elevated);
   --glass-border: var(--border-primary);
 }
 
-// 暖白主题：纸面控制台
+// 暖白主题：扁平暖白
 [data-theme='white'] {
-  --bg-secondary: #f1ebdf;
-  --bg-primary: #fbf7ef;
-  --bg-tertiary: #e8ddcc;
-  --bg-hover: #dfd2bf;
+  --bg-secondary: #faf7f2;
+  --bg-primary: #fffdf9;
+  --bg-tertiary: #efe7db;
+  --bg-hover: #e7dccb;
   --bg-quinary: #fffcf7;
   --bg-error-light: rgba(186, 93, 88, 0.1);
 
-  --surface-raised: rgba(251, 247, 239, 0.9);
-  --surface-layer: rgba(255, 250, 244, 0.94);
-  --surface-elevated: rgba(244, 236, 225, 0.98);
-  --surface-highlight: rgba(196, 122, 55, 0.08);
-  --paper-tint: rgba(251, 247, 239, 0.96);
-  --paper-speck: rgba(121, 88, 53, 0.06);
+  --surface-raised: #fffdf9;
+  --surface-layer: #faf7f2;
+  --surface-elevated: #f4eee5;
+  --surface-highlight: rgba(197, 122, 60, 0.04);
+  --paper-tint: #fffdf9;
+  --paper-speck: transparent;
 
-  --floating-surface: rgba(251, 247, 239, 0.84);
-  --floating-border: rgba(146, 121, 88, 0.24);
-  --floating-shadow:
-    0 26px 76px -38px rgba(71, 53, 35, 0.26), 0 1px 0 rgba(255, 255, 255, 0.58) inset;
+  --floating-surface: #fffdf9;
+  --floating-border: rgba(146, 121, 88, 0.3);
+  --floating-shadow: 0 1px 2px rgba(71, 53, 35, 0.06);
 
   --text-primary: #33281d;
   --text-secondary: #5d4b39;
@@ -162,44 +160,43 @@
   --count-badge-bg: rgba(88, 131, 182, 0.1);
   --count-badge-text: #395d86;
 
-  --shadow: 0 18px 56px -32px rgba(71, 53, 35, 0.18), 0 1px 0 rgba(255, 255, 255, 0.7) inset;
-  --shadow-lg: 0 34px 88px -42px rgba(71, 53, 35, 0.22), 0 1px 0 rgba(255, 255, 255, 0.74) inset;
+  --shadow: 0 1px 2px rgba(71, 53, 35, 0.05);
+  --shadow-lg: 0 2px 6px rgba(71, 53, 35, 0.08);
 
-  --page-spot-1: rgba(88, 131, 182, 0.16);
-  --page-spot-2: rgba(197, 122, 60, 0.16);
-  --page-spot-3: rgba(93, 125, 90, 0.12);
-  --grid-color: rgba(160, 142, 122, 0.18);
-  --scanline-opacity: 0.06;
-  --grid-opacity: 0.1;
+  --page-spot-1: transparent;
+  --page-spot-2: transparent;
+  --page-spot-3: transparent;
+  --grid-color: transparent;
+  --scanline-opacity: 0;
+  --grid-opacity: 0;
 
-  --glass-blur: 20px;
-  --glass-backdrop-filter: blur(20px) saturate(125%);
-  --glass-filter: blur(14px);
-  --glass-bg: color-mix(in srgb, var(--surface-raised) 92%, transparent);
-  --glass-bg-secondary: color-mix(in srgb, var(--surface-elevated) 92%, transparent);
+  --glass-blur: 0px;
+  --glass-backdrop-filter: none;
+  --glass-filter: none;
+  --glass-bg: var(--surface-raised);
+  --glass-bg-secondary: var(--surface-elevated);
   --glass-border: var(--border-primary);
 }
 
-// 深色主题：石墨控制台
+// 深色主题：扁平深色
 [data-theme='dark'] {
-  --bg-secondary: #0b111b;
-  --bg-primary: #111b2a;
-  --bg-tertiary: #1a2638;
-  --bg-hover: #22324a;
+  --bg-secondary: #0f172a;
+  --bg-primary: #111827;
+  --bg-tertiary: #1f2937;
+  --bg-hover: #243041;
   --bg-quinary: #070b12;
   --bg-error-light: rgba(251, 113, 133, 0.12);
 
-  --surface-raised: rgba(15, 23, 36, 0.9);
-  --surface-layer: rgba(20, 30, 46, 0.94);
-  --surface-elevated: rgba(24, 37, 58, 0.96);
-  --surface-highlight: rgba(96, 165, 250, 0.1);
-  --paper-tint: rgba(15, 23, 36, 0.95);
-  --paper-speck: rgba(148, 163, 184, 0.06);
+  --surface-raised: #111827;
+  --surface-layer: #0f172a;
+  --surface-elevated: #1f2937;
+  --surface-highlight: rgba(96, 165, 250, 0.05);
+  --paper-tint: #111827;
+  --paper-speck: transparent;
 
-  --floating-surface: rgba(15, 23, 36, 0.84);
-  --floating-border: rgba(108, 138, 189, 0.22);
-  --floating-shadow:
-    0 28px 86px -40px rgba(2, 6, 23, 0.72), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  --floating-surface: #111827;
+  --floating-border: rgba(96, 165, 250, 0.18);
+  --floating-shadow: 0 1px 2px rgba(2, 6, 23, 0.32);
 
   --text-primary: #f5f7fb;
   --text-secondary: #c0cadc;
@@ -245,21 +242,21 @@
   --count-badge-bg: rgba(96, 165, 250, 0.12);
   --count-badge-text: #bfdbfe;
 
-  --shadow: 0 20px 62px -34px rgba(2, 6, 23, 0.62), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
-  --shadow-lg: 0 34px 92px -42px rgba(2, 6, 23, 0.74), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  --shadow: 0 1px 2px rgba(2, 6, 23, 0.22);
+  --shadow-lg: 0 2px 6px rgba(2, 6, 23, 0.32);
 
-  --page-spot-1: rgba(96, 165, 250, 0.18);
-  --page-spot-2: rgba(245, 158, 11, 0.12);
-  --page-spot-3: rgba(52, 211, 153, 0.1);
-  --grid-color: rgba(96, 118, 156, 0.22);
-  --scanline-opacity: 0.12;
-  --grid-opacity: 0.16;
+  --page-spot-1: transparent;
+  --page-spot-2: transparent;
+  --page-spot-3: transparent;
+  --grid-color: transparent;
+  --scanline-opacity: 0;
+  --grid-opacity: 0;
 
-  --glass-blur: 18px;
-  --glass-backdrop-filter: blur(18px) saturate(145%);
-  --glass-filter: blur(12px);
-  --glass-bg: color-mix(in srgb, var(--surface-raised) 92%, transparent);
-  --glass-bg-secondary: color-mix(in srgb, var(--surface-elevated) 92%, transparent);
+  --glass-blur: 0px;
+  --glass-backdrop-filter: none;
+  --glass-filter: none;
+  --glass-bg: var(--surface-raised);
+  --glass-bg-secondary: var(--surface-elevated);
   --glass-border: var(--border-primary);
 }
 
