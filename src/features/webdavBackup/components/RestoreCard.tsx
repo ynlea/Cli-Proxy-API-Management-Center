@@ -38,7 +38,13 @@ export function RestoreCard() {
 
   // 初始加载 + 备份成功后自动刷新列表
   useEffect(() => {
-    refresh();
+    const frame = window.requestAnimationFrame(() => {
+      void refresh();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
   }, [refresh, lastBackupTime]);
 
   const handleRestore = useCallback(

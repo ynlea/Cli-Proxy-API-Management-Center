@@ -18,7 +18,7 @@ import {
   filterDataByTimeRange,
   type DateRange,
 } from '@/utils/monitor';
-import type { UsageData } from '@/pages/MonitorPage';
+import type { UsageData } from '@/types/monitor';
 import styles from '@/pages/MonitorPage.module.scss';
 
 interface RequestLogsProps {
@@ -28,7 +28,8 @@ interface RequestLogsProps {
   providerTypeMap: Record<string, string>;
   sourceInfoMap: Map<string, SourceInfo>;
   authFileMap?: Map<string, CredentialInfo>;
-  apiFilter: string;
+  liveFetching?: boolean;
+  showRefreshControls?: boolean;
 }
 
 interface LogEntry {
@@ -78,14 +79,22 @@ const parseLatencyMs = (value: unknown): number | null => {
   return null;
 };
 
-export function RequestLogs({ data, loading: parentLoading, providerMap, providerTypeMap, sourceInfoMap, authFileMap: propAuthFileMap, apiFilter }: RequestLogsProps) {
+export function RequestLogs({
+  data,
+  loading: parentLoading,
+  providerMap,
+  providerTypeMap,
+  sourceInfoMap,
+  authFileMap: propAuthFileMap,
+  liveFetching = true,
+  showRefreshControls = true,
+}: RequestLogsProps) {
   const { t } = useTranslation();
-  const [filterApi, setFilterApi] = useState('');
   const [filterModel, setFilterModel] = useState('');
   const [filterSource, setFilterSource] = useState('');
   const [filterStatus, setFilterStatus] = useState<'' | 'success' | 'failed'>('');
   const [filterProviderType, setFilterProviderType] = useState('');
-  const [autoRefresh, setAutoRefresh] = useState(10);
+  const [autoRefresh, setAutoRefresh] = useState(liveFetching ? 10 : 0);
   const [countdown, setCountdown] = useState(0);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   // 用 ref 存储 fetchLogData，避免作为定时器 useEffect 的依赖
@@ -114,7 +123,8 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
 
   // 认证文件映射（优先使用 prop，否则自行加载）
   const [localAuthFileMap, setLocalAuthFileMap] = useState<Map<string, CredentialInfo>>(new Map());
-  const authFileMap = propAuthFileMap?.size ? propAuthFileMap : localAuthFileMap;
+  const hasExternalAuthFileMap = propAuthFileMap !== undefined;
+  const authFileMap = propAuthFileMap ?? localAuthFileMap;
 
   // 使用禁用模型 Hook
   const {
@@ -135,9 +145,13 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
   }, []);
 
   // 使用日志独立数据或父组件数据
-  const effectiveData = logData || data;
+  const effectiveData = useMemo(
+    () => filterDataByTimeRange(liveFetching ? logData || data : data, timeRange, customRange),
+    [customRange, data, liveFetching, logData, timeRange]
+  );
   // 只在首次加载且没有数据时显示 loading 状态
-  const showLoading = (parentLoading && isFirstLoad && !effectiveData) || (logLoading && !effectiveData);
+  const showLoading =
+    (parentLoading && isFirstLoad && !effectiveData) || (liveFetching && logLoading && !effectiveData);
 
   // 当父组件数据加载完成时，标记首次加载完成
   useEffect(() => {
@@ -169,8 +183,11 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
 
   // 初始加载认证文件映射
   useEffect(() => {
-    loadAuthFileMap();
-  }, [loadAuthFileMap]);
+    if (hasExternalAuthFileMap) {
+      return;
+    }
+    void loadAuthFileMap();
+  }, [hasExternalAuthFileMap, loadAuthFileMap]);
 
   // 独立获取日志数据
   const fetchLogData = useCallback(async () => {
@@ -178,13 +195,13 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
     try {
       const response = await usageApi.getUsage();
       const usageData = (response?.usage ?? response) as UsageData;
-      setLogData(filterDataByTimeRange(usageData, timeRange, customRange, apiFilter));
+      setLogData(filterDataByTimeRange(usageData, timeRange, customRange));
     } catch (err) {
       console.error('日志刷新失败：', err);
     } finally {
       setLogLoading(false);
     }
-  }, [timeRange, customRange, apiFilter]);
+  }, [timeRange, customRange]);
 
   // 同步 fetchLogData 到 ref，确保定时器始终调用最新版本
   useEffect(() => {
@@ -193,6 +210,9 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
 
   // 统一的自动刷新定时器管理
   useEffect(() => {
+    if (!liveFetching) {
+      return;
+    }
     // 清理旧定时器
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
@@ -227,25 +247,28 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
         countdownRef.current = null;
       }
     };
-  }, [autoRefresh]);
+  }, [autoRefresh, liveFetching]);
 
   // 时间范围变化时立即刷新数据（跳过初次挂载，初次使用父组件数据）
   const skipInitialFetch = useRef(true);
   useEffect(() => {
+    if (!liveFetching) {
+      return;
+    }
     if (skipInitialFetch.current) {
       skipInitialFetch.current = false;
       return;
     }
     fetchLogData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeRange, customRange]);
+  }, [customRange, liveFetching, timeRange]);
 
   // 获取倒计时显示文本
   const getCountdownText = () => {
     if (logLoading) {
       return t('monitor.logs.refreshing');
     }
-    if (autoRefresh === 0) {
+    if (!liveFetching || autoRefresh === 0) {
       return t('monitor.logs.manual_refresh');
     }
     if (countdown > 0) {
@@ -360,14 +383,12 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
   }, [logEntries]);
 
   // 获取筛选选项
-  const { apis, models, sources, providerTypes } = useMemo(() => {
-    const apiSet = new Set<string>();
+  const { models, sources, providerTypes } = useMemo(() => {
     const modelSet = new Set<string>();
     const sourceSet = new Set<string>();
     const providerTypeSet = new Set<string>();
 
     logEntries.forEach((entry) => {
-      apiSet.add(entry.apiKey);
       modelSet.add(entry.model);
       sourceSet.add(entry.source);
       if (entry.providerType && entry.providerType !== '--') {
@@ -376,7 +397,6 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
     });
 
     return {
-      apis: Array.from(apiSet).sort(),
       models: Array.from(modelSet).sort(),
       sources: Array.from(sourceSet).sort(),
       providerTypes: Array.from(providerTypeSet).sort(),
@@ -386,7 +406,6 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
   // 过滤后的数据
   const filteredEntries = useMemo(() => {
     return logEntries.filter((entry) => {
-      if (filterApi && entry.apiKey !== filterApi) return false;
       if (filterModel && entry.model !== filterModel) return false;
       if (filterSource && entry.source !== filterSource) return false;
       if (filterStatus === 'success' && entry.failed) return false;
@@ -394,7 +413,7 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
       if (filterProviderType && entry.providerType !== filterProviderType) return false;
       return true;
     });
-  }, [logEntries, filterApi, filterModel, filterSource, filterStatus, filterProviderType]);
+  }, [logEntries, filterModel, filterSource, filterStatus, filterProviderType]);
 
   // 虚拟滚动配置
   const rowVirtualizer = useVirtualizer({
@@ -526,18 +545,6 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
         <div className={styles.logFilters}>
           <select
             className={styles.logSelect}
-            value={filterApi}
-            onChange={(e) => setFilterApi(e.target.value)}
-          >
-            <option value="">{t('monitor.logs.all_apis')}</option>
-            {apis.map((api) => (
-              <option key={api} value={api}>
-                {maskSecret(api)}
-              </option>
-            ))}
-          </select>
-          <select
-            className={styles.logSelect}
             value={filterProviderType}
             onChange={(e) => setFilterProviderType(e.target.value)}
           >
@@ -582,18 +589,20 @@ export function RequestLogs({ data, loading: parentLoading, providerMap, provide
             {getCountdownText()}
           </span>
 
-          <select
-            className={styles.logSelect}
-            value={autoRefresh}
-            onChange={(e) => setAutoRefresh(Number(e.target.value))}
-          >
-            <option value="0">{t('monitor.logs.manual_refresh')}</option>
-            <option value="5">{t('monitor.logs.refresh_5s')}</option>
-            <option value="10">{t('monitor.logs.refresh_10s')}</option>
-            <option value="15">{t('monitor.logs.refresh_15s')}</option>
-            <option value="30">{t('monitor.logs.refresh_30s')}</option>
-            <option value="60">{t('monitor.logs.refresh_60s')}</option>
-          </select>
+          {showRefreshControls ? (
+            <select
+              className={styles.logSelect}
+              value={autoRefresh}
+              onChange={(e) => setAutoRefresh(Number(e.target.value))}
+            >
+              <option value="0">{t('monitor.logs.manual_refresh')}</option>
+              <option value="5">{t('monitor.logs.refresh_5s')}</option>
+              <option value="10">{t('monitor.logs.refresh_10s')}</option>
+              <option value="15">{t('monitor.logs.refresh_15s')}</option>
+              <option value="30">{t('monitor.logs.refresh_30s')}</option>
+              <option value="60">{t('monitor.logs.refresh_60s')}</option>
+            </select>
+          ) : null}
         </div>
 
         {/* 虚拟滚动表格 */}

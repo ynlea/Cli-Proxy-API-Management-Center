@@ -2,7 +2,7 @@
  * 监控中心公共工具函数
  */
 
-import type { UsageData } from '@/pages/MonitorPage';
+import type { UsageData } from '@/types/monitor';
 
 /**
  * 日期范围接口

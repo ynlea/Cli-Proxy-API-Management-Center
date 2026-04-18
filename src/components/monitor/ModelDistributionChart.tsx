@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Doughnut } from 'react-chartjs-2';
-import type { UsageData } from '@/pages/MonitorPage';
+import type { UsageData } from '@/types/monitor';
 import styles from '@/pages/MonitorPage.module.scss';
 
 interface ModelDistributionChartProps {

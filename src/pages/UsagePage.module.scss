@@ -11,6 +11,13 @@
   margin: 0 auto;
 }
 
+.embeddedSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 .pageHero {
   position: relative;
   display: flex;

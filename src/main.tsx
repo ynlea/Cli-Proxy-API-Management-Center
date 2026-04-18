@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import '@/lib/chartRegistry';
 import '@/styles/global.scss';
 import { BRAND_ICON_MIME_TYPE, INLINE_BRAND_ICON } from '@/assets/brandIcon';
 import App from './App.tsx';

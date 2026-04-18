@@ -53,62 +53,6 @@
   box-sizing: border-box;
 }
 
-.panelStrip {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 10px;
-}
-
-.panelTab {
-  @include button-reset;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 72px;
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-    color-mix(in srgb, var(--bg-primary) 90%, transparent);
-  color: var(--text-secondary);
-  text-align: left;
-  transition:
-    border-color 0.18s ease,
-    background-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease;
-
-  &:hover {
-    color: var(--text-primary);
-    border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
-    background:
-      linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
-      color-mix(in srgb, var(--bg-secondary) 92%, transparent);
-    transform: translateY(-1px);
-  }
-}
-
-.panelTabActive {
-  color: var(--text-primary);
-  border-color: color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
-  background:
-    linear-gradient(180deg, rgba(117, 255, 122, 0.1), rgba(57, 213, 255, 0.05)),
-    var(--bg-primary);
-  box-shadow:
-    inset 0 0 0 1px rgba(117, 255, 122, 0.08),
-    0 12px 24px rgba(0, 0, 0, 0.08);
-}
-
-.panelTabLabel {
-  min-width: 0;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.35;
-  color: var(--text-primary);
-}
-
 .panelTabCount {
   display: inline-grid;
   place-items: center;
@@ -164,8 +108,7 @@
 .statsInfo {
   padding: 8px 12px;
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
-    var(--bg-secondary);
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%), var(--bg-secondary);
   border-radius: 6px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
   font-size: 13px;
@@ -318,33 +261,23 @@
 
 // 卡片渐变背景 — 基于 TYPE_COLORS light.bg 转 rgba
 .claudeCard {
-  background-image: linear-gradient(180deg,
-      rgba(251, 236, 228, 0.18),
-      rgba(251, 236, 228, 0));
+  background-image: linear-gradient(180deg, rgba(251, 236, 228, 0.18), rgba(251, 236, 228, 0));
 }
 
 .antigravityCard {
-  background-image: linear-gradient(180deg,
-      rgba(224, 247, 250, 0.12),
-      rgba(224, 247, 250, 0));
+  background-image: linear-gradient(180deg, rgba(224, 247, 250, 0.12), rgba(224, 247, 250, 0));
 }
 
 .codexCard {
-  background-image: linear-gradient(180deg,
-      rgba(234, 231, 255, 0.18),
-      rgba(234, 231, 255, 0));
+  background-image: linear-gradient(180deg, rgba(234, 231, 255, 0.18), rgba(234, 231, 255, 0));
 }
 
 .geminiCliCard {
-  background-image: linear-gradient(180deg,
-      rgba(224, 232, 255, 0.2),
-      rgba(224, 232, 255, 0));
+  background-image: linear-gradient(180deg, rgba(224, 232, 255, 0.2), rgba(224, 232, 255, 0));
 }
 
 .kimiCard {
-  background-image: linear-gradient(180deg,
-      rgba(220, 232, 255, 0.2),
-      rgba(220, 232, 255, 0));
+  background-image: linear-gradient(180deg, rgba(220, 232, 255, 0.2), rgba(220, 232, 255, 0));
 }
 
 .quotaSection {
@@ -393,8 +326,7 @@
 .quotaBar {
   height: 8px;
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.03), transparent 72%),
-    var(--bg-tertiary);
+    linear-gradient(180deg, rgba(57, 213, 255, 0.03), transparent 72%), var(--bg-tertiary);
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
@@ -553,14 +485,22 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform $transition-fast, box-shadow $transition-fast, border-color $transition-fast;
+  transition:
+    transform $transition-fast,
+    box-shadow $transition-fast,
+    border-color $transition-fast;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgba(255, 93, 135, 0.22), rgba(57, 213, 255, 0.3), rgba(117, 255, 122, 0.18))
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.22),
+          rgba(57, 213, 255, 0.3),
+          rgba(117, 255, 122, 0.18)
+        )
         top / 100% 2px no-repeat,
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
     pointer-events: none;

@@ -14,6 +14,9 @@ import { PageTransition } from '@/components/common/PageTransition';
 import { MainRoutes } from '@/router/MainRoutes';
 import {
   IconActivity,
+  IconChartLine,
+  IconChevronUp,
+  IconModelCluster,
   IconSidebarAuthFiles,
   IconSidebarConfig,
   IconSidebarDashboard,
@@ -23,6 +26,7 @@ import {
   IconSidebarQuota,
   IconSidebarSystem,
   IconSidebarUsage,
+  IconScrollText,
 } from '@/components/ui/icons';
 import { INLINE_BRAND_ICON } from '@/assets/brandIcon';
 import {
@@ -44,11 +48,14 @@ const sidebarIcons: Record<string, ReactNode> = {
   authFiles: <IconSidebarAuthFiles size={18} />,
   oauth: <IconSidebarOauth size={18} />,
   quota: <IconSidebarQuota size={18} />,
-  usage: <IconSidebarUsage size={18} />,
+  requestLogs: <IconScrollText size={18} />,
+  trends: <IconChartLine size={18} />,
+  channels: <IconModelCluster size={18} />,
+  costs: <IconSidebarUsage size={18} />,
+  monitor: <IconActivity size={18} />,
   config: <IconSidebarConfig size={18} />,
   logs: <IconSidebarLogs size={18} />,
   system: <IconSidebarSystem size={18} />,
-  monitor: <IconActivity size={18} />,
   backup: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -225,6 +232,8 @@ const THEME_CARDS: Array<{
   },
 ];
 
+const BACK_TO_TOP_THRESHOLD = 240;
+
 export function MainLayout() {
   const { t } = useTranslation();
   const { showNotification } = useNotificationStore();
@@ -251,6 +260,7 @@ export function MainLayout() {
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [brandExpanded, setBrandExpanded] = useState(true);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const languageMenuRef = useRef<HTMLDivElement | null>(null);
   const themeMenuRef = useRef<HTMLDivElement | null>(null);
@@ -266,6 +276,11 @@ export function MainLayout() {
   const canonicalPathname = normalizedPathname === '/dashboard' ? '/' : normalizedPathname;
   const isLogsPage = canonicalPathname.startsWith('/logs');
   const isDashboardPage = canonicalPathname === '/';
+
+  const updateBackToTopVisibility = useCallback(() => {
+    const shouldShow = (contentRef.current?.scrollTop ?? 0) > BACK_TO_TOP_THRESHOLD;
+    setShowBackToTop((prev) => (prev === shouldShow ? prev : shouldShow));
+  }, []);
 
   // 将顶栏高度写入 CSS 变量，确保侧栏/内容区计算一致，防止滚动时抖动
   useLayoutEffect(() => {
@@ -327,6 +342,26 @@ export function MainLayout() {
       document.documentElement.style.removeProperty('--content-center-x');
     };
   }, []);
+
+  useEffect(() => {
+    const contentEl = contentRef.current;
+    if (!contentEl) {
+      return;
+    }
+
+    contentEl.addEventListener('scroll', updateBackToTopVisibility, { passive: true });
+
+    return () => {
+      contentEl.removeEventListener('scroll', updateBackToTopVisibility);
+    };
+  }, [updateBackToTopVisibility]);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(updateBackToTopVisibility);
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [canonicalPathname, updateBackToTopVisibility]);
 
   // 5秒后自动收起品牌名称
   useEffect(() => {
@@ -457,12 +492,11 @@ export function MainLayout() {
     { path: '/auth-files', label: t('nav.auth_files'), icon: sidebarIcons.authFiles },
     { path: '/oauth', label: t('nav.oauth', { defaultValue: 'OAuth' }), icon: sidebarIcons.oauth },
     { path: '/quota', label: t('nav.quota_management'), icon: sidebarIcons.quota },
-    { path: '/usage', label: t('nav.usage_stats'), icon: sidebarIcons.usage },
+    { path: '/monitor', label: t('nav.monitor'), icon: sidebarIcons.monitor },
     ...(config?.loggingToFile
       ? [{ path: '/logs', label: t('nav.logs'), icon: sidebarIcons.logs }]
       : []),
     { path: '/system', label: t('nav.system_info'), icon: sidebarIcons.system },
-    { path: '/monitor', label: t('nav.monitor'), icon: sidebarIcons.monitor },
     { path: '/backup', label: t('nav.backup'), icon: sidebarIcons.backup },
   ];
   const connectionLabel = t(
@@ -547,6 +581,14 @@ export function MainLayout() {
     }
     showNotification(t('notification.data_refreshed'), 'success');
   };
+
+  const handleBackToTop = useCallback(() => {
+    const behavior: ScrollBehavior =
+      typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth';
+    contentRef.current?.scrollTo({ top: 0, behavior });
+  }, []);
 
   return (
     <div className="app-shell">
@@ -762,6 +804,18 @@ export function MainLayout() {
             />
           </main>
         </div>
+
+        <button
+          type="button"
+          className={`back-to-top-button${showBackToTop && !sidebarOpen ? ' visible' : ''}`}
+          onClick={handleBackToTop}
+          aria-label={t('common.back_to_top')}
+          aria-hidden={!showBackToTop || sidebarOpen}
+          tabIndex={showBackToTop && !sidebarOpen ? 0 : -1}
+          title={t('common.back_to_top')}
+        >
+          <IconChevronUp size={18} />
+        </button>
       </div>
     </div>
   );

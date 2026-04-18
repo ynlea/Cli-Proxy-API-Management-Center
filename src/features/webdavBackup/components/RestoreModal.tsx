@@ -5,6 +5,12 @@ import { Button } from '@/components/ui/Button';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import type { BackupScope } from '../types';
 
+const DEFAULT_RESTORE_SCOPE: BackupScope = {
+  localStorage: true,
+  config: false,
+  usage: true,
+};
+
 interface RestoreModalProps {
   open: boolean;
   onClose: () => void;
@@ -16,15 +22,21 @@ interface RestoreModalProps {
 export function RestoreModal({ open, onClose, onRestore, loading, filename }: RestoreModalProps) {
   const { t } = useTranslation();
 
-  const [scope, setScope] = useState<BackupScope>({
-    localStorage: true,
-    config: false,
-    usage: true,
-  });
+  const [scope, setScope] = useState<BackupScope>(DEFAULT_RESTORE_SCOPE);
 
   // 每次打开弹窗时重置为默认值
   useEffect(() => {
-    if (open) setScope({ localStorage: true, config: false, usage: true });
+    if (!open) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setScope(DEFAULT_RESTORE_SCOPE);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
   }, [open]);
 
   const scopeItems: { key: keyof BackupScope; label: string; hint: string }[] = [

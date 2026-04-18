@@ -1,0 +1,176 @@
+@use '../../styles/mixins' as *;
+
+.tabList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.compact {
+  width: fit-content;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.card {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.tabItem {
+  @include button-reset;
+  min-width: 0;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.compactItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 9px 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+    border-color: color-mix(in srgb, var(--border-color) 88%, transparent);
+  }
+
+  @include mobile {
+    flex: 1 0 auto;
+    justify-content: center;
+  }
+}
+
+.cardItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 90%, transparent);
+  color: var(--text-secondary);
+  text-align: left;
+
+  &:hover:not(:disabled) {
+    color: var(--text-primary);
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
+      color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+  }
+}
+
+.active {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)), var(--bg-primary);
+}
+
+.compactItem.active {
+  box-shadow: inset 0 0 0 1px rgba(117, 255, 122, 0.06);
+}
+
+.cardItem.active {
+  border-color: color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.1), rgba(57, 213, 255, 0.05)), var(--bg-primary);
+  box-shadow:
+    inset 0 0 0 1px rgba(117, 255, 122, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+
+  &:hover {
+    transform: none;
+  }
+}
+
+.leading,
+.trailing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.description {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.compactItem .body {
+  align-items: flex-start;
+}
+
+.compactItem .label {
+  white-space: nowrap;
+}
+
+.cardItem .label {
+  font-size: 14px;
+  line-height: 1.35;
+}

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
+import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import {
   IconChevronDown,
@@ -28,12 +29,7 @@ import { copyToClipboard } from '@/utils/clipboard';
 import { downloadBlob } from '@/utils/download';
 import { MANAGEMENT_API_PREFIX } from '@/utils/constants';
 import { formatUnixTimestamp } from '@/utils/format';
-import {
-  HTTP_METHODS,
-  STATUS_GROUPS,
-  resolveStatusGroup,
-  type LogState,
-} from './hooks/logTypes';
+import { HTTP_METHODS, STATUS_GROUPS, resolveStatusGroup, type LogState } from './hooks/logTypes';
 import { parseLogLine } from './hooks/logParsing';
 import { useLogFilters } from './hooks/useLogFilters';
 import { isNearBottom, useLogScroller } from './hooks/useLogScroller';
@@ -93,11 +89,19 @@ export function LogsPage() {
   const [requestLogId, setRequestLogId] = useState<string | null>(null);
   const [requestLogDownloading, setRequestLogDownloading] = useState(false);
 
+  const tabItems = useMemo(
+    () => [
+      { value: 'logs' as const, label: t('logs.log_content') },
+      { value: 'errors' as const, label: t('logs.error_logs_modal_title') },
+    ],
+    [t]
+  );
+
   const trace = useTraceResolver({
     traceScopeKey,
     connectionStatus,
     config,
-    requestLogDownloading
+    requestLogDownloading,
   });
 
   const logScrollerRef = useRef<ReturnType<typeof useLogScroller> | null>(null);
@@ -344,14 +348,14 @@ export function LogsPage() {
     return {
       filteredParsedLines: filteredParsed,
       filteredLines: filteredParsed.map((line) => line.raw),
-      removedCount: Math.max(baseLines.length - filteredParsed.length, 0)
+      removedCount: Math.max(baseLines.length - filteredParsed.length, 0),
     };
   }, [
     baseLines,
     filters.methodFilterSet,
     filters.pathFilterSet,
     filters.statusFilterSet,
-    parsedSearchLines
+    parsedSearchLines,
   ]);
 
   const parsedVisibleLines = useMemo(
@@ -368,7 +372,7 @@ export function LogsPage() {
     isSearching,
     filteredLineCount: filteredLines.length,
     hasStructuredFilters: filters.hasStructuredFilters,
-    showRawLogs
+    showRawLogs,
   });
 
   logScrollerRef.current = scroller;
@@ -434,7 +438,7 @@ export function LogsPage() {
       const response = await logsApi.downloadRequestLogById(id);
       downloadBlob({
         filename: `request-${id}.log`,
-        blob: new Blob([response.data], { type: 'text/plain' })
+        blob: new Blob([response.data], { type: 'text/plain' }),
       });
       showNotification(t('logs.request_log_download_success'), 'success');
       setRequestLogId(null);
@@ -466,22 +470,12 @@ export function LogsPage() {
         </div>
 
         <div className={styles.pageMeta}>
-          <div className={styles.tabBar}>
-            <button
-              type="button"
-              className={`${styles.tabItem} ${activeTab === 'logs' ? styles.tabActive : ''}`}
-              onClick={() => setActiveTab('logs')}
-            >
-              {t('logs.log_content')}
-            </button>
-            <button
-              type="button"
-              className={`${styles.tabItem} ${activeTab === 'errors' ? styles.tabActive : ''}`}
-              onClick={() => setActiveTab('errors')}
-            >
-              {t('logs.error_logs_modal_title')}
-            </button>
-          </div>
+          <SegmentedTabs
+            items={tabItems}
+            value={activeTab}
+            onChange={setActiveTab}
+            ariaLabel={t('logs.title')}
+          />
         </div>
       </div>
 
@@ -613,7 +607,9 @@ export function LogsPage() {
                       <span className={styles.filterChipLabel}>{t('logs.filter_path')}</span>
                       <div className={styles.filterChipList}>
                         {filters.pathOptions.length === 0 ? (
-                          <span className={styles.filterChipHint}>{t('logs.filter_path_empty')}</span>
+                          <span className={styles.filterChipHint}>
+                            {t('logs.filter_path_empty')}
+                          </span>
                         ) : (
                           filters.pathOptions.map(({ path, count }) => {
                             const active = filters.pathFilters.includes(path);
@@ -834,7 +830,9 @@ export function LogsPage() {
                                   </span>
                                 )}
 
-                                {line.latency && <span className={styles.pill}>{line.latency}</span>}
+                                {line.latency && (
+                                  <span className={styles.pill}>{line.latency}</span>
+                                )}
                                 {line.ip && <span className={styles.pill}>{line.ip}</span>}
 
                                 {line.method && (
@@ -849,7 +847,9 @@ export function LogsPage() {
                                   </span>
                                 )}
 
-                                {line.message && <span className={styles.message}>{line.message}</span>}
+                                {line.message && (
+                                  <span className={styles.message}>{line.message}</span>
+                                )}
 
                                 {canTraceRequest && (
                                   <button
@@ -1072,7 +1072,7 @@ export function LogsPage() {
                         {candidate.timeDeltaMs !== null && (
                           <span className={styles.traceDelta}>
                             {t('logs.trace_delta_seconds', {
-                              seconds: (candidate.timeDeltaMs / 1000).toFixed(2)
+                              seconds: (candidate.timeDeltaMs / 1000).toFixed(2),
                             })}
                           </span>
                         )}
@@ -1080,11 +1080,15 @@ export function LogsPage() {
                       <div className={styles.traceCandidateGrid}>
                         <div className={styles.traceInfoItem}>
                           <span className={styles.traceInfoLabel}>{t('logs.trace_endpoint')}</span>
-                          <span className={styles.traceInfoValue}>{candidate.detail.__endpoint}</span>
+                          <span className={styles.traceInfoValue}>
+                            {candidate.detail.__endpoint}
+                          </span>
                         </div>
                         <div className={styles.traceInfoItem}>
                           <span className={styles.traceInfoLabel}>{t('logs.trace_model')}</span>
-                          <span className={styles.traceInfoValue}>{candidate.detail.__modelName || '-'}</span>
+                          <span className={styles.traceInfoValue}>
+                            {candidate.detail.__modelName || '-'}
+                          </span>
                         </div>
                         <div className={styles.traceInfoItem}>
                           <span className={styles.traceInfoLabel}>{t('logs.trace_source')}</span>
@@ -1099,7 +1103,9 @@ export function LogsPage() {
                           </span>
                         </div>
                         <div className={styles.traceInfoItem}>
-                          <span className={styles.traceInfoLabel}>{t('logs.trace_auth_index')}</span>
+                          <span className={styles.traceInfoLabel}>
+                            {t('logs.trace_auth_index')}
+                          </span>
                           <span className={styles.traceInfoValue}>
                             {candidate.detail.auth_index ?? '-'}
                           </span>
@@ -1132,7 +1138,11 @@ export function LogsPage() {
         title={t('logs.request_log_download_title')}
         footer={
           <>
-            <Button variant="secondary" onClick={closeRequestLogModal} disabled={requestLogDownloading}>
+            <Button
+              variant="secondary"
+              onClick={closeRequestLogModal}
+              disabled={requestLogDownloading}
+            >
               {t('common.cancel')}
             </Button>
             <Button

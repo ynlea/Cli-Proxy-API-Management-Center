@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Chart } from 'react-chartjs-2';
-import type { UsageData } from '@/pages/MonitorPage';
+import type { UsageData } from '@/types/monitor';
 import { formatLocalDateKey } from '@/utils/monitor';
 import styles from '@/pages/MonitorPage.module.scss';
 
