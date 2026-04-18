@@ -35,8 +35,8 @@
   gap: 18px;
   padding: clamp(18px, 3vw, 24px);
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: var(--surface-raised);
+  border: 1px solid var(--border-secondary);
+  background: var(--surface-brand);
   box-shadow: var(--shadow);
 
   @media (min-width: #{$breakpoint-desktop}) {
@@ -69,12 +69,12 @@
   min-height: 30px;
   padding: 0 10px;
   border-radius: 8px;
-  border: 1px solid color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
-  background: var(--surface-layer);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
+  background: var(--bg-primary);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--text-secondary);
+  color: var(--primary-color);
 
   &::after {
     display: none;
@@ -125,7 +125,7 @@
   min-height: 58px;
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
   border-radius: 8px;
-  background: var(--surface-layer);
+  background: var(--bg-primary);
 }
 
 .dateTimeBlock {
@@ -157,6 +157,7 @@
   gap: 10px;
   padding: 12px 14px;
   font-size: 12px;
+  background: var(--surface-warm);
 }
 
 .statusDot {
@@ -193,6 +194,7 @@
   color: var(--text-secondary);
   font-size: 12px;
   letter-spacing: 0.04em;
+  background: var(--surface-positive);
 }
 
 .statsSection,
@@ -205,7 +207,7 @@
   padding: 18px 20px;
   border-radius: 12px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: var(--surface-raised);
+  background: color-mix(in srgb, var(--surface-brand) 18%, var(--surface-raised));
   box-shadow: var(--shadow);
 }
 
@@ -227,7 +229,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--text-tertiary);
+  color: var(--primary-color);
 }
 
 .bentoGrid {
@@ -251,7 +253,7 @@
   text-decoration: none;
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
-  background: var(--surface-layer);
+  background: var(--surface-brand);
   transition:
     border-color $transition-fast,
     background-color $transition-fast,
@@ -261,6 +263,14 @@
     background: var(--bg-primary);
     border-color: var(--border-hover);
   }
+}
+
+.bentoCard:nth-child(3n + 2) {
+  background: var(--surface-warm);
+}
+
+.bentoCard:nth-child(3n) {
+  background: var(--surface-positive);
 }
 
 .bentoLarge {
@@ -279,7 +289,7 @@
   height: 36px;
   border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--primary-color) 18%, var(--border-color));
-  background: var(--bg-primary);
+  background: color-mix(in srgb, var(--bg-primary) 86%, var(--surface-brand));
   color: var(--accent-sky);
 }
 
@@ -311,6 +321,7 @@
 }
 
 .configSection {
+  background: color-mix(in srgb, var(--surface-warm) 24%, var(--surface-raised));
   gap: 12px;
 
   @media (min-width: #{$breakpoint-desktop}) {
@@ -334,11 +345,12 @@
   padding: 14px;
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
-  background: var(--surface-layer);
+  background: color-mix(in srgb, var(--bg-primary) 86%, var(--surface-brand));
 }
 
 .configPillWide {
   grid-column: 1 / -1;
+  background: var(--surface-brand);
 }
 
 .configPillLabel {

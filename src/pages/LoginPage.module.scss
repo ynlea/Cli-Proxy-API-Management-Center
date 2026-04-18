@@ -16,8 +16,8 @@
   align-items: stretch;
   justify-content: center;
   padding: 40px;
-  background: color-mix(in srgb, var(--surface-layer) 92%, var(--bg-secondary));
-  border-right: 1px solid var(--border-secondary);
+  background: var(--brand-panel-bg);
+  border-right: 1px solid color-mix(in srgb, var(--brand-panel-text) 18%, transparent);
 
   @media (max-width: $breakpoint-mobile) {
     display: none;
@@ -51,7 +51,7 @@
   font-family: var(--font-display);
   font-size: clamp(56px, 10vw, 132px);
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--brand-panel-text);
   letter-spacing: 0.04em;
   line-height: 0.92;
   text-transform: uppercase;
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   padding: 32px;
-  background: var(--bg-secondary);
+  background: color-mix(in srgb, var(--surface-brand) 18%, var(--bg-secondary));
 
   @media (max-width: $breakpoint-mobile) {
     min-height: 100vh;
@@ -109,9 +109,9 @@
   height: 76px;
   border-radius: var(--surface-radius-sm, #{$radius-md});
   object-fit: cover;
-  background: var(--surface-layer);
+  background: var(--surface-brand);
   box-shadow: var(--shadow);
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--border-secondary);
   padding: 6px;
   image-rendering: auto;
 }
@@ -124,8 +124,8 @@
   gap: 18px;
   padding: 24px;
   border-radius: var(--surface-radius, #{$radius-lg});
-  border: 1px solid var(--border-primary);
-  background: var(--surface-raised);
+  border: 1px solid var(--border-secondary);
+  background: color-mix(in srgb, var(--surface-brand) 14%, var(--surface-raised));
   box-shadow: var(--shadow);
 
   @media (max-width: $breakpoint-mobile) {
@@ -173,8 +173,8 @@
   gap: 6px;
   padding: 14px 16px;
   border-radius: var(--surface-radius-sm, #{$radius-md});
-  border: 1px solid var(--border-primary);
-  background: var(--surface-layer);
+  border: 1px solid var(--border-secondary);
+  background: var(--surface-brand);
 
   .label {
     color: var(--text-secondary);
@@ -262,8 +262,8 @@
   gap: 14px;
   padding: 36px 30px;
   border-radius: var(--surface-radius, #{$radius-lg});
-  border: 1px solid var(--border-primary);
-  background: var(--surface-raised);
+  border: 1px solid var(--border-secondary);
+  background: var(--surface-brand);
   box-shadow: var(--shadow);
   animation: splashEnter 0.6s ease-out;
 }
@@ -293,8 +293,8 @@
   width: 140px;
   height: 8px;
   margin-top: 10px;
-  border: 1px solid var(--border-primary);
-  background: var(--surface-layer);
+  border: 1px solid var(--border-secondary);
+  background: color-mix(in srgb, var(--bg-primary) 84%, var(--surface-brand));
   overflow: hidden;
   position: relative;
 }
@@ -303,7 +303,7 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: 58%;
-  background: var(--primary-color);
+  background: var(--accent-earth);
   animation: splashLoading 1.4s ease-in-out infinite;
 }
 
