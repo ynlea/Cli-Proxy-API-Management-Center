@@ -99,34 +99,34 @@ export function HourlyTokenChart({ data, loading, isDark }: HourlyTokenChartProp
           type: 'line' as const,
           label: t('monitor.hourly_token.input'),
           data: hourlyData.inputTokens,
-          borderColor: '#22c55e',
-          backgroundColor: '#22c55e',
+          borderColor: '#39d5ff',
+          backgroundColor: '#39d5ff',
           borderWidth: 2,
           tension: 0.4,
           yAxisID: 'y',
           order: 0,
           pointRadius: 3,
-          pointBackgroundColor: '#22c55e',
+          pointBackgroundColor: '#39d5ff',
         },
         {
           type: 'line' as const,
           label: t('monitor.hourly_token.output'),
           data: hourlyData.outputTokens,
-          borderColor: '#f97316',
-          backgroundColor: '#f97316',
+          borderColor: '#ff5de4',
+          backgroundColor: '#ff5de4',
           borderWidth: 2,
           tension: 0.4,
           yAxisID: 'y',
           order: 0,
           pointRadius: 3,
-          pointBackgroundColor: '#f97316',
+          pointBackgroundColor: '#ff5de4',
         },
         {
           type: 'bar' as const,
           label: t('monitor.hourly_token.total'),
           data: hourlyData.totalTokens,
-          backgroundColor: 'rgba(59, 130, 246, 0.6)',
-          borderColor: 'rgba(59, 130, 246, 0.6)',
+          backgroundColor: 'rgba(255, 224, 102, 0.58)',
+          borderColor: 'rgba(255, 224, 102, 0.58)',
           borderWidth: 1,
           borderRadius: 4,
           yAxisID: 'y',
@@ -149,7 +149,7 @@ export function HourlyTokenChart({ data, loading, isDark }: HourlyTokenChartProp
         display: true,
         position: 'bottom' as const,
         labels: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           usePointStyle: true,
           padding: 12,
           font: {
@@ -172,10 +172,10 @@ export function HourlyTokenChart({ data, loading, isDark }: HourlyTokenChartProp
         },
       },
       tooltip: {
-        backgroundColor: isDark ? '#374151' : '#ffffff',
-        titleColor: isDark ? '#f3f4f6' : '#111827',
-        bodyColor: isDark ? '#d1d5db' : '#4b5563',
-        borderColor: isDark ? '#4b5563' : '#e5e7eb',
+        backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
+        titleColor: isDark ? '#75ff7a' : '#0c1834',
+        bodyColor: isDark ? '#daf9ff' : '#2b3a58',
+        borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
         borderWidth: 1,
         padding: 12,
         callbacks: {
@@ -190,10 +190,10 @@ export function HourlyTokenChart({ data, loading, isDark }: HourlyTokenChartProp
     scales: {
       x: {
         grid: {
-          color: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -202,10 +202,10 @@ export function HourlyTokenChart({ data, loading, isDark }: HourlyTokenChartProp
       y: {
         position: 'left' as const,
         grid: {
-          color: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -214,7 +214,7 @@ export function HourlyTokenChart({ data, loading, isDark }: HourlyTokenChartProp
         title: {
           display: true,
           text: 'Tokens (K)',
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },

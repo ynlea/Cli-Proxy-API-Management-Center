@@ -1,8 +1,12 @@
 @use '../styles/variables' as *;
 @use '../styles/mixins' as *;
+@use '../styles/pageShell' as pageShell;
 
 .container {
+  @include pageShell.pageContainer;
   width: 100%;
+  max-width: none;
+  gap: 20px;
 }
 
 .cardTitle {
@@ -16,20 +20,73 @@
   height: 24px;
 }
 
-.pageTitle {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
+.overviewStrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+
+  @include mobile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.pageHeader {
+.overviewCard {
+  @include button-reset;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: $spacing-md;
-  margin-bottom: $spacing-xl;
+  gap: 10px;
+  min-height: 94px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.06), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 90%, transparent);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 32%, var(--border-color));
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.05)),
+      color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.overviewCardActive {
+  border-color: color-mix(in srgb, var(--primary-color) 38%, var(--border-color));
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.12), rgba(57, 213, 255, 0.06)),
+    var(--bg-primary);
+  box-shadow:
+    inset 0 0 0 1px rgba(117, 255, 122, 0.08),
+    0 12px 28px rgba(0, 0, 0, 0.09);
+}
+
+.overviewLabel {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.overviewCount {
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
 }
 
 .searchBox {
@@ -52,9 +109,11 @@
   justify-content: center;
   padding: $spacing-xl * 2;
   text-align: center;
-  background: var(--bg-secondary);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary) 92%, transparent);
   border: 1px dashed var(--border-primary);
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 .searchEmptyTitle {
@@ -72,10 +131,73 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xl;
-  padding-bottom: calc(
-    var(--provider-nav-height, 60px) + 12px + env(safe-area-inset-bottom) + #{$spacing-md}
-  );
+  gap: 20px;
+}
+
+.workspaceShell {
+  @include pageShell.workspaceShell(clamp(18px, 2.8vw, 24px));
+}
+
+.providerStage {
+  min-width: 0;
+
+  :global(.card) {
+    height: 100%;
+    padding: 20px;
+  }
+
+  :global(.card-header) {
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+
+  :global(.card-header .title) {
+    font-size: 18px;
+  }
+
+  :global(.item-list) {
+    gap: 12px;
+  }
+
+  :global(.item-row) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--border-primary) 88%, transparent);
+    background:
+      linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+      color-mix(in srgb, var(--surface-layer) 92%, var(--bg-primary));
+  }
+
+  :global(.item-row .item-meta) {
+    gap: 8px;
+  }
+
+  :global(.item-row .item-actions) {
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  @include mobile {
+    :global(.card) {
+      padding: 16px;
+    }
+
+    :global(.item-row) {
+      grid-template-columns: 1fr;
+      padding: 14px;
+    }
+
+    :global(.item-row .item-actions) {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
 }
 
 .section {
@@ -101,7 +223,7 @@
 .providerList {
   display: grid;
   gap: $spacing-md;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 
   @include mobile {
     grid-template-columns: 1fr;
@@ -122,12 +244,14 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border-radius: 999px;
+  border-radius: 6px;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.1;
   border: 1px solid transparent;
-  background-color: var(--bg-tertiary);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--bg-tertiary) 92%, transparent);
   color: var(--text-primary);
   white-space: nowrap;
 }
@@ -181,9 +305,11 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: var(--accent-tertiary, #f3f4f6);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--accent-tertiary, #f3f4f6) 92%, transparent);
   border: 1px solid var(--border-primary);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 4px 10px;
   font-size: 12px;
   color: var(--text-secondary);
@@ -219,16 +345,20 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: var(--bg-quinary, #f8f9fa);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    var(--bg-quinary, #f8f9fa);
   color: var(--text-secondary);
   border: 1px solid var(--border-secondary);
-  border-radius: 14px;
+  border-radius: 6px;
   padding: 4px 10px;
   font-size: 12px;
   transition: all 0.15s ease;
 
   &:hover {
-    background: var(--bg-tertiary);
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.06), rgba(57, 213, 255, 0.04)),
+      var(--bg-tertiary);
     border-color: var(--primary-color);
   }
 }
@@ -272,7 +402,7 @@
 
 // API密钥条目列表（二级卡片）
 .apiKeyEntriesSection {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .apiKeyEntriesLabel {
@@ -283,9 +413,9 @@
 }
 
 .apiKeyEntryList {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 8px;
 }
 
 .apiKeyEntryCard {
@@ -293,9 +423,11 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  background: var(--bg-secondary, #f9fafb);
-  border: 1px solid var(--border-secondary);
+  padding: 10px 12px;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary, #f9fafb) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-secondary) 88%, transparent);
   border-radius: 8px;
   font-size: 12px;
 }
@@ -467,9 +599,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 12px;
   padding: 8px 0;
-  max-width: 280px;
+  max-width: 320px;
 }
 
 .statusBlocks {

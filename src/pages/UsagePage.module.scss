@@ -2,20 +2,74 @@
 @use '../styles/mixins' as *;
 
 .container {
-  width: 100%;
+  width: min(100%, 1480px);
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   position: relative;
+  margin: 0 auto;
+}
+
+.pageHero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(18px, 3vw, 24px);
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--primary-color) 10%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--surface-raised) 96%, transparent),
+      color-mix(in srgb, var(--bg-secondary) 96%, transparent)
+    );
+  box-shadow: var(--shadow);
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.26),
+          rgba(57, 213, 255, 0.34),
+          rgba(117, 255, 122, 0.24)
+        )
+        top / 100% 2px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 14px;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.pageHeaderCopy {
+  min-width: 0;
 }
 
 .headerActions {
@@ -23,11 +77,32 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.headerMetaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .lastRefreshed {
-  font-size: 11px;
-  color: var(--text-tertiary);
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 90%, transparent);
+  font-size: 12px;
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
@@ -36,6 +111,13 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 90%, transparent);
 }
 
 .timeRangeLabel {
@@ -49,10 +131,32 @@
 }
 
 .pageTitle {
-  font-size: 28px;
+  font-size: clamp(28px, 3.6vw, 38px);
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.contentStack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.supportGrid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  > * {
+    min-width: 0;
+  }
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
 }
 
 .errorBox {
@@ -78,10 +182,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  --glass-blur: 6px;
-  background: var(--glass-bg-secondary);
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  background:
+    radial-gradient(circle at top, rgba(57, 213, 255, 0.08), transparent 36%),
+    rgba(3, 5, 15, 0.82);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 }
 
 .loadingOverlayContent {
@@ -762,12 +867,15 @@
 
 .chartWrapper {
   padding: 14px;
-  background-color: var(--bg-secondary);
-  border-radius: $radius-lg;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 94%, var(--bg-secondary));
+  border-radius: 10px;
   border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: var(--shadow);
 }
 
 .chartLegend {
@@ -793,9 +901,11 @@
   min-width: 0;
   max-width: 240px;
   padding: 4px 10px;
-  border-radius: $radius-full;
+  border-radius: 6px;
   border: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    var(--bg-primary);
   font-size: 12px;
   color: var(--text-secondary);
 
@@ -851,7 +961,7 @@
 
 .chartsGrid {
   display: grid;
-  gap: 20px;
+  gap: 18px;
   grid-template-columns: minmax(0, 1fr);
 
   > * {
@@ -865,7 +975,7 @@
 
 .detailsGrid {
   display: grid;
-  gap: 20px;
+  gap: 18px;
   grid-template-columns: minmax(0, 1fr);
 
   > * {
@@ -928,7 +1038,7 @@
   overflow: auto;
   max-height: 460px;
   border: 1px solid var(--border-color);
-  border-radius: $radius-md;
+  border-radius: 8px;
 }
 
 .requestEventsTimestamp {
@@ -963,7 +1073,7 @@
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
-  border-radius: $radius-full;
+  border-radius: 4px;
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
@@ -977,12 +1087,8 @@
 
 .chartLineList {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
-
-  @include mobile {
-    grid-template-columns: 1fr;
-  }
 }
 
 .chartLineItem {
@@ -991,9 +1097,11 @@
   align-items: center;
   gap: 10px;
   padding: 12px;
-  background: var(--bg-secondary);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: $radius-md;
+  border-radius: 8px;
 
   @include mobile {
     grid-template-columns: 1fr;
@@ -1023,14 +1131,16 @@
 
 // Service Health Card
 .healthCard {
-  background: var(--bg-primary);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 94%, var(--bg-primary));
   border: 1px solid var(--border-color);
-  border-radius: $radius-lg;
+  border-radius: 10px;
   padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow);
 }
 
 .healthHeader {

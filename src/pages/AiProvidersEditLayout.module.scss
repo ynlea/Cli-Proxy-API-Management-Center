@@ -1,21 +1,24 @@
+@use '../styles/pageShell' as pageShell;
+
 .content {
+  @include pageShell.pageContainer;
   width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
+  padding: 0 0 24px;
 }
 
 .floatingActions {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .floatingBackButton {
-  min-width: 82px;
+  min-width: 96px;
 }
 
 .floatingSaveButton {
-  min-width: 88px;
+  min-width: 108px;
 }
 
 .upstreamApiKeyRow {

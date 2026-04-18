@@ -35,13 +35,13 @@ export function buildChartOptions({
   const pointRadius = isMobile && period === 'hour' ? 0 : isMobile ? 2 : 4;
   const tickFontSize = isMobile ? 10 : 12;
   const maxTickLabelCount = isMobile ? (period === 'hour' ? 8 : 6) : period === 'hour' ? 12 : 10;
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(17, 24, 39, 0.06)';
-  const axisBorderColor = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(17, 24, 39, 0.10)';
-  const tickColor = isDark ? 'rgba(255, 255, 255, 0.72)' : 'rgba(17, 24, 39, 0.72)';
-  const tooltipBg = isDark ? 'rgba(17, 24, 39, 0.92)' : 'rgba(255, 255, 255, 0.98)';
-  const tooltipTitle = isDark ? '#ffffff' : '#111827';
-  const tooltipBody = isDark ? 'rgba(255, 255, 255, 0.86)' : '#374151';
-  const tooltipBorder = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(17, 24, 39, 0.10)';
+  const gridColor = isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)';
+  const axisBorderColor = isDark ? 'rgba(117, 255, 122, 0.18)' : 'rgba(12, 24, 52, 0.16)';
+  const tickColor = isDark ? 'rgba(218, 249, 255, 0.82)' : 'rgba(12, 24, 52, 0.76)';
+  const tooltipBg = isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)';
+  const tooltipTitle = isDark ? '#75ff7a' : '#0c1834';
+  const tooltipBody = isDark ? 'rgba(218, 249, 255, 0.86)' : '#2b3a58';
+  const tooltipBorder = isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)';
 
   return {
     responsive: true,
@@ -60,7 +60,8 @@ export function buildChartOptions({
         borderWidth: 1,
         padding: 10,
         displayColors: true,
-        usePointStyle: true
+        usePointStyle: true,
+        cornerRadius: 6
       }
     },
     scales: {
@@ -125,7 +126,7 @@ export function buildChartOptions({
       point: {
         borderWidth: 2,
         radius: pointRadius,
-        hoverRadius: 4
+        hoverRadius: 5
       }
     }
   };

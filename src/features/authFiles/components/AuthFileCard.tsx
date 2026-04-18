@@ -251,27 +251,21 @@ export function AuthFileCard(props: AuthFileCardProps) {
 
           <div className={styles.cardActions}>
             <div className={styles.cardActionsMain}>
-              {showModelsButton && (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => onShowModels(file)}
-                  className={`${styles.primaryActionButton} ${styles.modelsActionButton}`}
-                  title={t('auth_files.models_button', { defaultValue: '模型' })}
-                  disabled={disableControls}
-                >
-                  <>
-                    <span className={styles.modelsActionIconWrap}>
-                      <IconModelCluster className={styles.actionIcon} size={16} />
-                    </span>
-                    <span className={styles.actionButtonLabel}>
-                      {t('auth_files.models_button', { defaultValue: '模型' })}
-                    </span>
-                  </>
-                </Button>
-              )}
-              {!isRuntimeOnly && (
+              {(showModelsButton || !isRuntimeOnly) && (
                 <div className={styles.cardUtilityActions}>
+                  {showModelsButton && (
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => onShowModels(file)}
+                      className={styles.iconButton}
+                      title={t('auth_files.models_button', { defaultValue: '模型' })}
+                      aria-label={t('auth_files.models_button', { defaultValue: '模型' })}
+                      disabled={disableControls}
+                    >
+                      <IconModelCluster className={styles.actionIcon} size={16} />
+                    </Button>
+                  )}
                   <Button
                     variant="secondary"
                     size="sm"

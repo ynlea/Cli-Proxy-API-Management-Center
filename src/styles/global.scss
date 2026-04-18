@@ -9,9 +9,20 @@
 @use './components.scss';
 @use './layout.scss';
 
+html,
 body {
-  background-color: var(--bg-secondary);
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(57, 213, 255, 0.08), transparent 24%),
+    linear-gradient(180deg, #0b0f1f, var(--bg-secondary) 18%, #02040d 100%);
   color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.45;
+  position: relative;
+  letter-spacing: 0.01em;
   transition: background-color $transition-normal, color $transition-normal;
 }
 
@@ -24,29 +35,108 @@ body.modal-open .content {
   overflow: hidden;
 }
 
+#root {
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+}
+
+#root::before,
+#root::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+#root::before {
+  z-index: -2;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 79, 216, 0.14), transparent 0 22%),
+    radial-gradient(circle at 86% 14%, rgba(57, 213, 255, 0.14), transparent 0 18%),
+    radial-gradient(circle at 24% 88%, rgba(117, 255, 122, 0.12), transparent 0 20%),
+    linear-gradient(180deg, rgba(74, 123, 255, 0.08), transparent 42%);
+}
+
+#root::after {
+  z-index: -1;
+  opacity: 0.86;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, calc(var(--scanline-opacity) * 0.35)) 0 1px,
+      transparent 1px 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(57, 213, 255, calc(var(--grid-opacity) * 0.22)) 0 1px,
+      transparent 1px 32px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(57, 213, 255, calc(var(--grid-opacity) * 0.18)) 0 1px,
+      transparent 1px 32px
+    );
+}
+
+a {
+  color: var(--accent-sky);
+  text-decoration-color: color-mix(in srgb, var(--accent-sky) 35%, transparent);
+  transition: color $transition-fast, text-decoration-color $transition-fast;
+
+  &:hover {
+    color: var(--primary-color);
+    text-decoration-color: currentColor;
+  }
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+
+::selection {
+  background: rgba(57, 213, 255, 0.3);
+  color: var(--text-primary);
+}
+
 // 滚动条样式
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: rgba(6, 10, 23, 0.72);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: $radius-full;
+  background: rgba(57, 213, 255, 0.22);
+  border-radius: 0;
+  border: 2px solid rgba(6, 10, 23, 0.72);
+  background-clip: padding-box;
 
   &:hover {
-    background: var(--border-hover);
+    background: rgba(57, 213, 255, 0.42);
   }
 }
 
 // 通用工具类
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 $spacing-md;
 }
@@ -76,4 +166,20 @@ body.modal-open .content {
 .fade-exit-active {
   opacity: 0;
   transition: opacity $transition-normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  #root::before,
+  #root::after {
+    opacity: 0.28;
+  }
 }

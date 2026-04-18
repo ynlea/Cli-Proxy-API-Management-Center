@@ -290,84 +290,107 @@ export function MonitorPage() {
         </div>
       )}
 
-      {/* 页面标题 */}
-      <div className={styles.header}>
-        <h1 className={styles.pageTitle}>{t('monitor.title')}</h1>
-        <div className={styles.headerActions}>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={loadData}
-            disabled={loading}
-          >
-            {loading ? t('common.loading') : t('common.refresh')}
-          </Button>
-        </div>
-      </div>
-
-      {/* 错误提示 */}
-      {error && <div className={styles.errorBox}>{error}</div>}
-
-      {/* 时间范围和 API 过滤 */}
-      <div className={styles.filters}>
-        <div className={styles.filterGroup}>
-          <span className={styles.filterLabel}>{t('monitor.time_range')}</span>
-          <div className={styles.timeButtons}>
-            {([1, 7, 14, 30] as TimeRange[]).map((range) => (
-              <button
-                key={range}
-                className={`${styles.timeButton} ${timeRange === range ? styles.active : ''}`}
-                onClick={() => handleTimeRangeChange(range)}
-              >
-                {range === 1 ? t('monitor.today') : t('monitor.last_n_days', { n: range })}
-              </button>
-            ))}
+      <div className={styles.pageHero}>
+        <div className={styles.header}>
+          <div className={styles.pageHeaderCopy}>
+            <h1 className={styles.pageTitle}>{t('monitor.title')}</h1>
+          </div>
+          <div className={styles.headerActions}>
+            <Button variant="secondary" size="sm" onClick={loadData} disabled={loading}>
+              {loading ? t('common.loading') : t('common.refresh')}
+            </Button>
           </div>
         </div>
-        <div className={styles.filterGroup}>
-          <span className={styles.filterLabel}>{t('monitor.api_filter')}</span>
-          <input
-            type="text"
-            className={styles.filterInput}
-            placeholder={t('monitor.api_filter_placeholder')}
-            value={apiFilter}
-            onChange={(e) => setApiFilter(e.target.value)}
-          />
-          <Button variant="secondary" size="sm" onClick={handleApiFilterApply}>
-            {t('monitor.apply')}
-          </Button>
+
+        <div className={styles.filters}>
+          <div className={styles.filterGroup}>
+            <span className={styles.filterLabel}>{t('monitor.time_range')}</span>
+            <div className={styles.timeButtons}>
+              {([1, 7, 14, 30] as TimeRange[]).map((range) => (
+                <button
+                  key={range}
+                  className={`${styles.timeButton} ${timeRange === range ? styles.active : ''}`}
+                  onClick={() => handleTimeRangeChange(range)}
+                >
+                  {range === 1 ? t('monitor.today') : t('monitor.last_n_days', { n: range })}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className={styles.filterGroup}>
+            <span className={styles.filterLabel}>{t('monitor.api_filter')}</span>
+            <div className={styles.filterControlRow}>
+              <input
+                type="text"
+                className={styles.filterInput}
+                placeholder={t('monitor.api_filter_placeholder')}
+                value={apiFilter}
+                onChange={(e) => setApiFilter(e.target.value)}
+              />
+              <Button variant="secondary" size="sm" onClick={handleApiFilterApply}>
+                {t('monitor.apply')}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* KPI 卡片 */}
-      <KpiCards data={filteredData} loading={loading} timeRange={timeRange} />
+      {error && <div className={styles.errorBox}>{error}</div>}
 
-      {/* 图表区域 */}
-      <div className={styles.chartsGrid}>
-        <ModelDistributionChart data={filteredData} loading={loading} isDark={isDark} timeRange={timeRange} />
-        <DailyTrendChart data={filteredData} loading={loading} isDark={isDark} timeRange={timeRange} />
+      <div className={styles.contentStack}>
+        <KpiCards data={filteredData} loading={loading} timeRange={timeRange} />
+
+        <div className={styles.chartsStack}>
+          <div className={styles.chartsGrid}>
+            <ModelDistributionChart
+              data={filteredData}
+              loading={loading}
+              isDark={isDark}
+              timeRange={timeRange}
+            />
+            <DailyTrendChart
+              data={filteredData}
+              loading={loading}
+              isDark={isDark}
+              timeRange={timeRange}
+            />
+          </div>
+
+          <div className={styles.detailCharts}>
+            <HourlyModelChart data={apiFilteredData} loading={loading} isDark={isDark} />
+            <HourlyTokenChart data={apiFilteredData} loading={loading} isDark={isDark} />
+          </div>
+        </div>
+
+        <div className={styles.statsGrid}>
+          <ChannelStats
+            data={filteredData}
+            loading={loading}
+            providerMap={providerMap}
+            providerModels={providerModels}
+            sourceInfoMap={sourceInfoMap}
+            authFileMap={authFileMap}
+          />
+          <FailureAnalysis
+            data={filteredData}
+            loading={loading}
+            providerMap={providerMap}
+            providerModels={providerModels}
+            sourceInfoMap={sourceInfoMap}
+            authFileMap={authFileMap}
+          />
+        </div>
+
+        <RequestLogs
+          data={filteredData}
+          loading={loading}
+          providerMap={providerMap}
+          providerTypeMap={providerTypeMap}
+          sourceInfoMap={sourceInfoMap}
+          authFileMap={authFileMap}
+          apiFilter={apiFilter}
+        />
       </div>
-
-      {/* 小时级图表 */}
-      <HourlyModelChart data={apiFilteredData} loading={loading} isDark={isDark} />
-      <HourlyTokenChart data={apiFilteredData} loading={loading} isDark={isDark} />
-
-      {/* 统计表格 */}
-      <div className={styles.statsGrid}>
-        <ChannelStats data={filteredData} loading={loading} providerMap={providerMap} providerModels={providerModels} sourceInfoMap={sourceInfoMap} authFileMap={authFileMap} />
-        <FailureAnalysis data={filteredData} loading={loading} providerMap={providerMap} providerModels={providerModels} sourceInfoMap={sourceInfoMap} authFileMap={authFileMap} />
-      </div>
-
-      {/* 请求日志 */}
-      <RequestLogs
-        data={filteredData}
-        loading={loading}
-        providerMap={providerMap}
-        providerTypeMap={providerTypeMap}
-        sourceInfoMap={sourceInfoMap}
-        authFileMap={authFileMap}
-        apiFilter={apiFilter}
-      />
     </div>
   );
 }

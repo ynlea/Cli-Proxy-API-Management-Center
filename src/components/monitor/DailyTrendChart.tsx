@@ -91,22 +91,22 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
           type: 'line' as const,
           label: t('monitor.trend.requests'),
           data: dailyData.map((item) => item.requests),
-          borderColor: '#3b82f6',
-          backgroundColor: '#3b82f6',
+          borderColor: '#39d5ff',
+          backgroundColor: '#39d5ff',
           borderWidth: 3,
           fill: false,
           tension: 0.35,
           yAxisID: 'y1',
           order: 0,
           pointRadius: 3,
-          pointBackgroundColor: '#3b82f6',
+          pointBackgroundColor: '#39d5ff',
         },
         {
           type: 'bar' as const,
           label: t('monitor.trend.input_tokens'),
           data: dailyData.map((item) => item.inputTokens / 1000),
-          backgroundColor: 'rgba(34, 197, 94, 0.7)',
-          borderColor: 'rgba(34, 197, 94, 0.7)',
+          backgroundColor: 'rgba(117, 255, 122, 0.66)',
+          borderColor: 'rgba(117, 255, 122, 0.66)',
           borderWidth: 1,
           borderRadius: 0,
           yAxisID: 'y',
@@ -117,8 +117,8 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
           type: 'bar' as const,
           label: t('monitor.trend.output_tokens'),
           data: dailyData.map((item) => item.outputTokens / 1000),
-          backgroundColor: 'rgba(249, 115, 22, 0.7)',
-          borderColor: 'rgba(249, 115, 22, 0.7)',
+          backgroundColor: 'rgba(255, 93, 228, 0.62)',
+          borderColor: 'rgba(255, 93, 228, 0.62)',
           borderWidth: 1,
           borderRadius: 4,
           yAxisID: 'y',
@@ -142,7 +142,7 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
         display: true,
         position: 'bottom' as const,
         labels: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           usePointStyle: true,
           padding: 16,
           font: {
@@ -165,10 +165,10 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
         },
       },
       tooltip: {
-        backgroundColor: isDark ? '#374151' : '#ffffff',
-        titleColor: isDark ? '#f3f4f6' : '#111827',
-        bodyColor: isDark ? '#d1d5db' : '#4b5563',
-        borderColor: isDark ? '#4b5563' : '#e5e7eb',
+        backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
+        titleColor: isDark ? '#75ff7a' : '#0c1834',
+        bodyColor: isDark ? '#daf9ff' : '#2b3a58',
+        borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
         borderWidth: 1,
         padding: 12,
         callbacks: {
@@ -186,10 +186,10 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
     scales: {
       x: {
         grid: {
-          color: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -200,10 +200,10 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
         position: 'left' as const,
         stacked: true,
         grid: {
-          color: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -212,7 +212,7 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
         title: {
           display: true,
           text: 'Tokens (K)',
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -225,7 +225,7 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
           drawOnChartArea: false,
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -233,7 +233,7 @@ export function DailyTrendChart({ data, loading, isDark, timeRange }: DailyTrend
         title: {
           display: true,
           text: t('monitor.trend.requests'),
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },

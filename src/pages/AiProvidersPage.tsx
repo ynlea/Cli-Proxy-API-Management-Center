@@ -8,9 +8,9 @@ import {
   GeminiSection,
   OpenAISection,
   VertexSection,
-  ProviderNav,
   useProviderStats,
 } from '@/components/providers';
+import { PageHero } from '@/components/layout/PageHero';
 import {
   withDisableAllModelsRule,
   withoutDisableAllModelsRule,
@@ -22,6 +22,14 @@ import { useAuthStore, useConfigStore, useNotificationStore, useThemeStore } fro
 import type { GeminiKeyConfig, OpenAIProviderConfig, ProviderKeyConfig } from '@/types';
 import { indexUsageDetailsBySource } from '@/utils/usageIndex';
 import styles from './AiProvidersPage.module.scss';
+
+type ProviderPanelId =
+  | 'provider-gemini'
+  | 'provider-codex'
+  | 'provider-claude'
+  | 'provider-vertex'
+  | 'provider-ampcode'
+  | 'provider-openai';
 
 export function AiProvidersPage() {
   const { t } = useTranslation();
@@ -57,6 +65,7 @@ export function AiProvidersPage() {
   );
 
   const [configSwitchingKey, setConfigSwitchingKey] = useState<string | null>(null);
+  const [activeProviderId, setActiveProviderId] = useState<ProviderPanelId>('provider-gemini');
 
   const disableControls = connectionStatus !== 'connected';
   const isSwitching = Boolean(configSwitchingKey);
@@ -367,99 +376,175 @@ export function AiProvidersPage() {
     });
   };
 
+  const providerOverview = useMemo(
+    () => [
+      {
+        id: 'provider-gemini' as const,
+        label: t('ai_providers.gemini_title'),
+        count: geminiKeys.length,
+      },
+      {
+        id: 'provider-codex' as const,
+        label: t('ai_providers.codex_title'),
+        count: codexConfigs.length,
+      },
+      {
+        id: 'provider-claude' as const,
+        label: t('ai_providers.claude_title'),
+        count: claudeConfigs.length,
+      },
+      {
+        id: 'provider-vertex' as const,
+        label: t('ai_providers.vertex_title'),
+        count: vertexConfigs.length,
+      },
+      {
+        id: 'provider-ampcode' as const,
+        label: t('ai_providers.ampcode_title'),
+        count: config?.ampcode ? 1 : 0,
+      },
+      {
+        id: 'provider-openai' as const,
+        label: t('ai_providers.openai_title'),
+        count: openaiProviders.length,
+      },
+    ],
+    [
+      claudeConfigs.length,
+      codexConfigs.length,
+      config?.ampcode,
+      geminiKeys.length,
+      openaiProviders.length,
+      t,
+      vertexConfigs.length,
+    ]
+  );
+
+  const renderActiveProviderSection = () => {
+    if (activeProviderId === 'provider-gemini') {
+      return (
+        <GeminiSection
+          configs={geminiKeys}
+          keyStats={keyStats}
+          usageDetailsBySource={usageDetailsBySource}
+          loading={loading}
+          disableControls={disableControls}
+          isSwitching={isSwitching}
+          onAdd={() => openEditor('/ai-providers/gemini/new')}
+          onEdit={(index) => openEditor(`/ai-providers/gemini/${index}`)}
+          onDelete={deleteGemini}
+          onToggle={(index, enabled) => void setConfigEnabled('gemini', index, enabled)}
+        />
+      );
+    }
+
+    if (activeProviderId === 'provider-codex') {
+      return (
+        <CodexSection
+          configs={codexConfigs}
+          keyStats={keyStats}
+          usageDetailsBySource={usageDetailsBySource}
+          loading={loading}
+          disableControls={disableControls}
+          isSwitching={isSwitching}
+          onAdd={() => openEditor('/ai-providers/codex/new')}
+          onEdit={(index) => openEditor(`/ai-providers/codex/${index}`)}
+          onDelete={(index) => void deleteProviderEntry('codex', index)}
+          onToggle={(index, enabled) => void setConfigEnabled('codex', index, enabled)}
+        />
+      );
+    }
+
+    if (activeProviderId === 'provider-claude') {
+      return (
+        <ClaudeSection
+          configs={claudeConfigs}
+          keyStats={keyStats}
+          usageDetailsBySource={usageDetailsBySource}
+          loading={loading}
+          disableControls={disableControls}
+          isSwitching={isSwitching}
+          onAdd={() => openEditor('/ai-providers/claude/new')}
+          onEdit={(index) => openEditor(`/ai-providers/claude/${index}`)}
+          onDelete={(index) => void deleteProviderEntry('claude', index)}
+          onToggle={(index, enabled) => void setConfigEnabled('claude', index, enabled)}
+        />
+      );
+    }
+
+    if (activeProviderId === 'provider-vertex') {
+      return (
+        <VertexSection
+          configs={vertexConfigs}
+          keyStats={keyStats}
+          usageDetailsBySource={usageDetailsBySource}
+          loading={loading}
+          disableControls={disableControls}
+          isSwitching={isSwitching}
+          onAdd={() => openEditor('/ai-providers/vertex/new')}
+          onEdit={(index) => openEditor(`/ai-providers/vertex/${index}`)}
+          onDelete={deleteVertex}
+          onToggle={(index, enabled) => void setConfigEnabled('vertex', index, enabled)}
+        />
+      );
+    }
+
+    if (activeProviderId === 'provider-ampcode') {
+      return (
+        <AmpcodeSection
+          config={config?.ampcode}
+          loading={loading}
+          disableControls={disableControls}
+          isSwitching={isSwitching}
+          onEdit={() => openEditor('/ai-providers/ampcode')}
+        />
+      );
+    }
+
+    return (
+      <OpenAISection
+        configs={openaiProviders}
+        keyStats={keyStats}
+        usageDetailsBySource={usageDetailsBySource}
+        loading={loading}
+        disableControls={disableControls}
+        isSwitching={isSwitching}
+        resolvedTheme={resolvedTheme}
+        onAdd={() => openEditor('/ai-providers/openai/new')}
+        onEdit={(index) => openEditor(`/ai-providers/openai/${index}`)}
+        onDelete={deleteOpenai}
+      />
+    );
+  };
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.pageTitle}>{t('ai_providers.title')}</h1>
+      <PageHero title={t('ai_providers.title')}>
+        <div className={styles.overviewStrip}>
+          {providerOverview.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`${styles.overviewCard} ${
+                activeProviderId === item.id ? styles.overviewCardActive : ''
+              }`}
+              onClick={() => setActiveProviderId(item.id)}
+              aria-pressed={activeProviderId === item.id}
+            >
+              <span className={styles.overviewLabel}>{item.label}</span>
+              <span className={styles.overviewCount}>{item.count}</span>
+            </button>
+          ))}
+        </div>
+      </PageHero>
+
       <div className={styles.content}>
         {error && <div className="error-box">{error}</div>}
 
-        <div id="provider-gemini">
-          <GeminiSection
-            configs={geminiKeys}
-            keyStats={keyStats}
-            usageDetailsBySource={usageDetailsBySource}
-            loading={loading}
-            disableControls={disableControls}
-            isSwitching={isSwitching}
-            onAdd={() => openEditor('/ai-providers/gemini/new')}
-            onEdit={(index) => openEditor(`/ai-providers/gemini/${index}`)}
-            onDelete={deleteGemini}
-            onToggle={(index, enabled) => void setConfigEnabled('gemini', index, enabled)}
-          />
-        </div>
-
-        <div id="provider-codex">
-          <CodexSection
-            configs={codexConfigs}
-            keyStats={keyStats}
-            usageDetailsBySource={usageDetailsBySource}
-            loading={loading}
-            disableControls={disableControls}
-            isSwitching={isSwitching}
-            onAdd={() => openEditor('/ai-providers/codex/new')}
-            onEdit={(index) => openEditor(`/ai-providers/codex/${index}`)}
-            onDelete={(index) => void deleteProviderEntry('codex', index)}
-            onToggle={(index, enabled) => void setConfigEnabled('codex', index, enabled)}
-          />
-        </div>
-
-        <div id="provider-claude">
-          <ClaudeSection
-            configs={claudeConfigs}
-            keyStats={keyStats}
-            usageDetailsBySource={usageDetailsBySource}
-            loading={loading}
-            disableControls={disableControls}
-            isSwitching={isSwitching}
-            onAdd={() => openEditor('/ai-providers/claude/new')}
-            onEdit={(index) => openEditor(`/ai-providers/claude/${index}`)}
-            onDelete={(index) => void deleteProviderEntry('claude', index)}
-            onToggle={(index, enabled) => void setConfigEnabled('claude', index, enabled)}
-          />
-        </div>
-
-        <div id="provider-vertex">
-          <VertexSection
-            configs={vertexConfigs}
-            keyStats={keyStats}
-            usageDetailsBySource={usageDetailsBySource}
-            loading={loading}
-            disableControls={disableControls}
-            isSwitching={isSwitching}
-            onAdd={() => openEditor('/ai-providers/vertex/new')}
-            onEdit={(index) => openEditor(`/ai-providers/vertex/${index}`)}
-            onDelete={deleteVertex}
-            onToggle={(index, enabled) => void setConfigEnabled('vertex', index, enabled)}
-          />
-        </div>
-
-        <div id="provider-ampcode">
-          <AmpcodeSection
-            config={config?.ampcode}
-            loading={loading}
-            disableControls={disableControls}
-            isSwitching={isSwitching}
-            onEdit={() => openEditor('/ai-providers/ampcode')}
-          />
-        </div>
-
-        <div id="provider-openai">
-          <OpenAISection
-            configs={openaiProviders}
-            keyStats={keyStats}
-            usageDetailsBySource={usageDetailsBySource}
-            loading={loading}
-            disableControls={disableControls}
-            isSwitching={isSwitching}
-            resolvedTheme={resolvedTheme}
-            onAdd={() => openEditor('/ai-providers/openai/new')}
-            onEdit={(index) => openEditor(`/ai-providers/openai/${index}`)}
-            onDelete={deleteOpenai}
-          />
+        <div className={styles.workspaceShell}>
+          <div className={styles.providerStage}>{renderActiveProviderSection()}</div>
         </div>
       </div>
-
-      <ProviderNav />
     </div>
   );
 }

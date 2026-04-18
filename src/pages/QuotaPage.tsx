@@ -1,10 +1,11 @@
 /**
- * Quota management page - coordinates the four quota sections.
+ * Quota management page - coordinates the provider quota workspaces.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
+import { PageHero } from '@/components/layout/PageHero';
 import { useAuthStore } from '@/stores';
 import { authFilesApi, configFileApi } from '@/services/api';
 import {
@@ -18,6 +19,8 @@ import {
 import type { AuthFileItem } from '@/types';
 import styles from './QuotaPage.module.scss';
 
+type QuotaPanelId = 'claude' | 'antigravity' | 'codex' | 'gemini-cli' | 'kimi';
+
 export function QuotaPage() {
   const { t } = useTranslation();
   const connectionStatus = useAuthStore((state) => state.connectionStatus);
@@ -25,6 +28,7 @@ export function QuotaPage() {
   const [files, setFiles] = useState<AuthFileItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activePanel, setActivePanel] = useState<QuotaPanelId>('claude');
 
   const disableControls = connectionStatus !== 'connected';
 
@@ -62,45 +66,116 @@ export function QuotaPage() {
     loadConfig();
   }, [loadFiles, loadConfig]);
 
+  const quotaPanels = useMemo(
+    () => [
+      {
+        id: 'claude' as const,
+        label: t(`${CLAUDE_CONFIG.i18nPrefix}.title`),
+        count: files.filter((file) => CLAUDE_CONFIG.filterFn(file)).length
+      },
+      {
+        id: 'antigravity' as const,
+        label: t(`${ANTIGRAVITY_CONFIG.i18nPrefix}.title`),
+        count: files.filter((file) => ANTIGRAVITY_CONFIG.filterFn(file)).length
+      },
+      {
+        id: 'codex' as const,
+        label: t(`${CODEX_CONFIG.i18nPrefix}.title`),
+        count: files.filter((file) => CODEX_CONFIG.filterFn(file)).length
+      },
+      {
+        id: 'gemini-cli' as const,
+        label: t(`${GEMINI_CLI_CONFIG.i18nPrefix}.title`),
+        count: files.filter((file) => GEMINI_CLI_CONFIG.filterFn(file)).length
+      },
+      {
+        id: 'kimi' as const,
+        label: t(`${KIMI_CONFIG.i18nPrefix}.title`),
+        count: files.filter((file) => KIMI_CONFIG.filterFn(file)).length
+      }
+    ],
+    [files, t]
+  );
+
+  const renderActiveSection = () => {
+    if (activePanel === 'claude') {
+      return (
+        <QuotaSection
+          config={CLAUDE_CONFIG}
+          files={files}
+          loading={loading}
+          disabled={disableControls}
+        />
+      );
+    }
+
+    if (activePanel === 'antigravity') {
+      return (
+        <QuotaSection
+          config={ANTIGRAVITY_CONFIG}
+          files={files}
+          loading={loading}
+          disabled={disableControls}
+        />
+      );
+    }
+
+    if (activePanel === 'codex') {
+      return (
+        <QuotaSection
+          config={CODEX_CONFIG}
+          files={files}
+          loading={loading}
+          disabled={disableControls}
+        />
+      );
+    }
+
+    if (activePanel === 'gemini-cli') {
+      return (
+        <QuotaSection
+          config={GEMINI_CLI_CONFIG}
+          files={files}
+          loading={loading}
+          disabled={disableControls}
+        />
+      );
+    }
+
+    return (
+      <QuotaSection config={KIMI_CONFIG} files={files} loading={loading} disabled={disableControls} />
+    );
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>{t('quota_management.title')}</h1>
-        <p className={styles.description}>{t('quota_management.description')}</p>
-      </div>
+      <PageHero
+        title={t('quota_management.title')}
+        description={t('quota_management.description')}
+      >
+        <div className={styles.panelStrip}>
+          {quotaPanels.map((panel) => (
+            <button
+              key={panel.id}
+              type="button"
+              className={`${styles.panelTab} ${
+                activePanel === panel.id ? styles.panelTabActive : ''
+              }`}
+              onClick={() => setActivePanel(panel.id)}
+              aria-pressed={activePanel === panel.id}
+            >
+              <span className={styles.panelTabLabel}>{panel.label}</span>
+              <span className={styles.panelTabCount}>{panel.count}</span>
+            </button>
+          ))}
+        </div>
+      </PageHero>
 
       {error && <div className={styles.errorBox}>{error}</div>}
 
-      <QuotaSection
-        config={CLAUDE_CONFIG}
-        files={files}
-        loading={loading}
-        disabled={disableControls}
-      />
-      <QuotaSection
-        config={ANTIGRAVITY_CONFIG}
-        files={files}
-        loading={loading}
-        disabled={disableControls}
-      />
-      <QuotaSection
-        config={CODEX_CONFIG}
-        files={files}
-        loading={loading}
-        disabled={disableControls}
-      />
-      <QuotaSection
-        config={GEMINI_CLI_CONFIG}
-        files={files}
-        loading={loading}
-        disabled={disableControls}
-      />
-      <QuotaSection
-        config={KIMI_CONFIG}
-        files={files}
-        loading={loading}
-        disabled={disableControls}
-      />
+      <div className={styles.workspaceShell}>
+        <div className={styles.quotaStage}>{renderActiveSection()}</div>
+      </div>
     </div>
   );
 }

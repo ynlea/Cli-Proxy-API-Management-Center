@@ -183,44 +183,44 @@ const THEME_CARDS: Array<{
     key: 'auto',
     labelKey: 'theme.auto',
     colors: {
-      bg: 'linear-gradient(135deg, #ffffff 0 50%, #111111 50% 100%)',
-      card: 'linear-gradient(135deg, #ffffff 0 50%, #1a1a1a 50% 100%)',
-      border: '#bdbdbd',
-      text: '#2d2a26',
-      textMuted: 'linear-gradient(135deg, #c9c9c9 0 50%, #5a5a5a 50% 100%)',
+      bg: 'linear-gradient(135deg, #e7e2d2 0 50%, #090816 50% 100%)',
+      card: 'linear-gradient(135deg, #f3eedc 0 50%, #121932 50% 100%)',
+      border: '#3996c6',
+      text: '#e8f8ff',
+      textMuted: 'linear-gradient(135deg, #285a3a 0 50%, #8b7cff 50% 100%)',
     },
   },
   {
     key: 'white',
     labelKey: 'theme.white',
     colors: {
-      bg: '#ffffff',
-      card: '#ffffff',
-      border: '#e5e5e5',
-      text: '#2d2a26',
-      textMuted: '#a29c95',
+      bg: '#ebe6d2',
+      card: '#f3eedc',
+      border: '#20583a',
+      text: '#102219',
+      textMuted: '#53735e',
     },
   },
   {
     key: 'light',
     labelKey: 'theme.light',
     colors: {
-      bg: '#faf9f5',
-      card: '#f0eee8',
-      border: '#e3e1db',
-      text: '#2d2a26',
-      textMuted: '#a29c95',
+      bg: '#050816',
+      card: '#0a1022',
+      border: '#388bff',
+      text: '#e8f8ff',
+      textMuted: '#5f7da3',
     },
   },
   {
     key: 'dark',
     labelKey: 'theme.dark',
     colors: {
-      bg: '#151412',
-      card: '#1d1b18',
-      border: '#3a3530',
-      text: '#f6f4f1',
-      textMuted: '#9c958d',
+      bg: '#070611',
+      card: '#130d29',
+      border: '#5a49de',
+      text: '#f6efff',
+      textMuted: '#8f7ec7',
     },
   },
 ];
@@ -259,7 +259,13 @@ export function MainLayout() {
 
   const fullBrandName = 'CLI Proxy API Management Center';
   const abbrBrandName = t('title.abbr');
-  const isLogsPage = location.pathname.startsWith('/logs');
+  const normalizedPathname =
+    location.pathname.length > 1 && location.pathname.endsWith('/')
+      ? location.pathname.slice(0, -1)
+      : location.pathname;
+  const canonicalPathname = normalizedPathname === '/dashboard' ? '/' : normalizedPathname;
+  const isLogsPage = canonicalPathname.startsWith('/logs');
+  const isDashboardPage = canonicalPathname === '/';
 
   // 将顶栏高度写入 CSS 变量，确保侧栏/内容区计算一致，防止滚动时抖动
   useLayoutEffect(() => {
@@ -739,7 +745,11 @@ export function MainLayout() {
         </aside>
 
         <div className={`content${isLogsPage ? ' content-logs' : ''}`} ref={contentRef}>
-          <main className={`main-content${isLogsPage ? ' main-content-logs' : ''}`}>
+          <main
+            className={`main-content${isLogsPage ? ' main-content-logs' : ''}${
+              isDashboardPage ? ' main-content-dashboard' : ''
+            }`}
+          >
             <PageTransition
               render={(location) => <MainRoutes location={location} />}
               getRouteOrder={getRouteOrder}

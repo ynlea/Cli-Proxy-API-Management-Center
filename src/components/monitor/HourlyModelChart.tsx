@@ -13,12 +13,12 @@ interface HourlyModelChartProps {
 
 // 颜色调色板
 const COLORS = [
-  'rgba(59, 130, 246, 0.7)',   // 蓝色
-  'rgba(34, 197, 94, 0.7)',    // 绿色
-  'rgba(249, 115, 22, 0.7)',   // 橙色
-  'rgba(139, 92, 246, 0.7)',   // 紫色
-  'rgba(236, 72, 153, 0.7)',   // 粉色
-  'rgba(6, 182, 212, 0.7)',    // 青色
+  'rgba(57, 213, 255, 0.68)',
+  'rgba(117, 255, 122, 0.68)',
+  'rgba(255, 224, 102, 0.64)',
+  'rgba(255, 93, 228, 0.62)',
+  'rgba(255, 93, 135, 0.62)',
+  'rgba(74, 123, 255, 0.64)',
 ];
 
 type HourRange = 6 | 12 | 24;
@@ -130,15 +130,15 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
       type: 'line' as const,
       label: t('monitor.hourly.success_rate'),
       data: hourlyData.successRates,
-      borderColor: '#4ef0c3',
-      backgroundColor: '#4ef0c3',
+      borderColor: '#75ff7a',
+      backgroundColor: '#75ff7a',
       borderWidth: 2.5,
       tension: 0.4,
       yAxisID: 'y1',
       stack: '',
       pointRadius: 3,
-      pointBackgroundColor: '#4ef0c3',
-      pointBorderColor: '#4ef0c3',
+      pointBackgroundColor: '#75ff7a',
+      pointBorderColor: '#75ff7a',
     }];
 
     // 添加模型柱状图
@@ -172,7 +172,7 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
         display: true,
         position: 'bottom' as const,
         labels: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           usePointStyle: true,
           padding: 12,
           font: {
@@ -201,10 +201,10 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
         },
       },
       tooltip: {
-        backgroundColor: isDark ? '#374151' : '#ffffff',
-        titleColor: isDark ? '#f3f4f6' : '#111827',
-        bodyColor: isDark ? '#d1d5db' : '#4b5563',
-        borderColor: isDark ? '#4b5563' : '#e5e7eb',
+        backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
+        titleColor: isDark ? '#75ff7a' : '#0c1834',
+        bodyColor: isDark ? '#daf9ff' : '#2b3a58',
+        borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
         borderWidth: 1,
         padding: 12,
         filter: (tooltipItem: any) => {
@@ -217,10 +217,10 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
       x: {
         stacked: true,
         grid: {
-          color: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -230,10 +230,10 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
         stacked: true,
         position: 'left' as const,
         grid: {
-          color: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
+          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -241,7 +241,7 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
         title: {
           display: true,
           text: t('monitor.hourly.requests'),
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -255,7 +255,7 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
           drawOnChartArea: false,
         },
         ticks: {
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },
@@ -264,7 +264,7 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
         title: {
           display: true,
           text: t('monitor.hourly.success_rate'),
-          color: isDark ? '#9ca3af' : '#6b7280',
+          color: isDark ? '#b7f6ff' : '#4b5875',
           font: {
             size: 11,
           },

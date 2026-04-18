@@ -2,195 +2,251 @@
  * 主题样式
  */
 
-// 浅色主题（默认）
+@use './variables.scss' as *;
+
+// 默认主题：蓝绿 CRT 终端
 :root {
-  // 极简暖灰：浅色模式
-  --bg-secondary: #faf9f5; // 页面背景（纸感）
-  --bg-primary: #f0eee8; // 容器/卡片背景
-  --bg-tertiary: #e9e6df; // hover/次级背景
-  --bg-hover: var(--bg-tertiary);
-  --bg-quinary: #f6f4ee;
-  --bg-error-light: rgba(198, 87, 70, 0.1);
-  --floating-surface: #fffdf9;
-  --floating-border: #d8d3ca;
-  --floating-shadow: 0 12px 26px rgba(0, 0, 0, 0.14);
+  --font-sans: #{$font-family};
+  --font-display: #{$font-display};
+  --font-accent: #{$font-accent};
 
-  --text-primary: #2d2a26;
-  --text-secondary: #6d6760;
-  --text-tertiary: #a29c95;
-  --text-quaternary: #c0bab3;
+  --bg-secondary: #050816;
+  --bg-primary: #0a1022;
+  --bg-tertiary: #101a35;
+  --bg-hover: var(--bg-tertiary);
+  --bg-quinary: #03050f;
+  --bg-error-light: rgba(255, 93, 135, 0.12);
+
+  --surface-raised: rgba(9, 16, 34, 0.98);
+  --surface-layer: rgba(13, 22, 44, 0.94);
+  --surface-elevated: rgba(18, 30, 58, 0.94);
+  --surface-highlight: rgba(57, 213, 255, 0.08);
+  --paper-tint: rgba(10, 16, 34, 0.96);
+  --paper-speck: rgba(57, 213, 255, 0.08);
+
+  --floating-surface: rgba(9, 16, 34, 0.98);
+  --floating-border: rgba(57, 213, 255, 0.28);
+  --floating-shadow: 0 0 0 1px rgba(57, 213, 255, 0.16), 0 0 26px rgba(57, 213, 255, 0.08);
+
+  --text-primary: #e8f8ff;
+  --text-secondary: #92d3f5;
+  --text-tertiary: #5f7da3;
+  --text-quaternary: #35486a;
   --text-muted: var(--text-tertiary);
 
-  --border-color: #e3e1db; // 边框/分割线
-  --border-secondary: var(--border-color);
-  --border-primary: #d5d2cb;
-  --border-hover: #cecac4;
+  --border-color: rgba(57, 213, 255, 0.18);
+  --border-secondary: rgba(255, 79, 216, 0.2);
+  --border-primary: rgba(56, 139, 255, 0.36);
+  --border-hover: rgba(57, 213, 255, 0.7);
 
-  --primary-color: #8b8680; // 行动色（主色）
-  --primary-hover: #7f7a74;
-  --primary-active: #726d67;
-  --primary-contrast: #ffffff;
+  --primary-color: #75ff7a;
+  --primary-hover: #9aff8e;
+  --primary-active: #b8ff9d;
+  --primary-contrast: #041008;
 
-  --success-color: #10b981;
-  --quota-medium-color: #e0aa14;
-  --warning-color: #c65746; // 错误/警告色
-  --error-color: #c65746;
+  --accent-sky: #39d5ff;
+  --accent-earth: #4b7cff;
+  --accent-red: #ff4fd8;
+  --accent-gold: #ffe066;
+  --accent-leaf: #75ff7a;
+
+  --success-color: #75ff7a;
+  --quota-medium-color: #ffe066;
+  --warning-color: #ffe066;
+  --error-color: #ff5d87;
   --danger-color: var(--error-color);
-  --info-color: var(--primary-color);
+  --info-color: var(--accent-sky);
 
-  --warning-bg: rgba(198, 87, 70, 0.12);
-  --warning-border: rgba(198, 87, 70, 0.35);
+  --warning-bg: rgba(255, 224, 102, 0.12);
+  --warning-border: rgba(255, 224, 102, 0.34);
   --warning-text: var(--warning-color);
 
-  --success-badge-bg: #d1fae5;
-  --success-badge-text: #065f46;
-  --success-badge-border: #6ee7b7;
+  --success-badge-bg: rgba(117, 255, 122, 0.12);
+  --success-badge-text: #bafdb8;
+  --success-badge-border: rgba(117, 255, 122, 0.34);
 
-  --failure-badge-bg: rgba(198, 87, 70, 0.14);
-  --failure-badge-text: #8a3a30;
-  --failure-badge-border: rgba(198, 87, 70, 0.35);
+  --failure-badge-bg: rgba(255, 93, 135, 0.12);
+  --failure-badge-text: #ffc2d2;
+  --failure-badge-border: rgba(255, 93, 135, 0.34);
 
-  --count-badge-bg: rgba(139, 134, 128, 0.18);
-  --count-badge-text: var(--primary-active);
+  --count-badge-bg: rgba(57, 213, 255, 0.12);
+  --count-badge-text: #9cecff;
 
-  --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.08);
-  --shadow-lg: 0 10px 18px -3px rgb(0 0 0 / 0.1);
+  --shadow: 0 0 0 1px rgba(56, 139, 255, 0.22), 0 0 18px rgba(57, 213, 255, 0.07);
+  --shadow-lg: 0 0 0 1px rgba(57, 213, 255, 0.26), 0 0 28px rgba(57, 213, 255, 0.09);
 
-  --radius-md: 8px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --surface-radius: 8px;
+  --surface-radius-sm: 4px;
   --accent-tertiary: var(--bg-tertiary);
 
-  // Glass effect (blurred surfaces)
-  --glass-blur: 12px;
-  --glass-backdrop-filter: blur(var(--glass-blur));
-  --glass-filter: blur(var(--glass-blur));
-  --glass-bg: color-mix(in srgb, var(--bg-primary) 82%, transparent);
-  --glass-bg-secondary: color-mix(in srgb, var(--bg-secondary) 82%, transparent);
-  --glass-border: color-mix(in srgb, var(--border-color) 60%, transparent);
+  --glass-blur: 0px;
+  --glass-backdrop-filter: none;
+  --glass-filter: none;
+  --glass-bg: var(--surface-raised);
+  --glass-bg-secondary: var(--surface-elevated);
+  --glass-border: var(--border-primary);
+  --scanline-opacity: 0.16;
+  --grid-opacity: 0.18;
 }
 
-// 纯白主题
+// 纯白主题：米白老机器
 [data-theme='white'] {
-  --bg-secondary: #ffffff;
-  --bg-primary: #ffffff;
-  --bg-tertiary: #f6f6f6;
+  --bg-secondary: #ebe6d2;
+  --bg-primary: #f3eedc;
+  --bg-tertiary: #ddd7c2;
   --bg-hover: var(--bg-tertiary);
-  --bg-quinary: #ffffff;
-  --bg-error-light: rgba(198, 87, 70, 0.08);
-  --floating-surface: #ffffff;
-  --floating-border: #d9d9d9;
-  --floating-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+  --bg-quinary: #f8f4e8;
+  --bg-error-light: rgba(176, 49, 96, 0.1);
+  --surface-raised: rgba(243, 238, 220, 0.98);
+  --surface-layer: rgba(248, 244, 232, 0.98);
+  --surface-elevated: rgba(233, 228, 210, 0.98);
+  --surface-highlight: rgba(91, 255, 114, 0.06);
+  --paper-tint: rgba(243, 238, 220, 0.98);
+  --paper-speck: rgba(12, 37, 24, 0.08);
+  --floating-surface: rgba(243, 238, 220, 0.98);
+  --floating-border: rgba(23, 82, 50, 0.26);
+  --floating-shadow: 0 0 0 1px rgba(23, 82, 50, 0.12), 0 0 20px rgba(23, 82, 50, 0.06);
 
-  --text-primary: #2d2a26;
-  --text-secondary: #6d6760;
-  --text-tertiary: #a29c95;
-  --text-quaternary: #c0bab3;
+  --text-primary: #102219;
+  --text-secondary: #1d5935;
+  --text-tertiary: #53735e;
+  --text-quaternary: #7d8b81;
   --text-muted: var(--text-tertiary);
 
-  --border-color: #e5e5e5;
-  --border-secondary: var(--border-color);
-  --border-primary: #d9d9d9;
-  --border-hover: #cccccc;
+  --border-color: rgba(23, 82, 50, 0.18);
+  --border-secondary: rgba(176, 49, 96, 0.14);
+  --border-primary: rgba(23, 82, 50, 0.28);
+  --border-hover: rgba(23, 82, 50, 0.48);
 
-  --primary-color: #8b8680;
-  --primary-hover: #7f7a74;
-  --primary-active: #726d67;
-  --primary-contrast: #ffffff;
+  --primary-color: #1d5935;
+  --primary-hover: #267246;
+  --primary-active: #2f8a58;
+  --primary-contrast: #f3eedc;
 
-  --success-color: #10b981;
-  --quota-medium-color: #e0aa14;
-  --warning-color: #c65746;
-  --error-color: #c65746;
+  --accent-sky: #2b9db0;
+  --accent-earth: #4d63d2;
+  --accent-red: #b03160;
+  --accent-gold: #8f6c00;
+  --accent-leaf: #2f8a58;
+
+  --success-color: #1d5935;
+  --quota-medium-color: #8f6c00;
+  --warning-color: #8f6c00;
+  --error-color: #b03160;
   --danger-color: var(--error-color);
-  --info-color: var(--primary-color);
+  --info-color: var(--accent-sky);
 
-  --warning-bg: rgba(198, 87, 70, 0.12);
-  --warning-border: rgba(198, 87, 70, 0.35);
+  --warning-bg: rgba(143, 108, 0, 0.12);
+  --warning-border: rgba(143, 108, 0, 0.28);
   --warning-text: var(--warning-color);
 
-  --success-badge-bg: #d1fae5;
-  --success-badge-text: #065f46;
-  --success-badge-border: #6ee7b7;
+  --success-badge-bg: rgba(29, 89, 53, 0.12);
+  --success-badge-text: #1d5935;
+  --success-badge-border: rgba(29, 89, 53, 0.28);
 
-  --failure-badge-bg: rgba(198, 87, 70, 0.14);
-  --failure-badge-text: #8a3a30;
-  --failure-badge-border: rgba(198, 87, 70, 0.35);
+  --failure-badge-bg: rgba(176, 49, 96, 0.12);
+  --failure-badge-text: #8f214b;
+  --failure-badge-border: rgba(176, 49, 96, 0.28);
 
-  --count-badge-bg: rgba(139, 134, 128, 0.18);
-  --count-badge-text: var(--primary-active);
+  --count-badge-bg: rgba(43, 157, 176, 0.12);
+  --count-badge-text: #1b5f6d;
 
-  --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.08);
-  --shadow-lg: 0 10px 18px -3px rgb(0 0 0 / 0.1);
+  --shadow: 0 0 0 1px rgba(23, 82, 50, 0.12), 0 0 16px rgba(23, 82, 50, 0.06);
+  --shadow-lg: 0 0 0 1px rgba(23, 82, 50, 0.16), 0 0 24px rgba(23, 82, 50, 0.08);
 
-  --radius-md: 8px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --surface-radius: 8px;
+  --surface-radius-sm: 4px;
   --accent-tertiary: var(--bg-tertiary);
+  --glass-bg: var(--surface-raised);
+  --glass-bg-secondary: var(--surface-elevated);
+  --glass-border: var(--border-primary);
 }
 
-// 深色主题（#191919）
+// 深色主题：紫蓝蒸汽波
 [data-theme='dark'] {
-  // 极简暖灰：深色模式（提升对比度与层级）
-  --bg-secondary: #151412; // 页面背景
-  --bg-primary: #1d1b18; // 容器/卡片背景
-  --bg-tertiary: #262320; // hover/次级背景
-  --bg-hover: #2e2a26;
-  --bg-quinary: #191714;
-  --bg-error-light: rgba(198, 87, 70, 0.18);
-  --floating-surface: #2a2723;
-  --floating-border: #4a443d;
-  --floating-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+  --bg-secondary: #070611;
+  --bg-primary: #130d29;
+  --bg-tertiary: #1c143e;
+  --bg-hover: #261b53;
+  --bg-quinary: #04030b;
+  --bg-error-light: rgba(255, 79, 216, 0.14);
+  --surface-raised: rgba(19, 13, 41, 0.98);
+  --surface-layer: rgba(28, 20, 62, 0.96);
+  --surface-elevated: rgba(17, 17, 49, 0.96);
+  --surface-highlight: rgba(255, 255, 255, 0.06);
+  --paper-tint: rgba(19, 13, 41, 0.98);
+  --paper-speck: rgba(255, 79, 216, 0.08);
+  --floating-surface: rgba(19, 13, 41, 0.98);
+  --floating-border: rgba(255, 79, 216, 0.24);
+  --floating-shadow: 0 0 0 1px rgba(255, 79, 216, 0.16), 0 0 30px rgba(57, 213, 255, 0.09);
 
-  --text-primary: #f6f4f1;
-  --text-secondary: #c9c3bb;
-  --text-tertiary: #9c958d;
-  --text-quaternary: #6f6962;
+  --text-primary: #f6efff;
+  --text-secondary: #d2b8ff;
+  --text-tertiary: #8f7ec7;
+  --text-quaternary: #4c4679;
   --text-muted: var(--text-tertiary);
 
-  --border-color: #3a3530;
-  --border-secondary: var(--border-color);
-  --border-primary: #4a453f;
-  --border-hover: #5a544d;
+  --border-color: rgba(255, 79, 216, 0.16);
+  --border-secondary: rgba(57, 213, 255, 0.18);
+  --border-primary: rgba(90, 73, 222, 0.4);
+  --border-hover: rgba(57, 213, 255, 0.72);
 
-  --primary-color: #8b8680;
-  --primary-hover: #9a948e;
-  --primary-active: #a6a099;
-  --primary-contrast: #ffffff;
+  --primary-color: #39d5ff;
+  --primary-hover: #82e8ff;
+  --primary-active: #b2f6ff;
+  --primary-contrast: #061019;
 
-  --success-color: #10b981;
-  --quota-medium-color: #ffd862;
-  --warning-color: #c65746;
-  --error-color: #c65746;
+  --accent-sky: #39d5ff;
+  --accent-earth: #5a49de;
+  --accent-red: #ff4fd8;
+  --accent-gold: #ffe066;
+  --accent-leaf: #75ff7a;
+
+  --success-color: #75ff7a;
+  --quota-medium-color: #ffe066;
+  --warning-color: #ffe066;
+  --error-color: #ff4fd8;
   --danger-color: var(--error-color);
-  --info-color: var(--primary-color);
+  --info-color: var(--accent-sky);
 
-  --warning-bg: rgba(198, 87, 70, 0.22);
-  --warning-border: rgba(198, 87, 70, 0.45);
-  --warning-text: #f1b0a6;
+  --warning-bg: rgba(255, 224, 102, 0.12);
+  --warning-border: rgba(255, 224, 102, 0.28);
+  --warning-text: #fff1ad;
 
-  --success-badge-bg: rgba(6, 78, 59, 0.3);
-  --success-badge-text: #6ee7b7;
-  --success-badge-border: #059669;
+  --success-badge-bg: rgba(117, 255, 122, 0.12);
+  --success-badge-text: #d5ffd6;
+  --success-badge-border: rgba(117, 255, 122, 0.3);
 
-  --failure-badge-bg: rgba(198, 87, 70, 0.24);
-  --failure-badge-text: #f1b0a6;
-  --failure-badge-border: rgba(198, 87, 70, 0.5);
+  --failure-badge-bg: rgba(255, 79, 216, 0.12);
+  --failure-badge-text: #ffd1f7;
+  --failure-badge-border: rgba(255, 79, 216, 0.28);
 
-  --count-badge-bg: rgba(139, 134, 128, 0.28);
-  --count-badge-text: var(--primary-active);
+  --count-badge-bg: rgba(57, 213, 255, 0.12);
+  --count-badge-text: #a7f0ff;
 
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+  --shadow: 0 0 0 1px rgba(90, 73, 222, 0.22), 0 0 20px rgba(255, 79, 216, 0.06);
+  --shadow-lg: 0 0 0 1px rgba(57, 213, 255, 0.2), 0 0 32px rgba(255, 79, 216, 0.08);
 
-  --radius-md: 8px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --surface-radius: 8px;
+  --surface-radius-sm: 4px;
   --accent-tertiary: var(--bg-tertiary);
-
-  --glass-border: color-mix(in srgb, var(--border-color) 55%, transparent);
+  --glass-bg: var(--surface-raised);
+  --glass-bg-secondary: var(--surface-elevated);
+  --glass-border: var(--border-primary);
 }
 
 @media (max-width: 768px), (prefers-reduced-motion: reduce), (prefers-reduced-transparency: reduce) {
   :root {
     --glass-backdrop-filter: none;
     --glass-filter: none;
-    --glass-bg: var(--bg-primary);
-    --glass-bg-secondary: var(--bg-secondary);
-    --glass-border: var(--border-color);
+    --glass-bg: var(--surface-raised);
+    --glass-bg-secondary: var(--surface-elevated);
+    --glass-border: var(--border-primary);
   }
 }

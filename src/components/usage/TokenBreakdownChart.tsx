@@ -13,10 +13,10 @@ import type { UsagePayload } from './hooks/useUsageData';
 import styles from '@/pages/UsagePage.module.scss';
 
 const TOKEN_COLORS: Record<TokenCategory, { border: string; bg: string }> = {
-  input: { border: '#3b82f6', bg: 'rgba(59, 130, 246, 0.25)' },
-  output: { border: '#22c55e', bg: 'rgba(34, 197, 94, 0.25)' },
-  cached: { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.25)' },
-  reasoning: { border: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.25)' }
+  input: { border: '#39d5ff', bg: 'rgba(57, 213, 255, 0.22)' },
+  output: { border: '#75ff7a', bg: 'rgba(117, 255, 122, 0.22)' },
+  cached: { border: '#ffe066', bg: 'rgba(255, 224, 102, 0.22)' },
+  reasoning: { border: '#ff5de4', bg: 'rgba(255, 93, 228, 0.2)' }
 };
 
 const CATEGORIES: TokenCategory[] = ['input', 'output', 'cached', 'reasoning'];

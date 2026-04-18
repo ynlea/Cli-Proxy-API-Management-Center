@@ -13,16 +13,16 @@ interface ModelDistributionChartProps {
 
 // 颜色调色板
 const COLORS = [
-  '#3b82f6', // 蓝色
-  '#22c55e', // 绿色
-  '#f97316', // 橙色
-  '#8b5cf6', // 紫色
-  '#ec4899', // 粉色
-  '#06b6d4', // 青色
-  '#eab308', // 黄色
-  '#ef4444', // 红色
-  '#14b8a6', // 青绿
-  '#6366f1', // 靛蓝
+  '#39d5ff',
+  '#75ff7a',
+  '#ffe066',
+  '#ff5de4',
+  '#ff5d87',
+  '#4a7bff',
+  '#ff9a3c',
+  '#8ff3ff',
+  '#7df0c1',
+  '#ff86f2',
 ];
 
 type ViewMode = 'request' | 'token';
@@ -88,7 +88,7 @@ export function ModelDistributionChart({ data, loading, isDark, timeRange }: Mod
             viewMode === 'request' ? item.requests : item.tokens
           ),
           backgroundColor: COLORS.slice(0, distributionData.length),
-          borderColor: isDark ? '#1f2937' : '#ffffff',
+          borderColor: isDark ? '#03050f' : '#ffffff',
           borderWidth: 2,
         },
       ],
@@ -105,10 +105,10 @@ export function ModelDistributionChart({ data, loading, isDark, timeRange }: Mod
         display: false,
       },
       tooltip: {
-        backgroundColor: isDark ? '#374151' : '#ffffff',
-        titleColor: isDark ? '#f3f4f6' : '#111827',
-        bodyColor: isDark ? '#d1d5db' : '#4b5563',
-        borderColor: isDark ? '#4b5563' : '#e5e7eb',
+        backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
+        titleColor: isDark ? '#75ff7a' : '#0c1834',
+        bodyColor: isDark ? '#daf9ff' : '#2b3a58',
+        borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
         borderWidth: 1,
         padding: 12,
         callbacks: {

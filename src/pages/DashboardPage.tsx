@@ -329,83 +329,83 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* Bento stats grid */}
-      <section className={styles.statsSection}>
-        <h2 className={styles.sectionHeading}>{t('dashboard.system_overview')}</h2>
-        <div className={styles.bentoGrid}>
-          {quickStats.map((stat, index) => (
-            <Link
-              key={stat.path}
-              to={stat.path}
-              className={`${styles.bentoCard} ${index === 0 ? styles.bentoLarge : ''}`}
-              style={{ animationDelay: `${index * 80}ms` }}
-            >
-              <div className={styles.bentoIcon}>{stat.icon}</div>
-              <div className={styles.bentoContent}>
-                <span className={styles.bentoValue}>
-                  {stat.loading ? '...' : stat.value}
-                </span>
-                <span className={styles.bentoLabel}>{stat.label}</span>
-                {stat.sublabel && !stat.loading && (
-                  <span className={styles.bentoSublabel}>{stat.sublabel}</span>
-                )}
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Config pills section */}
-      {config && (
-        <section className={styles.configSection}>
-          <h2 className={styles.sectionHeading}>{t('dashboard.current_config')}</h2>
-          <div className={styles.configPillGrid}>
-            <div className={styles.configPill}>
-              <span className={styles.configPillLabel}>{t('basic_settings.debug_enable')}</span>
-              <span className={`${styles.configPillValue} ${config.debug ? styles.on : styles.off}`}>
-                {config.debug ? t('common.yes') : t('common.no')}
-              </span>
-            </div>
-            <div className={styles.configPill}>
-              <span className={styles.configPillLabel}>{t('basic_settings.usage_statistics_enable')}</span>
-              <span className={`${styles.configPillValue} ${config.usageStatisticsEnabled ? styles.on : styles.off}`}>
-                {config.usageStatisticsEnabled ? t('common.yes') : t('common.no')}
-              </span>
-            </div>
-            <div className={styles.configPill}>
-              <span className={styles.configPillLabel}>{t('basic_settings.logging_to_file_enable')}</span>
-              <span className={`${styles.configPillValue} ${config.loggingToFile ? styles.on : styles.off}`}>
-                {config.loggingToFile ? t('common.yes') : t('common.no')}
-              </span>
-            </div>
-            <div className={styles.configPill}>
-              <span className={styles.configPillLabel}>{t('basic_settings.retry_count_label')}</span>
-              <span className={styles.configPillValue}>{config.requestRetry ?? 0}</span>
-            </div>
-            <div className={styles.configPill}>
-              <span className={styles.configPillLabel}>{t('basic_settings.ws_auth_enable')}</span>
-              <span className={`${styles.configPillValue} ${config.wsAuth ? styles.on : styles.off}`}>
-                {config.wsAuth ? t('common.yes') : t('common.no')}
-              </span>
-            </div>
-            <div className={styles.configPill}>
-              <span className={styles.configPillLabel}>{t('dashboard.routing_strategy')}</span>
-              <span className={`${styles.configBadge} ${routingStrategyBadgeClass}`}>
-                {routingStrategyDisplay}
-              </span>
-            </div>
-            {config.proxyUrl && (
-              <div className={`${styles.configPill} ${styles.configPillWide}`}>
-                <span className={styles.configPillLabel}>{t('basic_settings.proxy_url_label')}</span>
-                <span className={styles.configPillMono}>{config.proxyUrl}</span>
-              </div>
-            )}
+      <div className={styles.overviewGrid}>
+        <section className={styles.statsSection}>
+          <h2 className={styles.sectionHeading}>{t('dashboard.system_overview')}</h2>
+          <div className={styles.bentoGrid}>
+            {quickStats.map((stat, index) => (
+              <Link
+                key={stat.path}
+                to={stat.path}
+                className={`${styles.bentoCard} ${index === 0 ? styles.bentoLarge : ''}`}
+                style={{ animationDelay: `${index * 80}ms` }}
+              >
+                <div className={styles.bentoIcon}>{stat.icon}</div>
+                <div className={styles.bentoContent}>
+                  <span className={styles.bentoValue}>
+                    {stat.loading ? '...' : stat.value}
+                  </span>
+                  <span className={styles.bentoLabel}>{stat.label}</span>
+                  {stat.sublabel && !stat.loading && (
+                    <span className={styles.bentoSublabel}>{stat.sublabel}</span>
+                  )}
+                </div>
+              </Link>
+            ))}
           </div>
-          <Link to="/config" className={styles.viewMoreLink}>
-            {t('dashboard.edit_settings')} →
-          </Link>
         </section>
-      )}
+
+        {config && (
+          <section className={styles.configSection}>
+            <h2 className={styles.sectionHeading}>{t('dashboard.current_config')}</h2>
+            <div className={styles.configPillGrid}>
+              <div className={styles.configPill}>
+                <span className={styles.configPillLabel}>{t('basic_settings.debug_enable')}</span>
+                <span className={`${styles.configPillValue} ${config.debug ? styles.on : styles.off}`}>
+                  {config.debug ? t('common.yes') : t('common.no')}
+                </span>
+              </div>
+              <div className={styles.configPill}>
+                <span className={styles.configPillLabel}>{t('basic_settings.usage_statistics_enable')}</span>
+                <span className={`${styles.configPillValue} ${config.usageStatisticsEnabled ? styles.on : styles.off}`}>
+                  {config.usageStatisticsEnabled ? t('common.yes') : t('common.no')}
+                </span>
+              </div>
+              <div className={styles.configPill}>
+                <span className={styles.configPillLabel}>{t('basic_settings.logging_to_file_enable')}</span>
+                <span className={`${styles.configPillValue} ${config.loggingToFile ? styles.on : styles.off}`}>
+                  {config.loggingToFile ? t('common.yes') : t('common.no')}
+                </span>
+              </div>
+              <div className={styles.configPill}>
+                <span className={styles.configPillLabel}>{t('basic_settings.retry_count_label')}</span>
+                <span className={styles.configPillValue}>{config.requestRetry ?? 0}</span>
+              </div>
+              <div className={styles.configPill}>
+                <span className={styles.configPillLabel}>{t('basic_settings.ws_auth_enable')}</span>
+                <span className={`${styles.configPillValue} ${config.wsAuth ? styles.on : styles.off}`}>
+                  {config.wsAuth ? t('common.yes') : t('common.no')}
+                </span>
+              </div>
+              <div className={styles.configPill}>
+                <span className={styles.configPillLabel}>{t('dashboard.routing_strategy')}</span>
+                <span className={`${styles.configBadge} ${routingStrategyBadgeClass}`}>
+                  {routingStrategyDisplay}
+                </span>
+              </div>
+              {config.proxyUrl && (
+                <div className={`${styles.configPill} ${styles.configPillWide}`}>
+                  <span className={styles.configPillLabel}>{t('basic_settings.proxy_url_label')}</span>
+                  <span className={styles.configPillMono}>{config.proxyUrl}</span>
+                </div>
+              )}
+            </div>
+            <Link to="/config" className={styles.viewMoreLink}>
+              {t('dashboard.edit_settings')} →
+            </Link>
+          </section>
+        )}
+      </div>
     </div>
   );
 }

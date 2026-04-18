@@ -1,0 +1,98 @@
+@use '../../styles/mixins' as *;
+
+.container {
+  width: min(100%, 1480px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0 auto;
+  padding-bottom: 24px;
+}
+
+.pageHeader {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(18px, 3vw, 24px);
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--primary-color) 10%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--surface-raised) 96%, transparent),
+      color-mix(in srgb, var(--bg-secondary) 96%, transparent)
+    );
+  box-shadow: var(--shadow);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.26),
+          rgba(57, 213, 255, 0.34),
+          rgba(117, 255, 122, 0.24)
+        )
+        top / 100% 2px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.pageHeaderCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: clamp(28px, 3.8vw, 38px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 0;
+  max-width: 48rem;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.primarySection,
+.secondaryCard {
+  min-width: 0;
+
+  :global(.card) {
+    height: 100%;
+  }
+}
+
+.secondaryGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  gap: 18px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
+}

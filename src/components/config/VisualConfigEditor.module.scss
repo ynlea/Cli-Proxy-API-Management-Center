@@ -19,16 +19,20 @@
   }
 
   :global(.input) {
-    min-height: 48px;
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
-    border-color: color-mix(in srgb, var(--border-color) 84%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    min-height: 46px;
+    border-radius: 6px;
+    background:
+      linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+      color-mix(in srgb, var(--bg-primary) 94%, transparent);
+    border-color: color-mix(in srgb, var(--border-color) 86%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(57, 213, 255, 0.04);
   }
 
   :global(.input:focus) {
-    background: var(--bg-primary);
-    border-color: var(--primary-color);
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.06), transparent 72%),
+      color-mix(in srgb, var(--bg-primary) 96%, transparent);
+    border-color: rgba($primary-color, 0.44);
   }
 
   :global(textarea.input) {
@@ -42,7 +46,7 @@
   }
 
   :global(.error-box) {
-    border-radius: 14px;
+    border-radius: 6px;
   }
 
   :global(.item-list) {
@@ -51,9 +55,11 @@
   }
 
   :global(.item-row) {
-    border-radius: 18px;
+    border-radius: 8px;
     padding: 14px 16px;
-    background: color-mix(in srgb, var(--bg-primary) 78%, transparent);
+    background:
+      linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+      color-mix(in srgb, var(--bg-primary) 82%, transparent);
     border-color: color-mix(in srgb, var(--border-color) 86%, transparent);
   }
 
@@ -66,9 +72,12 @@
   }
 
   :global(.pill) {
-    background: color-mix(in srgb, var(--bg-secondary) 84%, transparent);
+    background:
+      linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+      color-mix(in srgb, var(--bg-secondary) 88%, transparent);
     border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
     color: var(--text-secondary);
+    border-radius: 6px;
   }
 }
 
@@ -97,22 +106,28 @@
 
 .expandableToggle {
   position: absolute;
-  right: 6px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
-  border: none;
+  background: color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+  border-radius: 4px;
   cursor: pointer;
   font-size: 10px;
   line-height: 1;
-  padding: 2px;
+  padding: 4px;
   color: var(--text-secondary, #999);
-  opacity: 0.5;
-  transition: opacity 0.15s;
+  opacity: 0.84;
+  transition:
+    opacity 0.15s,
+    border-color 0.15s,
+    color 0.15s;
   z-index: 1;
 
   &:hover {
     opacity: 1;
+    border-color: color-mix(in srgb, var(--primary-color) 26%, var(--border-color));
+    color: var(--primary-color);
   }
 
   &:disabled {
@@ -127,14 +142,275 @@
   right: 14px;
 }
 
+.groupPanel {
+  position: sticky;
+  top: calc(var(--header-height, 64px) + 12px);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 95%, var(--bg-primary));
+  box-shadow: var(--shadow);
+
+  @include mobile {
+    top: calc(var(--header-height, 64px) + 10px);
+    padding: 14px;
+    border-radius: 10px;
+  }
+}
+
+.groupPanelHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.groupPanelCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.groupPanelEyebrow {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.groupPanelTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(20px, 2vw, 24px);
+  line-height: 1.1;
+}
+
+.groupPanelDescription {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 52rem;
+}
+
+.groupPanelMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+
+  @include mobile {
+    justify-content: flex-start;
+  }
+}
+
+.summaryPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+  background: color-mix(in srgb, var(--bg-primary) 90%, transparent);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.groupTabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.groupTab {
+  @include button-reset;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background: color-mix(in srgb, var(--bg-primary) 86%, transparent);
+  text-align: left;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.05), rgba(57, 213, 255, 0.03)),
+      color-mix(in srgb, var(--bg-primary) 92%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(57, 213, 255, 0.04);
+  }
+}
+
+.groupTabActive {
+  border-color: color-mix(in srgb, var(--primary-color) 30%, var(--border-color));
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
+    color-mix(in srgb, var(--bg-primary) 94%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(117, 255, 122, 0.05);
+}
+
+.groupTabCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.groupTabTitle {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.groupTabCaption {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.groupTabBadges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 0 0 auto;
+
+  @include mobile {
+    align-items: flex-start;
+  }
+}
+
+.groupSectionStack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.groupSection {
+  scroll-margin-top: 136px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 94%, var(--bg-primary));
+  box-shadow: var(--shadow);
+
+  @include mobile {
+    scroll-margin-top: 116px;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 10px;
+  }
+}
+
+.groupSectionActive {
+  border-color: color-mix(in srgb, var(--primary-color) 20%, var(--border-color));
+}
+
+.groupSectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-color) 78%, transparent);
+
+  @include mobile {
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 12px;
+  }
+}
+
+.groupSectionCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.groupSectionEyebrow {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.groupSectionTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.groupSectionDescription {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 48rem;
+}
+
+.groupSectionMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+
+  @include mobile {
+    justify-content: flex-start;
+  }
+}
+
+.groupSectionBody {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .overview {
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  border-radius: 30px;
-  border: 1px solid color-mix(in srgb, var(--border-color) 78%, transparent);
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
   background:
     radial-gradient(
       circle at top right,
@@ -143,10 +419,11 @@
     ),
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--bg-primary) 94%, transparent),
+      color-mix(in srgb, var(--surface-raised) 96%, transparent),
       color-mix(in srgb, var(--bg-secondary) 96%, transparent)
     );
   padding: clamp(22px, 3vw, 30px);
+  box-shadow: var(--shadow);
 
   &::before {
     content: '';
@@ -161,6 +438,22 @@
     );
     opacity: 0.6;
     pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(255, 93, 135, 0.36), rgba(57, 213, 255, 0.42), rgba(117, 255, 122, 0.36))
+        top / 100% 2px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
   }
 }
 
@@ -185,13 +478,15 @@
   gap: 6px;
   min-height: 34px;
   padding: 0 14px;
-  border-radius: 999px;
+  border-radius: 6px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 88%, transparent);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
 }
 
 .overviewPillWarning {
@@ -222,25 +517,32 @@
   gap: 14px;
   width: 100%;
   padding: 14px 16px;
-  border-radius: 20px;
+  border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 74%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 82%, transparent);
   text-align: left;
   transition:
-    transform 0.18s ease,
     border-color 0.18s ease,
-    background-color 0.18s ease;
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
 
   &:hover {
-    transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--primary-color) 26%, var(--border-color));
-    background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.06), rgba(57, 213, 255, 0.04)),
+      color-mix(in srgb, var(--bg-primary) 92%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(117, 255, 122, 0.06);
   }
 }
 
 .overviewFocusLinkActive {
   border-color: color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
-  background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
+    color-mix(in srgb, var(--bg-primary) 92%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(117, 255, 122, 0.08);
 }
 
 .focusIcon {
@@ -249,9 +551,12 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--primary-color) 10%, var(--bg-secondary));
-  color: var(--primary-hover);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.1), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+  color: var(--primary-color);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
   flex: 0 0 auto;
 }
 
@@ -322,16 +627,20 @@
   min-width: max-content;
   flex: 0 0 auto;
   padding: 10px 14px;
-  border-radius: 999px;
+  border-radius: 6px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
-  box-shadow: 0 18px 36px -30px rgba(0, 0, 0, 0.28);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 90%, transparent);
+  box-shadow: var(--shadow);
   white-space: nowrap;
 }
 
 .mobileSectionNavButtonActive {
   border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
-  background: color-mix(in srgb, var(--bg-primary) 96%, transparent);
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
+    color-mix(in srgb, var(--bg-primary) 96%, transparent);
 }
 
 .mobileSectionNavIndex {
@@ -341,8 +650,8 @@
   min-width: 28px;
   height: 28px;
   padding: 0 8px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--bg-secondary) 92%, transparent);
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 700;
@@ -362,7 +671,7 @@
   min-width: 22px;
   height: 22px;
   padding: 0 6px;
-  border-radius: 999px;
+  border-radius: 4px;
   background: var(--warning-bg);
   border: 1px solid var(--warning-border);
   color: var(--warning-text);
@@ -392,13 +701,12 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 12px;
-  border-radius: 26px;
+  border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 76%, transparent);
-  --glass-blur: 14px;
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
-  box-shadow: 0 24px 56px -34px rgba(0, 0, 0, 0.42);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 94%, var(--bg-primary));
+  box-shadow: var(--shadow-lg);
   -ms-overflow-style: none;
   scrollbar-width: none;
 
@@ -427,10 +735,12 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 12px;
-  border-radius: 26px;
+  border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 96%, transparent);
-  box-shadow: 0 24px 56px -34px rgba(0, 0, 0, 0.42);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 96%, var(--bg-primary));
+  box-shadow: var(--shadow-lg);
   -ms-overflow-style: none;
   scrollbar-width: none;
 
@@ -463,36 +773,37 @@
   gap: 14px;
   width: 100%;
   padding: 14px;
-  border-radius: 20px;
+  border-radius: 8px;
   border: 1px solid transparent;
   background: transparent;
   color: inherit;
   text-align: left;
   transition:
-    transform 0.18s ease,
     background-color 0.18s ease,
-    border-color 0.18s ease;
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 
   &:hover {
-    transform: translateX(2px);
-    background: color-mix(in srgb, var(--bg-secondary) 86%, transparent);
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.05), rgba(57, 213, 255, 0.03)),
+      color-mix(in srgb, var(--bg-secondary) 92%, transparent);
     border-color: color-mix(in srgb, var(--border-color) 88%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(57, 213, 255, 0.04);
   }
 
   @media (max-width: 1024px) {
     min-width: 232px;
     flex: 0 0 auto;
 
-    &:hover {
-      transform: translateY(-1px);
-    }
   }
 }
 
 .navButtonActive {
-  background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
+    color-mix(in srgb, var(--bg-primary) 94%, transparent);
   border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
-  box-shadow: 0 18px 36px -30px rgba(0, 0, 0, 0.32);
+  box-shadow: inset 0 0 0 1px rgba(117, 255, 122, 0.06);
 }
 
 .navIndex {
@@ -501,8 +812,8 @@
   justify-content: center;
   min-width: 34px;
   height: 34px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--bg-secondary) 92%, transparent);
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
   color: var(--text-secondary);
   font-size: 11px;
@@ -561,7 +872,7 @@
   min-width: 28px;
   height: 28px;
   padding: 0 10px;
-  border-radius: 999px;
+  border-radius: 4px;
   background: var(--warning-bg);
   border: 1px solid var(--warning-border);
   color: var(--warning-text);
@@ -575,15 +886,36 @@
   flex-direction: column;
   min-width: 0;
   padding: clamp(20px, 3vw, 30px);
-  border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 76%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 94%, var(--bg-primary));
+  box-shadow: var(--shadow);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(255, 93, 135, 0.32), rgba(57, 213, 255, 0.42), rgba(117, 255, 122, 0.32))
+        top / 100% 2px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .sectionGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  gap: 14px;
 
   @include mobile {
     grid-template-columns: minmax(0, 1fr);
@@ -604,12 +936,14 @@
 .toggleRow {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
-  padding: 16px 18px;
-  border-radius: 18px;
+  padding: 14px 16px;
+  border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 84%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.03), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 92%, transparent);
 
   @include mobile {
     grid-template-columns: minmax(0, 1fr);
@@ -669,9 +1003,11 @@
   align-items: center;
   min-height: 26px;
   padding: 0 10px;
-  border-radius: 999px;
+  border-radius: 4px;
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 94%, transparent);
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 700;
@@ -681,11 +1017,13 @@
 .subsection {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 18px 20px;
-  border-radius: 24px;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 84%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.03), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 94%, transparent);
 }
 
 .subsectionHeader {
@@ -743,9 +1081,11 @@
   flex-direction: column;
   gap: 12px;
   padding: 14px;
-  border-radius: 20px;
+  border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.03), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 94%, transparent);
 }
 
 .ruleCardHeader {
@@ -773,16 +1113,18 @@
 
 .actionRow {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .emptyState {
   border: 1px dashed color-mix(in srgb, var(--border-color) 84%, transparent);
-  border-radius: 18px;
+  border-radius: 8px;
   padding: 18px 16px;
   color: var(--text-secondary);
   text-align: center;
-  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary) 92%, transparent);
 }
 
 .stringList {
@@ -870,10 +1212,22 @@
 }
 
 @include mobile {
+  .groupPanel {
+    gap: 12px;
+  }
+
+  .groupTab {
+    padding: 12px;
+  }
+
+  .groupSection {
+    gap: 12px;
+  }
+
   .overview {
     gap: 14px;
     padding: 18px;
-    border-radius: 24px;
+    border-radius: 10px;
   }
 
   .overviewFocusLink {
@@ -881,13 +1235,13 @@
   }
 
   .sections {
-    border-radius: 26px;
+    border-radius: 10px;
     padding: 16px;
   }
 
   .subsection {
     padding: 16px;
-    border-radius: 20px;
+    border-radius: 8px;
   }
 
   .toggleRow {

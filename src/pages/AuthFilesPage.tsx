@@ -20,6 +20,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
+import { PageHero } from '@/components/layout/PageHero';
 import { IconFilterAll } from '@/components/ui/icons';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
@@ -88,14 +89,14 @@ export function AuthFilesPage() {
 
   const [filter, setFilter] = useState<'all' | string>('all');
   const [problemOnly, setProblemOnly] = useState(false);
-  const [compactMode, setCompactMode] = useState(false);
+  const [compactMode, setCompactMode] = useState(true);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [pageSizeByMode, setPageSizeByMode] = useState({
     regular: DEFAULT_REGULAR_PAGE_SIZE,
     compact: DEFAULT_COMPACT_PAGE_SIZE,
   });
-  const [pageSizeInput, setPageSizeInput] = useState('9');
+  const [pageSizeInput, setPageSizeInput] = useState(String(DEFAULT_COMPACT_PAGE_SIZE));
   const [viewMode, setViewMode] = useState<'diagram' | 'list'>('list');
   const [sortMode, setSortMode] = useState<AuthFilesSortMode>('default');
   const [batchActionBarVisible, setBatchActionBarVisible] = useState(false);
@@ -644,14 +645,10 @@ export function AuthFilesPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>{t('auth_files.title')}</h1>
-        <p className={styles.description}>{t('auth_files.description')}</p>
-      </div>
-
-      <Card
-        title={titleNode}
-        extra={
+      <PageHero
+        title={t('auth_files.title')}
+        description={t('auth_files.description')}
+        meta={
           <div className={styles.headerActions}>
             <Button variant="secondary" size="sm" onClick={handleHeaderRefresh} disabled={loading}>
               {t('common.refresh')}
@@ -690,7 +687,10 @@ export function AuthFilesPage() {
             />
           </div>
         }
-      >
+      />
+
+      <div className={styles.contentStack}>
+        <Card title={titleNode} className={styles.workspaceCard}>
         {error && <div className={styles.errorBox}>{error}</div>}
 
         <div className={styles.filterSection}>
@@ -782,31 +782,38 @@ export function AuthFilesPage() {
                 description={t('auth_files.search_empty_desc')}
               />
             ) : (
-              <div
-                className={`${styles.fileGrid} ${quotaFilterType ? styles.fileGridQuotaManaged : ''} ${compactMode ? styles.fileGridCompact : ''}`}
-              >
-                {pageItems.map((file) => (
-                  <AuthFileCard
-                    key={file.name}
-                    file={file}
-                    compact={compactMode}
-                    selected={selectedFiles.has(file.name)}
-                    resolvedTheme={resolvedTheme}
-                    disableControls={disableControls}
-                    deleting={deleting}
-                    statusUpdating={statusUpdating}
-                    quotaFilterType={quotaFilterType}
-                    keyStats={keyStats}
-                    statusBarCache={statusBarCache}
-                    onShowModels={showModels}
-                    onDownload={handleDownload}
-                    onOpenPrefixProxyEditor={openPrefixProxyEditor}
-                    onDelete={handleDelete}
-                    onToggleStatus={handleStatusToggle}
-                    onToggleSelect={toggleSelect}
-                  />
-                ))}
-              </div>
+              <>
+                <div className={styles.fileListHeader} aria-hidden="true">
+                  <span>{t('auth_files.title_section', { defaultValue: '认证文件' })}</span>
+                  <span>{t('auth_files.health_status_label')}</span>
+                  <span>{t('common.actions', { defaultValue: '操作' })}</span>
+                </div>
+                <div
+                  className={`${styles.fileGrid} ${quotaFilterType ? styles.fileGridQuotaManaged : ''} ${compactMode ? styles.fileGridCompact : ''}`}
+                >
+                  {pageItems.map((file) => (
+                    <AuthFileCard
+                      key={file.name}
+                      file={file}
+                      compact={compactMode}
+                      selected={selectedFiles.has(file.name)}
+                      resolvedTheme={resolvedTheme}
+                      disableControls={disableControls}
+                      deleting={deleting}
+                      statusUpdating={statusUpdating}
+                      quotaFilterType={quotaFilterType}
+                      keyStats={keyStats}
+                      statusBarCache={statusBarCache}
+                      onShowModels={showModels}
+                      onDownload={handleDownload}
+                      onOpenPrefixProxyEditor={openPrefixProxyEditor}
+                      onDelete={handleDelete}
+                      onToggleStatus={handleStatusToggle}
+                      onToggleSelect={toggleSelect}
+                    />
+                  ))}
+                </div>
+              </>
             )}
 
             {!loading && sorted.length > pageSize && (
@@ -838,33 +845,36 @@ export function AuthFilesPage() {
             )}
           </div>
         </div>
-      </Card>
+        </Card>
 
-      <OAuthExcludedCard
-        disableControls={disableControls}
-        excludedError={excludedError}
-        excluded={excluded}
-        onAdd={() => openExcludedEditor()}
-        onEdit={openExcludedEditor}
-        onDelete={deleteExcluded}
-      />
+        <div className={styles.secondaryGrid}>
+          <OAuthExcludedCard
+            disableControls={disableControls}
+            excludedError={excludedError}
+            excluded={excluded}
+            onAdd={() => openExcludedEditor()}
+            onEdit={openExcludedEditor}
+            onDelete={deleteExcluded}
+          />
 
-      <OAuthModelAliasCard
-        disableControls={disableControls}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        onAdd={() => openModelAliasEditor()}
-        onEditProvider={openModelAliasEditor}
-        onDeleteProvider={deleteModelAlias}
-        modelAliasError={modelAliasError}
-        modelAlias={modelAlias}
-        allProviderModels={allProviderModels}
-        onUpdate={handleMappingUpdate}
-        onDeleteLink={handleDeleteLink}
-        onToggleFork={handleToggleFork}
-        onRenameAlias={handleRenameAlias}
-        onDeleteAlias={handleDeleteAlias}
-      />
+          <OAuthModelAliasCard
+            disableControls={disableControls}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            onAdd={() => openModelAliasEditor()}
+            onEditProvider={openModelAliasEditor}
+            onDeleteProvider={deleteModelAlias}
+            modelAliasError={modelAliasError}
+            modelAlias={modelAlias}
+            allProviderModels={allProviderModels}
+            onUpdate={handleMappingUpdate}
+            onDeleteLink={handleDeleteLink}
+            onToggleFork={handleToggleFork}
+            onRenameAlias={handleRenameAlias}
+            onDeleteAlias={handleDeleteAlias}
+          />
+        </div>
+      </div>
 
       <AuthFileModelsModal
         open={modelsModalOpen}

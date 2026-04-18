@@ -1,0 +1,79 @@
+@use './mixins' as *;
+
+@mixin pageContainer($minHeight: false) {
+  width: min(100%, 1480px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0 auto;
+
+  @if $minHeight {
+    min-height: 100%;
+  }
+}
+
+@mixin framedSurface($padding: clamp(18px, 3vw, 24px), $radius: 12px) {
+  position: relative;
+  overflow: hidden;
+  padding: $padding;
+  border-radius: $radius;
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--primary-color) 12%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--surface-raised) 96%, transparent),
+      color-mix(in srgb, var(--bg-secondary) 96%, transparent)
+    );
+  box-shadow: var(--shadow);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: min(220px, 42vw);
+    height: min(220px, 42vw);
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--primary-color) 10%, transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+    opacity: 0.62;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.28),
+          rgba(57, 213, 255, 0.36),
+          rgba(117, 255, 122, 0.24)
+        )
+        top / 100% 2px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@mixin workspaceShell($padding: clamp(18px, 2.8vw, 24px)) {
+  @include framedSurface($padding, 12px);
+}
+
+@mixin responsiveStack {
+  @include mobile {
+    gap: 16px;
+  }
+}

@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import type { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { parse as parseYaml, parseDocument } from 'yaml';
 import { usePageTransitionLayer } from '@/components/common/PageTransitionLayer';
+import { PageHero } from '@/components/layout/PageHero';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import {
@@ -500,46 +501,49 @@ export function ConfigPage() {
     </div>
   );
 
-  const pageEyebrow =
-    activeTab === 'visual'
-      ? t('config_management.tabs.visual', { defaultValue: '可视化编辑' })
-      : t('config_management.tabs.source', { defaultValue: '源文件编辑' });
   const pageDescription =
     activeTab === 'visual'
       ? t('config_management.visual.notice')
       : t('config_management.description');
+  const activeTabLabel =
+    activeTab === 'visual'
+      ? t('config_management.tabs.visual', { defaultValue: '可视化编辑' })
+      : t('config_management.tabs.source', { defaultValue: '源文件编辑' });
 
   return (
     <div className={styles.container}>
-      <div className={styles.pageHeader}>
-        <div className={styles.pageHeaderCopy}>
-          <span className={styles.pageEyebrow}>{pageEyebrow}</span>
-          <h1 className={styles.pageTitle}>{t('config_management.title')}</h1>
-          <p className={styles.description}>{pageDescription}</p>
-        </div>
-
-        <div className={styles.pageMeta}>
-          <div className={`${styles.statusBadge} ${getStatusClass()}`}>{getStatusText()}</div>
-          <div className={styles.tabBar}>
+      <PageHero
+        eyebrow={t('config_management.editor_title', { defaultValue: '配置文件' })}
+        title={t('config_management.title')}
+        description={t('config_management.description')}
+        meta={<div className={`${styles.statusBadge} ${getStatusClass()}`}>{getStatusText()}</div>}
+        supportClassName={styles.heroSupport}
+      >
+        <div className={styles.tabBar}>
+          {(['visual', 'source'] as ConfigEditorTab[]).map((tab) => (
             <button
               type="button"
-              className={`${styles.tabItem} ${activeTab === 'visual' ? styles.tabActive : ''}`}
-              onClick={() => handleTabChange('visual')}
+              key={tab}
+              className={`${styles.tabItem} ${activeTab === tab ? styles.tabActive : ''}`}
+              onClick={() => handleTabChange(tab)}
               disabled={saving || loading}
             >
-              {t('config_management.tabs.visual', { defaultValue: '可视化编辑' })}
+              <div className={styles.tabCopy}>
+                <span className={styles.tabItemLabel}>
+                  {tab === 'visual'
+                    ? t('config_management.tabs.visual', { defaultValue: '可视化编辑' })
+                    : t('config_management.tabs.source', { defaultValue: '源代码编辑' })}
+                </span>
+                <span className={styles.tabItemHint}>
+                  {tab === 'visual'
+                    ? t('config_management.visual.notice')
+                    : t('config_management.description')}
+                </span>
+              </div>
             </button>
-            <button
-              type="button"
-              className={`${styles.tabItem} ${activeTab === 'source' ? styles.tabActive : ''}`}
-              onClick={() => handleTabChange('source')}
-              disabled={saving || loading}
-            >
-              {t('config_management.tabs.source', { defaultValue: '源代码编辑' })}
-            </button>
-          </div>
+          ))}
         </div>
-      </div>
+      </PageHero>
 
       <div className={styles.workspaceShell}>
         <div className={styles.content}>
@@ -550,59 +554,80 @@ export function ConfigPage() {
             </div>
           )}
 
-          {activeTab === 'visual' ? (
-            <VisualConfigEditor
-              values={visualValues}
-              validationErrors={visualValidationErrors}
-              hasPayloadValidationErrors={visualHasPayloadValidationErrors}
-              disabled={disableControls || loading}
-              onChange={setVisualValues}
-            />
-          ) : (
-            <div className={styles.sourceWorkspace}>
-              <div className={styles.sourceToolbar}>
-                <div className={styles.searchInputWrapper}>
-                  <Input
-                    value={searchQuery}
-                    onChange={(e) => handleSearchChange(e.target.value)}
-                    onKeyDown={handleSearchKeyDown}
-                    placeholder={t('config_management.search_placeholder', {
-                      defaultValue: '搜索配置内容...',
-                    })}
-                    disabled={disableControls || loading}
-                    className={styles.searchInput}
-                    rightElement={
-                      <div className={styles.searchRight}>
-                        {searchQuery && lastSearchedQuery === searchQuery && (
-                          <span className={styles.searchCount}>
-                            {searchResults.total > 0
-                              ? `${searchResults.current} / ${searchResults.total}`
-                              : t('config_management.search_no_results', {
-                                  defaultValue: '无结果',
-                                })}
-                          </span>
-                        )}
-                        <button
-                          type="button"
-                          className={styles.searchButton}
-                          onClick={() => executeSearch('next')}
-                          disabled={!searchQuery || disableControls || loading}
-                          title={t('config_management.search_button', { defaultValue: '搜索' })}
-                        >
-                          <IconSearch size={16} />
-                        </button>
-                      </div>
-                    }
-                  />
-                </div>
+          <div className={styles.workspaceToolbar}>
+            <div className={styles.toolbarMeta}>
+              <div className={styles.toolbarCopy}>
+                <span className={styles.toolbarTitle}>{activeTabLabel}</span>
+                <p className={styles.toolbarHint}>{pageDescription}</p>
+              </div>
+              <div className={styles.toolbarBadges}>
+                <div className={`${styles.inlineStatus} ${getStatusClass()}`}>{getStatusText()}</div>
+                <span className={styles.toolbarChip}>
+                  {isDirty
+                    ? t('config_management.status_dirty')
+                    : t('config_management.status_loaded')}
+                </span>
+                {activeTab === 'source' && searchQuery && lastSearchedQuery === searchQuery && (
+                  <span className={styles.toolbarChip}>
+                    {searchResults.total > 0
+                      ? `${searchResults.current} / ${searchResults.total}`
+                      : t('config_management.search_no_results', {
+                          defaultValue: '无结果',
+                        })}
+                  </span>
+                )}
+              </div>
+            </div>
 
-                <div className={styles.searchActions}>
+            <div className={styles.toolbarActions}>
+              {activeTab === 'source' && (
+                <div className={styles.searchDock}>
+                  <div className={styles.searchInputWrapper}>
+                    <Input
+                      value={searchQuery}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      onKeyDown={handleSearchKeyDown}
+                      placeholder={t('config_management.search_placeholder', {
+                        defaultValue: '搜索配置内容...',
+                      })}
+                      disabled={disableControls || loading}
+                      className={styles.searchInput}
+                      rightElement={
+                        <div className={styles.searchRight}>
+                          {searchQuery && lastSearchedQuery === searchQuery && (
+                            <span className={styles.searchCount}>
+                              {searchResults.total > 0
+                                ? `${searchResults.current} / ${searchResults.total}`
+                                : t('config_management.search_no_results', {
+                                    defaultValue: '无结果',
+                                  })}
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            className={styles.searchButton}
+                            onClick={() => executeSearch('next')}
+                            disabled={!searchQuery || disableControls || loading}
+                            title={t('config_management.search_button', {
+                              defaultValue: '搜索',
+                            })}
+                          >
+                            <IconSearch size={16} />
+                          </button>
+                        </div>
+                      }
+                    />
+                  </div>
+
                   <Button
                     variant="secondary"
                     size="sm"
+                    className={styles.iconAction}
                     onClick={handlePrevMatch}
                     disabled={
-                      !searchQuery || lastSearchedQuery !== searchQuery || searchResults.total === 0
+                      !searchQuery ||
+                      lastSearchedQuery !== searchQuery ||
+                      searchResults.total === 0
                     }
                     title={t('config_management.search_prev', { defaultValue: '上一个' })}
                   >
@@ -611,31 +636,76 @@ export function ConfigPage() {
                   <Button
                     variant="secondary"
                     size="sm"
+                    className={styles.iconAction}
                     onClick={handleNextMatch}
                     disabled={
-                      !searchQuery || lastSearchedQuery !== searchQuery || searchResults.total === 0
+                      !searchQuery ||
+                      lastSearchedQuery !== searchQuery ||
+                      searchResults.total === 0
                     }
                     title={t('config_management.search_next', { defaultValue: '下一个' })}
                   >
                     <IconChevronDown size={16} />
                   </Button>
                 </div>
-              </div>
+              )}
 
-              <div className={styles.editorWrapper}>
-                <Suspense fallback={null}>
-                  <LazyConfigSourceEditor
-                    editorRef={editorRef}
-                    value={content}
-                    onChange={handleChange}
-                    theme={resolvedTheme}
-                    editable={!disableControls && !loading}
-                    placeholder={t('config_management.editor_placeholder')}
-                  />
-                </Suspense>
+              <div className={styles.primaryActions}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleReload}
+                  disabled={loading || saving}
+                >
+                  {t('config_management.reload')}
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSave}
+                  disabled={
+                    disableControls ||
+                    loading ||
+                    saving ||
+                    !isDirty ||
+                    diffModalOpen ||
+                    hasVisualModeError ||
+                    hasVisualValidationErrors
+                  }
+                >
+                  {t('config_management.save')}
+                </Button>
               </div>
             </div>
-          )}
+          </div>
+
+          <div className={styles.stageSurface}>
+            {activeTab === 'visual' ? (
+              <div className={styles.visualStage}>
+                <VisualConfigEditor
+                  values={visualValues}
+                  validationErrors={visualValidationErrors}
+                  hasPayloadValidationErrors={visualHasPayloadValidationErrors}
+                  disabled={disableControls || loading}
+                  onChange={setVisualValues}
+                />
+              </div>
+            ) : (
+              <div className={styles.sourceEditorStage}>
+                <div className={styles.editorWrapper}>
+                  <Suspense fallback={null}>
+                    <LazyConfigSourceEditor
+                      editorRef={editorRef}
+                      value={content}
+                      onChange={handleChange}
+                      theme={resolvedTheme}
+                      editable={!disableControls && !loading}
+                      placeholder={t('config_management.editor_placeholder')}
+                    />
+                  </Suspense>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

@@ -3,9 +3,9 @@
 
 .pageContent {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1480px;
   margin: 0 auto;
-  padding: 0 $spacing-lg $spacing-2xl;
+  padding: 0 clamp(12px, 2vw, 20px) $spacing-2xl;
 
   @include mobile {
     padding-left: $spacing-md;
@@ -21,8 +21,8 @@
 .settingsHeader {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xs;
-  padding: $spacing-md $spacing-lg;
+  gap: 6px;
+  padding: $spacing-lg $spacing-xl;
   border-bottom: 1px solid var(--border-color);
 
   @include mobile {
@@ -42,13 +42,14 @@
 .settingsHeaderHint {
   font-size: 13px;
   color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 .settingsSection {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
-  padding: $spacing-md $spacing-lg $spacing-lg;
+  gap: $spacing-md;
+  padding: $spacing-lg $spacing-xl $spacing-xl;
 
   @include mobile {
     padding-left: $spacing-md;
@@ -57,14 +58,13 @@
 }
 
 .settingsRow {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
   align-items: flex-start;
-  justify-content: space-between;
   gap: $spacing-lg;
 
   @include mobile {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: 1fr;
     gap: $spacing-sm;
   }
 }
@@ -89,9 +89,10 @@
 }
 
 .settingsControl {
-  flex: 0 0 auto;
-  width: min(360px, 45%);
-  min-width: 220px;
+  width: 100%;
+  min-width: 0;
+  max-width: 420px;
+  justify-self: end;
 
   @include mobile {
     width: 100%;
@@ -102,13 +103,13 @@
 .tagList {
   display: flex;
   flex-wrap: wrap;
-  gap: $spacing-xs;
+  gap: $spacing-sm;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: $radius-full;
   border: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
@@ -147,6 +148,7 @@
   gap: $spacing-xs;
   font-size: 13px;
   color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .loadingModels {
@@ -159,27 +161,30 @@
 }
 
 .modelList {
-  max-height: 520px;
+  max-height: 620px;
   overflow: auto;
-  padding: $spacing-sm $spacing-lg $spacing-lg;
+  padding: $spacing-sm $spacing-xl $spacing-xl;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-sm $spacing-md;
 
   @include mobile {
     padding-left: $spacing-md;
     padding-right: $spacing-md;
+    grid-template-columns: 1fr;
   }
 }
 
 .modelItem {
   width: 100%;
   align-items: flex-start;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-color);
-  border-radius: $radius-sm;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 86%, transparent);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary) 90%, var(--bg-primary));
   transition: background-color $transition-fast;
-
-  &:last-child {
-    border-bottom: none;
-  }
 
   &:hover {
     background-color: var(--bg-hover);
@@ -208,7 +213,7 @@
 }
 
 .emptyModels {
-  padding: $spacing-xl $spacing-lg;
+  padding: $spacing-xl $spacing-xl;
   color: var(--text-secondary);
   font-size: 13px;
   text-align: center;

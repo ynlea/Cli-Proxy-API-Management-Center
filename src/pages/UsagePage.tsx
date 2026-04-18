@@ -233,9 +233,49 @@ export function UsagePage() {
         </div>
       )}
 
-      <div className={styles.header}>
-        <h1 className={styles.pageTitle}>{t('usage_stats.title')}</h1>
-        <div className={styles.headerActions}>
+      <div className={styles.pageHero}>
+        <div className={styles.header}>
+          <div className={styles.pageHeaderCopy}>
+            <h1 className={styles.pageTitle}>{t('usage_stats.title')}</h1>
+          </div>
+          <div className={styles.headerActions}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleExport}
+              loading={exporting}
+              disabled={loading || importing}
+            >
+              {t('usage_stats.export')}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleImport}
+              loading={importing}
+              disabled={loading || exporting}
+            >
+              {t('usage_stats.import')}
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => void loadUsage().catch(() => {})}
+              disabled={loading || exporting || importing}
+            >
+              {loading ? t('common.loading') : t('usage_stats.refresh')}
+            </Button>
+            <input
+              ref={importInputRef}
+              type="file"
+              accept=".json,application/json"
+              style={{ display: 'none' }}
+              onChange={handleImportChange}
+            />
+          </div>
+        </div>
+
+        <div className={styles.headerMetaRow}>
           <div className={styles.timeRangeGroup}>
             <span className={styles.timeRangeLabel}>{t('usage_stats.range_filter')}</span>
             <Select
@@ -247,39 +287,6 @@ export function UsagePage() {
               fullWidth={false}
             />
           </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handleExport}
-            loading={exporting}
-            disabled={loading || importing}
-          >
-            {t('usage_stats.export')}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handleImport}
-            loading={importing}
-            disabled={loading || exporting}
-          >
-            {t('usage_stats.import')}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => void loadUsage().catch(() => {})}
-            disabled={loading || exporting || importing}
-          >
-            {loading ? t('common.loading') : t('usage_stats.refresh')}
-          </Button>
-          <input
-            ref={importInputRef}
-            type="file"
-            accept=".json,application/json"
-            style={{ display: 'none' }}
-            onChange={handleImportChange}
-          />
           {lastRefreshedAt && (
             <span className={styles.lastRefreshed}>
               {t('usage_stats.last_updated')}: {lastRefreshedAt.toLocaleTimeString()}
@@ -290,108 +297,102 @@ export function UsagePage() {
 
       {error && <div className={styles.errorBox}>{error}</div>}
 
-      {/* Stats Overview Cards */}
-      <StatCards
-        usage={filteredUsage}
-        loading={loading}
-        modelPrices={modelPrices}
-        nowMs={nowMs}
-        sparklines={{
-          requests: requestsSparkline,
-          tokens: tokensSparkline,
-          rpm: rpmSparkline,
-          tpm: tpmSparkline,
-          cost: costSparkline
-        }}
-      />
-
-      {/* Chart Line Selection */}
-      <ChartLineSelector
-        chartLines={chartLines}
-        modelNames={modelNames}
-        maxLines={MAX_CHART_LINES}
-        onChange={handleChartLinesChange}
-      />
-
-      {/* Service Health */}
-      <ServiceHealthCard usage={usage} loading={loading} />
-
-      {/* Charts Grid */}
-      <div className={styles.chartsGrid}>
-        <UsageChart
-          title={t('usage_stats.requests_trend')}
-          period={requestsPeriod}
-          onPeriodChange={setRequestsPeriod}
-          chartData={requestsChartData}
-          chartOptions={requestsChartOptions}
+      <div className={styles.contentStack}>
+        <StatCards
+          usage={filteredUsage}
           loading={loading}
-          isMobile={isMobile}
-          emptyText={t('usage_stats.no_data')}
+          modelPrices={modelPrices}
+          nowMs={nowMs}
+          sparklines={{
+            requests: requestsSparkline,
+            tokens: tokensSparkline,
+            rpm: rpmSparkline,
+            tpm: tpmSparkline,
+            cost: costSparkline
+          }}
         />
-        <UsageChart
-          title={t('usage_stats.tokens_trend')}
-          period={tokensPeriod}
-          onPeriodChange={setTokensPeriod}
-          chartData={tokensChartData}
-          chartOptions={tokensChartOptions}
+
+        <div className={styles.supportGrid}>
+          <ChartLineSelector
+            chartLines={chartLines}
+            modelNames={modelNames}
+            maxLines={MAX_CHART_LINES}
+            onChange={handleChartLinesChange}
+          />
+          <ServiceHealthCard usage={usage} loading={loading} />
+        </div>
+
+        <div className={styles.chartsGrid}>
+          <UsageChart
+            title={t('usage_stats.requests_trend')}
+            period={requestsPeriod}
+            onPeriodChange={setRequestsPeriod}
+            chartData={requestsChartData}
+            chartOptions={requestsChartOptions}
+            loading={loading}
+            isMobile={isMobile}
+            emptyText={t('usage_stats.no_data')}
+          />
+          <UsageChart
+            title={t('usage_stats.tokens_trend')}
+            period={tokensPeriod}
+            onPeriodChange={setTokensPeriod}
+            chartData={tokensChartData}
+            chartOptions={tokensChartOptions}
+            loading={loading}
+            isMobile={isMobile}
+            emptyText={t('usage_stats.no_data')}
+          />
+        </div>
+
+        <TokenBreakdownChart
+          usage={filteredUsage}
           loading={loading}
+          isDark={isDark}
           isMobile={isMobile}
-          emptyText={t('usage_stats.no_data')}
+          hourWindowHours={hourWindowHours}
+        />
+
+        <CostTrendChart
+          usage={filteredUsage}
+          loading={loading}
+          isDark={isDark}
+          isMobile={isMobile}
+          modelPrices={modelPrices}
+          hourWindowHours={hourWindowHours}
+        />
+
+        <div className={styles.detailsGrid}>
+          <ApiDetailsCard apiStats={apiStats} loading={loading} hasPrices={hasPrices} />
+          <ModelStatsCard modelStats={modelStats} loading={loading} hasPrices={hasPrices} />
+        </div>
+
+        <RequestEventsDetailsCard
+          usage={filteredUsage}
+          loading={loading}
+          geminiKeys={config?.geminiApiKeys || []}
+          claudeConfigs={config?.claudeApiKeys || []}
+          codexConfigs={config?.codexApiKeys || []}
+          vertexConfigs={config?.vertexApiKeys || []}
+          openaiProviders={config?.openaiCompatibility || []}
+        />
+
+        <CredentialStatsCard
+          usage={filteredUsage}
+          loading={loading}
+          geminiKeys={config?.geminiApiKeys || []}
+          claudeConfigs={config?.claudeApiKeys || []}
+          codexConfigs={config?.codexApiKeys || []}
+          vertexConfigs={config?.vertexApiKeys || []}
+          openaiProviders={config?.openaiCompatibility || []}
+        />
+
+        <PriceSettingsCard
+          modelNames={modelNames}
+          modelPrices={modelPrices}
+          onPricesChange={setModelPrices}
         />
       </div>
-
-      {/* Token Breakdown Chart */}
-      <TokenBreakdownChart
-        usage={filteredUsage}
-        loading={loading}
-        isDark={isDark}
-        isMobile={isMobile}
-        hourWindowHours={hourWindowHours}
-      />
-
-      {/* Cost Trend Chart */}
-      <CostTrendChart
-        usage={filteredUsage}
-        loading={loading}
-        isDark={isDark}
-        isMobile={isMobile}
-        modelPrices={modelPrices}
-        hourWindowHours={hourWindowHours}
-      />
-
-      {/* Details Grid */}
-      <div className={styles.detailsGrid}>
-        <ApiDetailsCard apiStats={apiStats} loading={loading} hasPrices={hasPrices} />
-        <ModelStatsCard modelStats={modelStats} loading={loading} hasPrices={hasPrices} />
-      </div>
-
-      <RequestEventsDetailsCard
-        usage={filteredUsage}
-        loading={loading}
-        geminiKeys={config?.geminiApiKeys || []}
-        claudeConfigs={config?.claudeApiKeys || []}
-        codexConfigs={config?.codexApiKeys || []}
-        vertexConfigs={config?.vertexApiKeys || []}
-        openaiProviders={config?.openaiCompatibility || []}
-      />
-
-      {/* Credential Stats */}
-      <CredentialStatsCard
-        usage={filteredUsage}
-        loading={loading}
-        geminiKeys={config?.geminiApiKeys || []}
-        claudeConfigs={config?.claudeApiKeys || []}
-        codexConfigs={config?.codexApiKeys || []}
-        vertexConfigs={config?.vertexApiKeys || []}
-        openaiProviders={config?.openaiCompatibility || []}
-      />
-
-      {/* Price Settings */}
-      <PriceSettingsCard
-        modelNames={modelNames}
-        modelPrices={modelPrices}
-        onPricesChange={setModelPrices}
-      />
     </div>
   );
 }

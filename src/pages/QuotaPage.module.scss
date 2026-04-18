@@ -1,29 +1,11 @@
 @use '../styles/variables' as *;
 @use '../styles/mixins' as *;
+@use '../styles/pageShell' as pageShell;
 
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-lg;
-}
-
-.pageHeader {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-sm;
-}
-
-.pageTitle {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.description {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin: 0;
+  @include pageShell.pageContainer(true);
+  width: 100%;
+  max-width: none;
 }
 
 .headerActions {
@@ -63,12 +45,94 @@
   height: 24px;
   min-width: 24px;
   padding: 0 8px;
-  border-radius: 999px;
+  border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
   color: var(--count-badge-text);
   background-color: var(--count-badge-bg);
   box-sizing: border-box;
+}
+
+.panelStrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.panelTab {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--bg-primary) 90%, transparent);
+  color: var(--text-secondary);
+  text-align: left;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+
+  &:hover {
+    color: var(--text-primary);
+    border-color: color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
+      color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+.panelTabActive {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.1), rgba(57, 213, 255, 0.05)),
+    var(--bg-primary);
+  box-shadow:
+    inset 0 0 0 1px rgba(117, 255, 122, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.panelTabLabel {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.panelTabCount {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--primary-color) 14%, transparent);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.workspaceShell {
+  @include pageShell.workspaceShell(clamp(18px, 2.8vw, 24px));
+}
+
+.quotaStage {
+  min-width: 0;
+
+  :global(.card) {
+    height: 100%;
+  }
 }
 
 .errorBox {
@@ -99,8 +163,11 @@
 
 .statsInfo {
   padding: 8px 12px;
-  background-color: var(--bg-secondary);
-  border-radius: $radius-md;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    var(--bg-secondary);
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
   font-size: 13px;
   color: var(--text-secondary);
   white-space: nowrap;
@@ -158,8 +225,10 @@
   gap: $spacing-xs;
   align-items: center;
   padding: 3px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary) 92%, transparent);
   border: 1px solid color-mix(in srgb, var(--border-color) 88%, transparent);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
 
@@ -171,7 +240,7 @@
 
 .viewModeButton:global(.btn.btn-sm) {
   padding: 8px 14px;
-  border-radius: 999px;
+  border-radius: 6px;
   border-color: transparent;
   background: transparent;
   color: var(--text-secondary);
@@ -193,10 +262,12 @@
 }
 
 .viewModeButtonActive:global(.btn.btn-sm) {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: var(--primary-contrast, #fff);
-  box-shadow: 0 8px 18px -14px rgba(0, 0, 0, 0.45);
+  background:
+    linear-gradient(180deg, rgba(117, 255, 122, 0.14), rgba(57, 213, 255, 0.08)),
+    color-mix(in srgb, var(--bg-secondary) 96%, var(--primary-color));
+  border-color: rgba($primary-color, 0.38);
+  color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px rgba(117, 255, 122, 0.06);
 
   &:hover:not(:disabled) {
     background: var(--primary-hover);
@@ -207,7 +278,7 @@
 
 .refreshAllButton:global(.btn.btn-sm) {
   padding-inline: 14px;
-  border-radius: 999px;
+  border-radius: 6px;
   background: color-mix(in srgb, var(--primary-color) 12%, var(--bg-secondary));
   border-color: color-mix(in srgb, var(--primary-color) 22%, var(--border-color));
   color: var(--text-primary);
@@ -321,9 +392,12 @@
 
 .quotaBar {
   height: 8px;
-  background-color: var(--bg-tertiary);
-  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.03), transparent 72%),
+    var(--bg-tertiary);
+  border-radius: 4px;
   overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
 }
 
 .quotaBarFill {
@@ -374,24 +448,35 @@
   font-size: 12px;
   color: var(--text-tertiary);
   text-align: center;
-  padding: $spacing-sm 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px dashed color-mix(in srgb, var(--border-color) 72%, transparent);
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary) 72%, transparent);
 }
 
 .quotaMessageAction {
   width: 100%;
-  border: none;
-  background: none;
+  border: 1px dashed color-mix(in srgb, var(--primary-color) 30%, var(--border-color));
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--bg-secondary) 78%, transparent);
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
+  font-weight: 600;
 
   &:hover:not(:disabled) {
     color: var(--text-primary);
+    border-color: color-mix(in srgb, var(--primary-color) 42%, var(--border-color));
+    background:
+      linear-gradient(180deg, rgba(117, 255, 122, 0.07), rgba(57, 213, 255, 0.04)),
+      color-mix(in srgb, var(--bg-secondary) 86%, transparent);
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.6;
-    text-decoration: none;
   }
 }
 
@@ -432,187 +517,98 @@
 }
 
 .premiumPlanValue {
-  position: relative;
   display: inline-flex;
   align-items: center;
   font-weight: 700;
   font-size: 12px;
   padding: 2px 8px;
-  border-radius: 999px;
-  overflow: visible;
-  isolation: isolate;
+  border-radius: 6px;
+  overflow: hidden;
   background:
-    radial-gradient(
-      circle at 18% 24%,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.72) 18%,
-      rgba(255, 255, 255, 0) 42%
-    ),
-    linear-gradient(135deg, #fff9e3 0%, #ffe07f 52%, #e0aa14 100%);
-  border: 1px solid rgba(217, 165, 22, 0.72);
-  box-shadow:
-    0 1px 3px rgba(133, 92, 0, 0.16),
-    0 0 0 1px rgba(255, 255, 255, 0.22) inset,
-    0 0 16px rgba(255, 214, 98, 0.28);
-  color: #6b4b00;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+    linear-gradient(180deg, rgba(255, 224, 102, 0.22), rgba(255, 184, 77, 0.1)),
+    color-mix(in srgb, var(--bg-secondary) 96%, #e0aa14);
+  border: 1px solid rgba(224, 170, 20, 0.44);
+  box-shadow: inset 0 0 0 1px rgba(255, 224, 102, 0.12);
+  color: #ffe066;
   text-transform: capitalize;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -6px -9px;
-    border-radius: inherit;
-    background: radial-gradient(
-      circle at 18% 22%,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(255, 237, 158, 0.58) 32%,
-      rgba(255, 215, 91, 0) 72%
-    );
-    --glass-blur: 9px;
-    filter: var(--glass-filter);
-    opacity: 0.75;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  @media (dynamic-range: high) {
-    background:
-      radial-gradient(
-        circle at 18% 24%,
-        color(display-p3 1 0.99 0.94) 0%,
-        color(display-p3 1 0.97 0.82 / 0.82) 18%,
-        color(display-p3 1 0.95 0.7 / 0) 42%
-      ),
-      linear-gradient(
-        135deg,
-        color(display-p3 1 0.98 0.88),
-        color(display-p3 0.99 0.86 0.34),
-        color(display-p3 0.92 0.68 0.05)
-      );
-    border-color: color(display-p3 0.9 0.73 0.12 / 0.85);
-    box-shadow:
-      0 1px 4px color(display-p3 0.45 0.28 0 / 0.22),
-      0 0 0 1px color(display-p3 1 0.98 0.86 / 0.3) inset,
-      0 0 18px color(display-p3 1 0.89 0.2 / 0.36);
-    color: color(display-p3 0.43 0.3 0);
-  }
-
-  @supports (color: #{'color(rec2100-linear 1 1 1)'}) {
-    @media (dynamic-range: high) {
-      dynamic-range-limit: no-limit;
-      box-shadow:
-        0 1px 4px color(display-p3 0.45 0.28 0 / 0.22),
-        0 0 0 1px color(display-p3 1 0.98 0.86 / 0.3) inset,
-        0 0 14px color(display-p3 1 0.89 0.2 / 0.36),
-        0 0 30px #{'color(rec2100-linear 3.6 2.9 0.7 / 0.48)'};
-
-      &::before {
-        background: radial-gradient(
-          circle at 18% 22%,
-          #{'color(rec2100-linear 6.5 6.2 5.4 / 0.92)'} 0%,
-          #{'color(rec2100-linear 2.4 2 0.6 / 0.62)'} 34%,
-          #{'color(rec2100-linear 1 0.85 0.12 / 0)'} 76%
-        );
-        opacity: 0.92;
-      }
-    }
-  }
 }
 
 :global([data-theme='dark']) .premiumPlanValue {
   background:
-    radial-gradient(
-      circle at 18% 24%,
-      rgba(255, 229, 138, 0.32) 0%,
-      rgba(255, 214, 98, 0.18) 18%,
-      rgba(255, 214, 98, 0) 44%
-    ),
-    linear-gradient(135deg, #4f3d0b 0%, #6e5510 48%, #8f6d10 100%);
-  border-color: rgba(226, 180, 50, 0.7);
-  box-shadow:
-    0 1px 6px rgba(0, 0, 0, 0.28),
-    0 0 0 1px rgba(255, 220, 120, 0.16) inset,
-    0 0 18px rgba(255, 196, 44, 0.22);
-  color: #fff0a8;
-  text-shadow: 0 0 10px rgba(255, 212, 79, 0.22);
-
-  &::before {
-    background: radial-gradient(
-      circle at 18% 24%,
-      rgba(255, 229, 138, 0.42) 0%,
-      rgba(255, 197, 66, 0.28) 34%,
-      rgba(255, 187, 0, 0) 74%
-    );
-    opacity: 0.8;
-  }
-
-  @media (dynamic-range: high) {
-    background:
-      radial-gradient(
-        circle at 18% 24%,
-        color(display-p3 1 0.89 0.38 / 0.38) 0%,
-        color(display-p3 1 0.82 0.2 / 0.2) 18%,
-        color(display-p3 1 0.82 0.2 / 0) 44%
-      ),
-      linear-gradient(
-        135deg,
-        color(display-p3 0.33 0.25 0.04),
-        color(display-p3 0.48 0.36 0.08),
-        color(display-p3 0.62 0.46 0.09)
-      );
-    border-color: color(display-p3 0.78 0.6 0.16 / 0.78);
-    box-shadow:
-      0 1px 8px color(display-p3 0 0 0 / 0.32),
-      0 0 0 1px color(display-p3 0.95 0.8 0.24 / 0.18) inset,
-      0 0 20px color(display-p3 1 0.76 0.1 / 0.28);
-    color: color(display-p3 1 0.93 0.58);
-  }
-
-  @supports (color: #{'color(rec2100-linear 1 1 1)'}) {
-    @media (dynamic-range: high) {
-      dynamic-range-limit: no-limit;
-      box-shadow:
-        0 1px 8px color(display-p3 0 0 0 / 0.32),
-        0 0 0 1px color(display-p3 0.95 0.8 0.24 / 0.18) inset,
-        0 0 16px color(display-p3 1 0.76 0.1 / 0.28),
-        0 0 28px #{'color(rec2100-linear 4.8 3.5 0.45 / 0.4)'};
-
-      &::before {
-        background: radial-gradient(
-          circle at 18% 24%,
-          #{'color(rec2100-linear 5.6 4.1 0.75 / 0.64)'} 0%,
-          #{'color(rec2100-linear 2.2 1.5 0.2 / 0.34)'} 34%,
-          #{'color(rec2100-linear 1.2 0.9 0.06 / 0)'} 74%
-        );
-        opacity: 0.95;
-      }
-    }
-  }
+    linear-gradient(180deg, rgba(255, 224, 102, 0.18), rgba(255, 184, 77, 0.08)),
+    color-mix(in srgb, var(--bg-secondary) 96%, #8f6d10);
+  border-color: rgba(255, 224, 102, 0.36);
+  color: #ffe066;
 }
 
 .fileCard {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    color-mix(in srgb, var(--surface-raised) 94%, var(--bg-primary));
+  border: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent);
   border-radius: $radius-lg;
   padding: $spacing-md;
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  gap: 10px;
   transition: transform $transition-fast, box-shadow $transition-fast, border-color $transition-fast;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(255, 93, 135, 0.22), rgba(57, 213, 255, 0.3), rgba(117, 255, 122, 0.18))
+        top / 100% 2px no-repeat,
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-md;
-    border-color: rgba(37, 99, 235, 0.2);
+    border-color: color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
   }
 }
 
-.cardHeader {
+.quotaCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.quotaCardIdentity {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: $spacing-sm;
   min-height: 28px;
+  min-width: 0;
+}
+
+.quotaCardState {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--bg-tertiary) 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-color) 88%, transparent);
+}
+
+.quotaCardRefresh:global(.btn.btn-sm) {
+  min-width: 0;
+  padding-inline: 12px;
 }
 
 .typeBadge {
@@ -626,10 +622,27 @@
 
 .fileName {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   word-break: break-all;
   line-height: 1.4;
+}
+
+.quotaCardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.quotaCardMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 .pagination {

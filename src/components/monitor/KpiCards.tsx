@@ -23,7 +23,7 @@ function formatNumber(num: number): string {
   return num.toLocaleString();
 }
 
-export function KpiCards({ data, loading, timeRange }: KpiCardsProps) {
+export function KpiCards({ data, loading, timeRange: _timeRange }: KpiCardsProps) {
   const { t } = useTranslation();
 
   // 计算统计数据
@@ -113,22 +113,14 @@ export function KpiCards({ data, loading, timeRange }: KpiCardsProps) {
     };
   }, [data]);
 
-  const timeRangeLabel = timeRange === 1
-    ? t('monitor.today')
-    : t('monitor.last_n_days', { n: timeRange });
-
-  return (
-    <div className={styles.kpiGrid}>
-      {/* 请求数 */}
-      <div className={styles.kpiCard}>
-        <div className={styles.kpiTitle}>
-          <span className={styles.kpiLabel}>{t('monitor.kpi.requests')}</span>
-          <span className={styles.kpiTag}>{timeRangeLabel}</span>
-        </div>
-        <div className={styles.kpiValue}>
-          {loading ? '--' : formatNumber(stats.totalRequests)}
-        </div>
-        <div className={styles.kpiMeta}>
+  const kpiCards = [
+    {
+      key: 'requests',
+      className: '',
+      label: t('monitor.kpi.requests'),
+      value: loading ? '--' : formatNumber(stats.totalRequests),
+      meta: (
+        <>
           <span className={styles.kpiSuccess}>
             {t('monitor.kpi.success')}: {loading ? '--' : stats.successRequests.toLocaleString()}
           </span>
@@ -138,65 +130,55 @@ export function KpiCards({ data, loading, timeRange }: KpiCardsProps) {
           <span>
             {t('monitor.kpi.rate')}: {loading ? '--' : stats.successRate.toFixed(1)}%
           </span>
-        </div>
-      </div>
-
-      {/* Tokens */}
-      <div className={`${styles.kpiCard} ${styles.green}`}>
-        <div className={styles.kpiTitle}>
-          <span className={styles.kpiLabel}>{t('monitor.kpi.tokens')}</span>
-          <span className={styles.kpiTag}>{timeRangeLabel}</span>
-        </div>
-        <div className={styles.kpiValue}>
-          {loading ? '--' : formatNumber(stats.totalTokens)}
-        </div>
-        <div className={styles.kpiMeta}>
+        </>
+      ),
+    },
+    {
+      key: 'tokens',
+      className: styles.green,
+      label: t('monitor.kpi.tokens'),
+      value: loading ? '--' : formatNumber(stats.totalTokens),
+      meta: (
+        <>
           <span>{t('monitor.kpi.input')}: {loading ? '--' : formatNumber(stats.inputTokens)}</span>
           <span>{t('monitor.kpi.output')}: {loading ? '--' : formatNumber(stats.outputTokens)}</span>
-        </div>
-      </div>
-
-      {/* 平均 TPM */}
-      <div className={`${styles.kpiCard} ${styles.purple}`}>
-        <div className={styles.kpiTitle}>
-          <span className={styles.kpiLabel}>{t('monitor.kpi.avg_tpm')}</span>
-          <span className={styles.kpiTag}>{timeRangeLabel}</span>
-        </div>
-        <div className={styles.kpiValue}>
-          {loading ? '--' : formatNumber(stats.avgTpm)}
-        </div>
-        <div className={styles.kpiMeta}>
+          {(stats.reasoningTokens > 0 || stats.cachedTokens > 0) && (
+            <span>
+              {t('monitor.kpi.cached')}: {loading ? '--' : formatNumber(stats.cachedTokens)}
+            </span>
+          )}
+        </>
+      ),
+    },
+    {
+      key: 'throughput',
+      className: styles.purple,
+      label: t('monitor.kpi.avg_tpm'),
+      value: loading ? '--' : formatNumber(stats.avgTpm),
+      meta: (
+        <>
           <span>{t('monitor.kpi.tokens_per_minute')}</span>
-        </div>
-      </div>
+          <span>{t('monitor.kpi.avg_rpm')}: {loading ? '--' : stats.avgRpm.toFixed(1)}</span>
+          <span>{t('monitor.kpi.avg_rpd')}: {loading ? '--' : formatNumber(stats.avgRpd)}</span>
+        </>
+      ),
+    },
+  ];
 
-      {/* 平均 RPM */}
-      <div className={`${styles.kpiCard} ${styles.orange}`}>
-        <div className={styles.kpiTitle}>
-          <span className={styles.kpiLabel}>{t('monitor.kpi.avg_rpm')}</span>
-          <span className={styles.kpiTag}>{timeRangeLabel}</span>
+  return (
+    <div className={styles.kpiGrid}>
+      {kpiCards.map((card) => (
+        <div
+          key={card.key}
+          className={`${styles.kpiCard} ${card.className}`.trim()}
+        >
+          <div className={styles.kpiTitle}>
+            <span className={styles.kpiLabel}>{card.label}</span>
+          </div>
+          <div className={styles.kpiValue}>{card.value}</div>
+          <div className={styles.kpiMeta}>{card.meta}</div>
         </div>
-        <div className={styles.kpiValue}>
-          {loading ? '--' : stats.avgRpm.toFixed(1)}
-        </div>
-        <div className={styles.kpiMeta}>
-          <span>{t('monitor.kpi.requests_per_minute')}</span>
-        </div>
-      </div>
-
-      {/* 日均 RPD */}
-      <div className={`${styles.kpiCard} ${styles.cyan}`}>
-        <div className={styles.kpiTitle}>
-          <span className={styles.kpiLabel}>{t('monitor.kpi.avg_rpd')}</span>
-          <span className={styles.kpiTag}>{timeRangeLabel}</span>
-        </div>
-        <div className={styles.kpiValue}>
-          {loading ? '--' : formatNumber(stats.avgRpd)}
-        </div>
-        <div className={styles.kpiMeta}>
-          <span>{t('monitor.kpi.requests_per_day')}</span>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }

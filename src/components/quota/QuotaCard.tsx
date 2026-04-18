@@ -5,8 +5,11 @@
 import { useTranslation } from 'react-i18next';
 import type { ReactElement, ReactNode } from 'react';
 import type { TFunction } from 'i18next';
+import { Button } from '@/components/ui/Button';
 import type { AuthFileItem, ResolvedTheme, ThemeColors } from '@/types';
 import { TYPE_COLORS } from '@/utils/quota';
+import { formatFileSize } from '@/utils/format';
+import { formatModified } from '@/features/authFiles/constants';
 import styles from '@/pages/QuotaPage.module.scss';
 
 type QuotaStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -95,6 +98,7 @@ export function QuotaCard<TState extends QuotaStatusState>({
     quota?.error || t('common.unknown_error')
   );
   const idleMessageKey = onRefresh ? `${i18nPrefix}.idle` : (cardIdleMessageKey ?? `${i18nPrefix}.idle`);
+  const isDisabled = Boolean(item.disabled);
 
   const getTypeLabel = (type: string): string => {
     const key = `auth_files.filter_${type}`;
@@ -106,36 +110,51 @@ export function QuotaCard<TState extends QuotaStatusState>({
 
   return (
     <div className={`${styles.fileCard} ${cardClassName}`}>
-      <div className={styles.cardHeader}>
-        <span
-          className={styles.typeBadge}
-          style={{
-            backgroundColor: typeColor.bg,
-            color: typeColor.text,
-            ...(typeColor.border ? { border: typeColor.border } : {})
-          }}
-        >
-          {getTypeLabel(displayType)}
+      <div className={styles.quotaCardHeader}>
+        <div className={styles.quotaCardIdentity}>
+          <span
+            className={styles.typeBadge}
+            style={{
+              backgroundColor: typeColor.bg,
+              color: typeColor.text,
+              ...(typeColor.border ? { border: typeColor.border } : {})
+            }}
+          >
+            {getTypeLabel(displayType)}
+          </span>
+          {isDisabled ? (
+            <span className={styles.quotaCardState}>{t('auth_files.health_status_disabled')}</span>
+          ) : null}
+        </div>
+        {onRefresh ? (
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onRefresh}
+            disabled={!canRefresh}
+            className={styles.quotaCardRefresh}
+          >
+            {t('common.refresh')}
+          </Button>
+        ) : null}
+      </div>
+
+      <span className={styles.fileName}>{item.name}</span>
+
+      <div className={styles.quotaCardMeta}>
+        <span className={styles.quotaCardMetaItem}>
+          {t('auth_files.file_size')}: {item.size ? formatFileSize(item.size) : '-'}
         </span>
-        <span className={styles.fileName}>{item.name}</span>
+        <span className={styles.quotaCardMetaItem}>
+          {t('auth_files.file_modified')}: {formatModified(item)}
+        </span>
       </div>
 
       <div className={styles.quotaSection}>
         {quotaStatus === 'loading' ? (
           <div className={styles.quotaMessage}>{t(`${i18nPrefix}.loading`)}</div>
         ) : quotaStatus === 'idle' ? (
-          onRefresh ? (
-            <button
-              type="button"
-              className={`${styles.quotaMessage} ${styles.quotaMessageAction}`}
-              onClick={onRefresh}
-              disabled={!canRefresh}
-            >
-              {t(idleMessageKey)}
-            </button>
-          ) : (
-            <div className={styles.quotaMessage}>{t(idleMessageKey)}</div>
-          )
+          <div className={styles.quotaMessage}>{t(idleMessageKey)}</div>
         ) : quotaStatus === 'error' ? (
           <div className={styles.quotaError}>
             {t(`${i18nPrefix}.load_failed`, {

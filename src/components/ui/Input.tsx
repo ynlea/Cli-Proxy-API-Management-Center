@@ -13,6 +13,7 @@ export function Input({ label, hint, error, rightElement, className = '', id, ..
   const hintId = hint ? `${inputId}-hint` : undefined;
   const errorId = error ? `${inputId}-error` : undefined;
   const describedBy = [rest['aria-describedby'], errorId, hintId].filter(Boolean).join(' ') || undefined;
+  const inputStyle = rightElement ? { paddingRight: 56 } : undefined;
 
   return (
     <div className="form-group">
@@ -23,6 +24,7 @@ export function Input({ label, hint, error, rightElement, className = '', id, ..
           className={`input ${className}`.trim()}
           aria-invalid={Boolean(error) || rest['aria-invalid']}
           aria-describedby={describedBy}
+          style={inputStyle}
           {...rest}
         />
         {rightElement && (
