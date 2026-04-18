@@ -16,7 +16,11 @@ import { modelsApi, providersApi } from '@/services/api';
 import { useAuthStore, useConfigStore, useNotificationStore } from '@/stores';
 import type { ProviderKeyConfig } from '@/types';
 import { buildHeaderObject, headersToEntries, normalizeHeaderEntries } from '@/utils/headers';
-import { areKeyValueEntriesEqual, areModelEntriesEqual, areStringArraysEqual } from '@/utils/compare';
+import {
+  areKeyValueEntriesEqual,
+  areModelEntriesEqual,
+  areStringArraysEqual,
+} from '@/utils/compare';
 import { entriesToModels, modelsToEntries } from '@/components/ui/modelInputListUtils';
 import { excludedModelsToText, parseExcludedModels } from '@/components/providers/utils';
 import type { ProviderFormState } from '@/components/providers';
@@ -79,7 +83,9 @@ type CodexFormBaseline = {
 const buildCodexBaseline = (form: ProviderFormState): CodexFormBaseline => ({
   apiKey: String(form.apiKey ?? '').trim(),
   priority:
-    form.priority !== undefined && Number.isFinite(form.priority) ? Math.trunc(form.priority) : null,
+    form.priority !== undefined && Number.isFinite(form.priority)
+      ? Math.trunc(form.priority)
+      : null,
   prefix: String(form.prefix ?? '').trim(),
   baseUrl: String(form.baseUrl ?? '').trim(),
   websockets: Boolean(form.websockets),

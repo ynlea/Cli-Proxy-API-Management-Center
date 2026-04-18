@@ -1,0 +1,209 @@
+@use '../../styles/variables.scss' as *;
+
+.panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+    rgba(8, 11, 20, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 14px 34px rgba(0, 10, 30, 0.22);
+  backdrop-filter: blur(18px) saturate(1.1);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+}
+
+.panelSuccess {
+  background:
+    linear-gradient(180deg, rgba(159, 245, 191, 0.12), rgba(255, 255, 255, 0.02)),
+    rgba(8, 11, 20, 0.24);
+}
+
+.header,
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.label,
+.metaLabel {
+  font-family: var(--font-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text-secondary) 92%, white 8%);
+}
+
+.meta {
+  padding-top: 4px;
+}
+
+.metaValue {
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--text-primary) 96%, white 4%);
+  text-align: right;
+  word-break: break-all;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(125, 180, 255, 0.92));
+  box-shadow:
+    0 0 0 6px rgba(125, 180, 255, 0.12),
+    0 0 14px rgba(125, 180, 255, 0.28);
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+.dotSuccess {
+  background: linear-gradient(135deg, rgba(215, 255, 233, 0.96), rgba(111, 223, 155, 0.94));
+  box-shadow:
+    0 0 0 6px rgba(111, 223, 155, 0.12),
+    0 0 14px rgba(111, 223, 155, 0.24);
+  animation-duration: 2.4s;
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  height: 7px;
+  padding: 2px;
+  border-radius: $radius-full;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.16),
+      transparent
+    );
+    animation: trackSheen 1.9s linear infinite;
+    opacity: 0.66;
+  }
+}
+
+.bar {
+  position: relative;
+  height: 100%;
+  width: 38%;
+  border-radius: $radius-full;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.96),
+    rgba(151, 194, 255, 0.96) 42%,
+    rgba(83, 132, 225, 0.98) 100%
+  );
+  box-shadow: 0 0 16px rgba(94, 152, 255, 0.22);
+  animation: trackLoading 1.45s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.barSuccess {
+  width: 78%;
+  background: linear-gradient(
+    90deg,
+    rgba(224, 255, 236, 0.98),
+    rgba(137, 234, 177, 0.96) 48%,
+    rgba(74, 173, 118, 0.98) 100%
+  );
+  animation: none;
+  transform: none;
+}
+
+.ticks {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  span {
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.26), rgba(152, 199, 255, 0.4));
+    opacity: 0.42;
+  }
+
+  span:nth-child(1) {
+    width: 52px;
+  }
+
+  span:nth-child(2) {
+    width: 32px;
+  }
+
+  span:nth-child(3) {
+    width: 18px;
+  }
+}
+
+@keyframes trackLoading {
+  0% {
+    transform: translateX(-112%);
+  }
+
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes trackSheen {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .panel {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .metaValue {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot,
+  .track::after,
+  .bar {
+    animation: none !important;
+    transform: none !important;
+  }
+}

@@ -58,17 +58,21 @@
     "unsaved_changes_message": "У вас есть несохранённые изменения. Если вы уйдёте, они будут потеряны. Выйти?"
   },
   "title": {
-    "main": "Центр управления CLI Proxy API",
-    "login": "Центр управления CLI Proxy API",
-    "abbr": "CPAMC"
+    "main": "CPA Console",
+    "login": "CPA Console",
+    "abbr": "CPA"
   },
   "splash": {
-    "title": "CLI Proxy API",
-    "subtitle": "Центр управления"
+    "title": "CPA",
+    "subtitle": "Console",
+    "loading_title": "Подготавливаем консоль",
+    "loading_message": "Интерфейс и конфигурация инициализируются. Пожалуйста, подождите."
   },
   "auto_login": {
     "title": "Автовход...",
-    "message": "Пытаемся подключиться к серверу, используя сохранённые данные"
+    "message": "Пытаемся подключиться к серверу, используя сохранённые данные",
+    "success_title": "Сеанс восстановлен",
+    "success_message": "Подключение готово. Открываем консоль."
   },
   "login": {
     "subtitle": "Введите данные подключения, чтобы получить доступ к панели управления",
@@ -129,7 +133,7 @@
   },
   "dashboard": {
     "title": "Панель управления",
-    "subtitle": "Добро пожаловать в Центр управления CLI Proxy API",
+    "subtitle": "Добро пожаловать в CPA Console",
     "openai_providers": "Поставщики OpenAI",
     "quick_actions": "Быстрые действия",
     "current_config": "Текущая конфигурация",
@@ -953,6 +957,7 @@
     "model_name": "Название модели",
     "model_price_settings": "Настройки стоимости моделей",
     "saved_prices": "Сохранённые цены",
+    "effective_prices": "Активные цены",
     "requests_trend": "Динамика запросов",
     "tokens_trend": "Динамика токенов",
     "api_details": "Детали API",
@@ -1002,11 +1007,17 @@
     "model_price_model_label": "Модель",
     "model_price_select_placeholder": "Выберите модель",
     "model_price_select_hint": "Модели берутся из детальной статистики использования",
+    "model_price_auto_hint": "Цены теперь автоматически подбираются по имени модели. Сохранение меняет только текущую модель.",
     "model_price_prompt": "Цена prompt",
     "model_price_completion": "Цена completion",
     "model_price_cache": "Цена кэша",
     "model_price_save": "Сохранить цену",
     "model_price_empty": "Цена для моделей не задана",
+    "model_price_source_preset": "Предустановка",
+    "model_price_source_custom": "Своя цена",
+    "model_price_source_custom_override": "Своя поверх предустановки",
+    "model_price_restore_preset": "Вернуть предустановку",
+    "model_price_match_hint": "Источник: {{provider}} / {{model}}",
     "model_price_model": "Модель",
     "model_price_saved": "Цена модели сохранена",
     "model_price_model_required": "Выберите модель для задания цены",
@@ -1154,7 +1165,7 @@
     "reload": "Перезагрузить",
     "reload_confirm_message": "Перезагрузка отбросит ваши несохранённые изменения. Продолжить?",
     "save": "Сохранить",
-    "description": "Редактируйте config.yaml через визуальный редактор или исходный файл",
+    "description": "Редактируйте config.yaml через групповые вкладки или режим исходного файла",
     "status_idle": "Ожидание действия",
     "status_loading": "Загрузка конфигурации...",
     "status_loading_short": "Загрузка",
@@ -1196,8 +1207,26 @@
       "source": "Редактор файла"
     },
     "visual": {
-      "notice": "Визуальный режим охватывает основные поля. Остальные параметры config.yaml по-прежнему нужно проверять или редактировать в режиме исходника.",
+      "notice": "Групповой режим охватывает основные поля. Остальные параметры config.yaml по-прежнему нужно проверять или редактировать в режиме исходника.",
       "quick_jump": "Быстрый переход",
+      "groups": {
+        "core": {
+          "title": "Базовая настройка",
+          "description": "Соберите сервер, TLS и удалённое управление в одном месте, чтобы сначала стабилизировать точку входа сервиса."
+        },
+        "access": {
+          "title": "Доступ и маршрутизация",
+          "description": "Держите каталоги аутентификации, ключи и маршрутизацию запросов в одной группе, чтобы меньше переключаться."
+        },
+        "runtime": {
+          "title": "Стратегия выполнения",
+          "description": "Управляйте поведением системы, квотами и параметрами стриминга вместе, чтобы удобнее настраивать всё подряд."
+        },
+        "advanced": {
+          "title": "Продвинутые правила",
+          "description": "Вынесите payload-правила в отдельный блок с запасом места для длинных форм и сложной логики."
+        }
+      },
       "sections": {
         "server": {
           "title": "Настройки сервера",
@@ -1374,7 +1403,7 @@
   },
   "system_info": {
     "title": "Информация о центре управления",
-    "about_title": "CLI Proxy API Management Center",
+    "about_title": "CPA Console",
     "connection_status_title": "Статус подключения",
     "api_status_label": "Статус API:",
     "config_status_label": "Статус конфигурации:",

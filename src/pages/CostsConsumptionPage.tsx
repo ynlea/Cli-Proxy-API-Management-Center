@@ -34,6 +34,8 @@ export function CostsConsumptionPage({
     error,
     lastRefreshedAt,
     modelPrices,
+    manualModelPrices,
+    modelPriceSources,
     setModelPrices,
     loadUsage,
     handleExport,
@@ -58,9 +60,19 @@ export function CostsConsumptionPage({
     <div className={embedded ? styles.embeddedSection : styles.container}>
       {loading && !usage && (
         <div className={styles.loadingOverlay} aria-busy="true">
-          <div className={styles.loadingOverlayContent}>
+          <div
+            className={styles.loadingOverlayContent}
+            aria-live="polite"
+            data-watermark={t('title.abbr')}
+          >
+            <span className={styles.loadingOverlayKicker}>{t('title.main')}</span>
             <LoadingSpinner size={28} className={styles.loadingOverlaySpinner} />
             <span className={styles.loadingOverlayText}>{t('common.loading')}</span>
+            <span className={styles.loadingOverlayMeter} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </div>
         </div>
       )}
@@ -167,6 +179,8 @@ export function CostsConsumptionPage({
           <PriceSettingsCard
             modelNames={modelNames}
             modelPrices={modelPrices}
+            manualModelPrices={manualModelPrices}
+            modelPriceSources={modelPriceSources}
             onPricesChange={setModelPrices}
           />
         </div>

@@ -109,7 +109,12 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgba(255, 93, 135, 0.28), rgba(57, 213, 255, 0.34), rgba(117, 255, 122, 0.28))
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.28),
+          rgba(57, 213, 255, 0.34),
+          rgba(117, 255, 122, 0.28)
+        )
         top / 100% 2px no-repeat,
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
     pointer-events: none;

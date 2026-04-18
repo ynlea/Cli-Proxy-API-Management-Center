@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { SelectionCheckbox } from '@/components/ui/SelectionCheckbox';
-import { IconEye, IconEyeOff } from '@/components/ui/icons';
+import { IconEye, IconEyeOff, IconKey, IconPencilLine } from '@/components/ui/icons';
+import { AuthMediaStage } from '@/components/common/AuthMediaStage';
+import { StageProgressPanel } from '@/components/common/StageProgressPanel';
 import { useAuthStore, useLanguageStore, useNotificationStore } from '@/stores';
 import { detectApiBaseFromLocation, normalizeApiBase } from '@/utils/connection';
 import { LANGUAGE_LABEL_KEYS, LANGUAGE_ORDER } from '@/utils/constants';
 import { isSupportedLanguage } from '@/utils/language';
-import { INLINE_BRAND_ICON } from '@/assets/brandIcon';
 import type { ApiError } from '@/types';
 import styles from './LoginPage.module.scss';
 
@@ -188,127 +189,142 @@ export function LoginPage() {
 
   // 显示启动动画（自动登录中或自动登录成功）
   const showSplash = autoLoading || autoLoginSuccess;
+  const displayBase = apiBase || storedBase || detectedBase;
+  const stageStatus = showSplash
+    ? autoLoginSuccess
+      ? t('common.connected_status')
+      : t('common.loading')
+    : t('common.login');
+  const stageTitle = showSplash
+    ? autoLoginSuccess
+      ? t('auto_login.success_title', { defaultValue: t('common.connected_status') })
+      : t('auto_login.title')
+    : t('title.login');
+  const stageDescription = showSplash
+    ? autoLoginSuccess
+      ? t('auto_login.success_message', { defaultValue: t('common.connected_status') })
+      : t('auto_login.message')
+    : t('login.subtitle');
 
   return (
-    <div className={styles.container}>
-      {/* 左侧品牌展示区 */}
-      <div className={styles.brandPanel}>
-        <div className={styles.brandContent}>
-          <span className={styles.brandWord}>CLI</span>
-          <span className={styles.brandWord}>PROXY</span>
-          <span className={styles.brandWord}>API</span>
-        </div>
-      </div>
-
-      {/* 右侧功能交互区 */}
-      <div className={styles.formPanel}>
+    <div className={styles.page}>
+      <AuthMediaStage
+        label={t('title.main')}
+        status={stageStatus}
+        title={stageTitle}
+        description={stageDescription}
+        hideMeta
+        controls={
+          <Select
+            className={styles.languageSelect}
+            value={language}
+            options={languageOptions}
+            onChange={handleLanguageChange}
+            fullWidth={false}
+            ariaLabel={t('language.switch')}
+          />
+        }
+      >
         {showSplash ? (
-          /* 启动动画 */
-          <div className={styles.splashContent}>
-            <img src={INLINE_BRAND_ICON} alt="CPAMC icon" className={styles.splashLogo} />
-            <h1 className={styles.splashTitle}>{t('splash.title')}</h1>
-            <p className={styles.splashSubtitle}>{t('splash.subtitle')}</p>
-            <div className={styles.splashLoader}>
-              <div className={styles.splashLoaderBar} />
-            </div>
-          </div>
+          <StageProgressPanel
+            label={stageStatus}
+            metaLabel={t('login.connection_current')}
+            metaValue={displayBase}
+            state={autoLoginSuccess ? 'success' : 'loading'}
+          />
         ) : (
-          /* 登录表单 */
-          <div className={styles.formContent}>
-            {/* Logo */}
-            <img src={INLINE_BRAND_ICON} alt="CPAMC icon" className={styles.logo} />
-
-            {/* 登录表单卡片 */}
-            <div className={styles.loginCard}>
-              <div className={styles.loginHeader}>
-                <div className={styles.titleRow}>
-                  <div className={styles.title}>{t('title.login')}</div>
-                  <Select
-                    className={styles.languageSelect}
-                    value={language}
-                    options={languageOptions}
-                    onChange={handleLanguageChange}
-                    fullWidth={false}
-                    ariaLabel={t('language.switch')}
-                  />
+          <div className={styles.formFields}>
+            <div className={styles.connectionBox}>
+              <div className={styles.connectionHeader}>
+                <div className={styles.connectionCopy}>
+                  <div className={styles.connectionLabel}>{t('login.connection_current')}</div>
+                  <div className={styles.connectionValue}>{displayBase}</div>
                 </div>
-                <div className={styles.subtitle}>{t('login.subtitle')}</div>
+                <button
+                  type="button"
+                  className={`${styles.connectionAction} ${showCustomBase ? styles.connectionActionActive : ''}`.trim()}
+                  onClick={() => setShowCustomBase((prev) => !prev)}
+                  aria-expanded={showCustomBase}
+                  aria-label={t('login.custom_connection_label')}
+                >
+                  <IconPencilLine size={14} />
+                  <span>
+                    {showCustomBase
+                      ? t('common.collapse', { defaultValue: '收起' })
+                      : t('common.edit', { defaultValue: '编辑' })}
+                  </span>
+                </button>
               </div>
-
-              <div className={styles.connectionBox}>
-                <div className={styles.label}>{t('login.connection_current')}</div>
-                <div className={styles.value}>{apiBase || detectedBase}</div>
-                <div className={styles.hint}>{t('login.connection_auto_hint')}</div>
+              <div className={styles.connectionHint}>
+                {showCustomBase
+                  ? t('login.custom_connection_hint')
+                  : t('login.connection_auto_hint')}
               </div>
+            </div>
 
-              <div className={styles.toggleAdvanced}>
-                <SelectionCheckbox
-                  checked={showCustomBase}
-                  onChange={setShowCustomBase}
-                  ariaLabel={t('login.custom_connection_label')}
-                  label={t('login.custom_connection_label')}
-                  labelClassName={styles.toggleLabel}
-                />
-              </div>
-
-              {showCustomBase && (
+            {showCustomBase && (
+              <div className={styles.inlineEditor}>
                 <Input
-                  label={t('login.custom_connection_label')}
+                  aria-label={t('login.custom_connection_label')}
                   placeholder={t('login.custom_connection_placeholder')}
                   value={apiBase}
                   onChange={(e) => setApiBase(e.target.value)}
-                  hint={t('login.custom_connection_hint')}
-                />
-              )}
-
-              <Input
-                autoFocus
-                label={t('login.management_key_label')}
-                placeholder={t('login.management_key_placeholder')}
-                type={showKey ? 'text' : 'password'}
-                value={managementKey}
-                onChange={(e) => setManagementKey(e.target.value)}
-                onKeyDown={handleSubmitKeyDown}
-                rightElement={
-                  <button
-                    type="button"
-                    className="btn btn-ghost btn-sm"
-                    onClick={() => setShowKey((prev) => !prev)}
-                    aria-label={
-                      showKey
-                        ? t('login.hide_key', { defaultValue: '隐藏密钥' })
-                        : t('login.show_key', { defaultValue: '显示密钥' })
-                    }
-                    title={
-                      showKey
-                        ? t('login.hide_key', { defaultValue: '隐藏密钥' })
-                        : t('login.show_key', { defaultValue: '显示密钥' })
-                    }
-                  >
-                    {showKey ? <IconEyeOff size={16} /> : <IconEye size={16} />}
-                  </button>
-                }
-              />
-
-              <div className={styles.toggleAdvanced}>
-                <SelectionCheckbox
-                  checked={rememberPassword}
-                  onChange={setRememberPassword}
-                  ariaLabel={t('login.remember_password_label')}
-                  label={t('login.remember_password_label')}
-                  labelClassName={styles.toggleLabel}
                 />
               </div>
+            )}
 
-              <Button fullWidth onClick={handleSubmit} loading={loading}>
-                {loading ? t('login.submitting') : t('login.submit_button')}
-              </Button>
+            <Input
+              autoFocus
+              aria-label={t('login.management_key_label')}
+              placeholder={t('login.management_key_placeholder')}
+              type={showKey ? 'text' : 'password'}
+              value={managementKey}
+              onChange={(e) => setManagementKey(e.target.value)}
+              onKeyDown={handleSubmitKeyDown}
+              leftElement={
+                <span className={styles.fieldIcon} aria-hidden="true">
+                  <IconKey size={15} />
+                </span>
+              }
+              rightElement={
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  onClick={() => setShowKey((prev) => !prev)}
+                  aria-label={
+                    showKey
+                      ? t('login.hide_key', { defaultValue: '隐藏密钥' })
+                      : t('login.show_key', { defaultValue: '显示密钥' })
+                  }
+                  title={
+                    showKey
+                      ? t('login.hide_key', { defaultValue: '隐藏密钥' })
+                      : t('login.show_key', { defaultValue: '显示密钥' })
+                  }
+                >
+                  {showKey ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+                </button>
+              }
+            />
 
-              {error && <div className={styles.errorBox}>{error}</div>}
+            <div className={styles.toggleAdvanced}>
+              <SelectionCheckbox
+                checked={rememberPassword}
+                onChange={setRememberPassword}
+                ariaLabel={t('login.remember_password_label')}
+                label={t('login.remember_password_label')}
+                labelClassName={styles.toggleLabel}
+              />
             </div>
+
+            <Button fullWidth className={styles.submitButton} onClick={handleSubmit} loading={loading}>
+              {loading ? t('login.submitting') : t('login.submit_button')}
+            </Button>
+
+            {error && <div className={styles.errorBox}>{error}</div>}
           </div>
         )}
-      </div>
+      </AuthMediaStage>
     </div>
   );
 }

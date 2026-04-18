@@ -110,7 +110,9 @@ export function ManualBackupCard() {
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 13, whiteSpace: 'nowrap' }}>{t('backup.max_count_label')}</span>
+            <span style={{ fontSize: 13, whiteSpace: 'nowrap' }}>
+              {t('backup.max_count_label')}
+            </span>
             <div style={{ width: 100 }}>
               <Select
                 value={String(maxBackupCount)}
@@ -138,9 +140,18 @@ export function ManualBackupCard() {
             gap: 6,
           }}
         >
-          <div><strong>{t('backup.auto_label_1')}</strong>{t('backup.auto_note_1')}</div>
-          <div><strong>{t('backup.auto_label_2')}</strong>{t('backup.auto_note_2')}</div>
-          <div><strong>{t('backup.auto_label_3')}</strong>{t('backup.auto_note_3')}</div>
+          <div>
+            <strong>{t('backup.auto_label_1')}</strong>
+            {t('backup.auto_note_1')}
+          </div>
+          <div>
+            <strong>{t('backup.auto_label_2')}</strong>
+            {t('backup.auto_note_2')}
+          </div>
+          <div>
+            <strong>{t('backup.auto_label_3')}</strong>
+            {t('backup.auto_note_3')}
+          </div>
         </div>
 
         {/* 操作按钮 */}
@@ -148,12 +159,7 @@ export function ManualBackupCard() {
           <Button variant="secondary" onClick={exportLocal}>
             {t('backup.export_local')}
           </Button>
-          <Button
-            variant="primary"
-            onClick={backup}
-            loading={isBackingUp}
-            disabled={!serverUrl}
-          >
+          <Button variant="primary" onClick={backup} loading={isBackingUp} disabled={!serverUrl}>
             {t('backup.backup_now')}
           </Button>
         </div>

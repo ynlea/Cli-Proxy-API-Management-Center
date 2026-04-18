@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { INLINE_BRAND_ICON } from '@/assets/brandIcon';
+import { AuthMediaStage } from '@/components/common/AuthMediaStage';
+import { StageProgressPanel } from '@/components/common/StageProgressPanel';
 import './SplashScreen.scss';
 
 interface SplashScreenProps {
@@ -26,14 +27,15 @@ export function SplashScreen({ onFinish, fadeOut = false }: SplashScreenProps) {
 
   return (
     <div className={`splash-screen ${fadeOut ? 'fade-out' : ''}`}>
-      <div className="splash-content">
-        <img src={INLINE_BRAND_ICON} alt="CPAMC icon" className="splash-logo" />
-        <h1 className="splash-title">{t('splash.title')}</h1>
-        <p className="splash-subtitle">{t('splash.subtitle')}</p>
-        <div className="splash-loader">
-          <div className="splash-loader-bar" />
-        </div>
-      </div>
+      <AuthMediaStage
+        className="splash-stage"
+        label={t('title.main')}
+        status={t('common.loading')}
+        title={t('splash.loading_title', { defaultValue: t('common.loading') })}
+        description={t('splash.loading_message', { defaultValue: t('auto_login.message') })}
+      >
+        <StageProgressPanel label={t('common.loading')} />
+      </AuthMediaStage>
     </div>
   );
 }

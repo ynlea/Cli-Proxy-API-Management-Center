@@ -3,11 +3,13 @@ import { createRoot } from 'react-dom/client';
 import '@/lib/chartRegistry';
 import '@/styles/global.scss';
 import { BRAND_ICON_MIME_TYPE, INLINE_BRAND_ICON } from '@/assets/brandIcon';
+import { prewarmAuthStageMedia } from '@/constants/media';
 import App from './App.tsx';
 
-document.title = 'CLI Proxy API Management Center';
+document.title = 'CPA Console';
 document.documentElement.setAttribute('translate', 'no');
 document.documentElement.classList.add('notranslate');
+prewarmAuthStageMedia();
 
 const faviconEl = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
 if (faviconEl) {

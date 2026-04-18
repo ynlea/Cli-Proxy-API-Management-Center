@@ -30,7 +30,12 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgba(255, 93, 135, 0.4), rgba(57, 213, 255, 0.4), rgba(117, 255, 122, 0.4))
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.4),
+          rgba(57, 213, 255, 0.4),
+          rgba(117, 255, 122, 0.4)
+        )
         top / 100% 2px no-repeat,
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
     pointer-events: none;
@@ -140,7 +145,12 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgba(255, 93, 135, 0.36), rgba(57, 213, 255, 0.42), rgba(117, 255, 122, 0.36))
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.36),
+          rgba(57, 213, 255, 0.42),
+          rgba(117, 255, 122, 0.36)
+        )
         top / 100% 2px no-repeat,
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
     pointer-events: none;

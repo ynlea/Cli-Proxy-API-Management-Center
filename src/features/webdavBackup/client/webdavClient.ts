@@ -55,7 +55,7 @@ async function relay(
   method: string,
   url: string,
   headers: Record<string, string>,
-  data?: string,
+  data?: string
 ): Promise<ApiCallResponse> {
   const resp = await apiClient.post<ApiCallResponse>('/api-call', {
     method,
@@ -87,7 +87,7 @@ export const webdavClient = {
       'PROPFIND',
       buildDirUrl(config),
       propfindHeaders(config, '0'),
-      PROPFIND_RESOURCETYPE,
+      PROPFIND_RESOURCETYPE
     );
     if (typeof resp.body === 'string' && resp.body.trim()) {
       parsePropfindResponse(resp.body);
@@ -99,7 +99,12 @@ export const webdavClient = {
     const headers = baseHeaders(config);
 
     try {
-      const resp = await relay('PROPFIND', url, propfindHeaders(config, '0'), PROPFIND_RESOURCETYPE);
+      const resp = await relay(
+        'PROPFIND',
+        url,
+        propfindHeaders(config, '0'),
+        PROPFIND_RESOURCETYPE
+      );
       if (typeof resp.body === 'string' && resp.body.trim()) {
         parsePropfindResponse(resp.body);
       }
@@ -118,7 +123,7 @@ export const webdavClient = {
       'PUT',
       buildFileUrl(config, filename),
       { ...baseHeaders(config), 'Content-Type': 'application/json; charset=utf-8' },
-      content,
+      content
     );
   },
 
@@ -132,7 +137,7 @@ export const webdavClient = {
       'PROPFIND',
       buildDirUrl(config),
       propfindHeaders(config, '1'),
-      PROPFIND_LIST,
+      PROPFIND_LIST
     );
     if (typeof resp.body !== 'string' || resp.body.length === 0) {
       console.warn('[WebDAV] PROPFIND returned empty body, status:', resp.status_code);

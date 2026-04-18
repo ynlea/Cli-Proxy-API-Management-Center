@@ -25,7 +25,9 @@ function filenameFromHref(href: string): string {
  */
 export function parsePropfindResponse(xmlText: string): WebdavFileInfo[] {
   if (looksLikeHtmlDocument(xmlText)) {
-    throw new Error('WebDAV 返回了 HTML 页面而不是 XML，可能是地址不对、被登录页/反向代理拦截，或服务端不支持当前目录列表请求');
+    throw new Error(
+      'WebDAV 返回了 HTML 页面而不是 XML，可能是地址不对、被登录页/反向代理拦截，或服务端不支持当前目录列表请求'
+    );
   }
 
   const parser = new DOMParser();

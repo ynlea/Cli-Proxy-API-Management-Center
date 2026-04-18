@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useChartData,
-  useSparklines,
-  useUsageData,
-} from '@/components/usage';
+import { useChartData, useSparklines, useUsageData } from '@/components/usage';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useConfigStore, useThemeStore } from '@/stores';
@@ -88,6 +84,9 @@ interface UseUsageInsightsDataReturn {
   error: string;
   lastRefreshedAt: Date | null;
   modelPrices: ReturnType<typeof useUsageData>['modelPrices'];
+  manualModelPrices: ReturnType<typeof useUsageData>['manualModelPrices'];
+  presetModelPrices: ReturnType<typeof useUsageData>['presetModelPrices'];
+  modelPriceSources: ReturnType<typeof useUsageData>['modelPriceSources'];
   setModelPrices: ReturnType<typeof useUsageData>['setModelPrices'];
   loadUsage: () => Promise<void>;
   handleExport: () => Promise<void>;
@@ -142,6 +141,9 @@ export function useUsageInsightsData(
     error,
     lastRefreshedAt,
     modelPrices,
+    manualModelPrices,
+    presetModelPrices,
+    modelPriceSources,
     setModelPrices,
     loadUsage,
     handleExport,
@@ -171,8 +173,7 @@ export function useUsageInsightsData(
     [timeRange, usage]
   );
 
-  const hourWindowHours =
-    timeRange === 'all' ? undefined : HOUR_WINDOW_BY_TIME_RANGE[timeRange];
+  const hourWindowHours = timeRange === 'all' ? undefined : HOUR_WINDOW_BY_TIME_RANGE[timeRange];
 
   const handleChartLinesChange = useCallback((lines: string[]) => {
     setChartLines(normalizeChartLines(lines));
@@ -197,13 +198,8 @@ export function useUsageInsightsData(
   }, [timeRange]);
 
   const nowMs = lastRefreshedAt?.getTime() ?? 0;
-  const {
-    requestsSparkline,
-    tokensSparkline,
-    rpmSparkline,
-    tpmSparkline,
-    costSparkline,
-  } = useSparklines({ usage: filteredUsage, loading, nowMs });
+  const { requestsSparkline, tokensSparkline, rpmSparkline, tpmSparkline, costSparkline } =
+    useSparklines({ usage: filteredUsage, loading, nowMs });
 
   const {
     requestsPeriod,
@@ -237,6 +233,9 @@ export function useUsageInsightsData(
     error,
     lastRefreshedAt,
     modelPrices,
+    manualModelPrices,
+    presetModelPrices,
+    modelPriceSources,
     setModelPrices,
     loadUsage,
     handleExport,

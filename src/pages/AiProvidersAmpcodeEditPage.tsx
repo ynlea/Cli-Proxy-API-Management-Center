@@ -450,7 +450,9 @@ export function AiProvidersAmpcodeEditPage() {
                     onClick={() => {
                       setUpstreamApiKeysDirty(true);
                       setForm((prev) => {
-                        const nextEntries = prev.upstreamApiKeyEntries.filter((_, entryIndex) => entryIndex !== index);
+                        const nextEntries = prev.upstreamApiKeyEntries.filter(
+                          (_, entryIndex) => entryIndex !== index
+                        );
                         return {
                           ...prev,
                           upstreamApiKeyEntries: nextEntries.length

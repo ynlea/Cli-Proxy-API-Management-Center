@@ -58,17 +58,21 @@
     "unsaved_changes_message": "你有未保存的更改，离开后将丢失这些更改。确定要离开吗？"
   },
   "title": {
-    "main": "CLI Proxy API Management Center",
-    "login": "CLI Proxy API Management Center",
-    "abbr": "CPAMC"
+    "main": "CPA Console",
+    "login": "CPA Console",
+    "abbr": "CPA"
   },
   "splash": {
-    "title": "CLI Proxy API",
-    "subtitle": "管理中心"
+    "title": "CPA",
+    "subtitle": "Console",
+    "loading_title": "正在准备管理中心",
+    "loading_message": "界面与配置正在初始化，请稍候片刻"
   },
   "auto_login": {
     "title": "正在自动登录...",
-    "message": "正在使用本地保存的连接信息尝试连接服务器"
+    "message": "正在使用本地保存的连接信息尝试连接服务器",
+    "success_title": "连接已恢复",
+    "success_message": "正在进入管理中心"
   },
   "login": {
     "subtitle": "请输入连接信息以访问管理界面",
@@ -129,7 +133,7 @@
   },
   "dashboard": {
     "title": "仪表盘",
-    "subtitle": "欢迎使用 CLI Proxy API 管理中心",
+    "subtitle": "欢迎使用 CPA Console",
     "openai_providers": "OpenAI 提供商",
     "quick_actions": "快捷操作",
     "current_config": "当前配置",
@@ -959,6 +963,7 @@
     "model_name": "模型名称",
     "model_price_settings": "模型价格设置",
     "saved_prices": "已保存的价格",
+    "effective_prices": "当前生效的价格",
     "requests_trend": "请求趋势",
     "tokens_trend": "Token 使用趋势",
     "api_details": "API 详细统计",
@@ -1008,11 +1013,17 @@
     "model_price_model_label": "选择模型",
     "model_price_select_placeholder": "选择模型",
     "model_price_select_hint": "模型列表来自使用统计明细",
+    "model_price_auto_hint": "会根据模型名称自动匹配预设价格，保存后仅覆盖当前模型。",
     "model_price_prompt": "提示价格",
     "model_price_completion": "补全价格",
     "model_price_cache": "缓存价格",
     "model_price_save": "保存价格",
     "model_price_empty": "暂未设置任何模型价格",
+    "model_price_source_preset": "预设",
+    "model_price_source_custom": "自定义",
+    "model_price_source_custom_override": "自定义覆盖",
+    "model_price_restore_preset": "恢复预设",
+    "model_price_match_hint": "匹配来源：{{provider}} / {{model}}",
     "model_price_model": "模型",
     "model_price_saved": "模型价格已保存",
     "model_price_model_required": "请选择要设置价格的模型",
@@ -1160,7 +1171,7 @@
     "reload": "重新加载",
     "reload_confirm_message": "重新加载将丢弃你当前未保存的修改，确定继续吗？",
     "save": "保存",
-    "description": "通过可视化或者源文件方式编辑 config.yaml 配置文件",
+    "description": "通过分组标签或源文件方式编辑 config.yaml 配置文件",
     "status_idle": "等待操作",
     "status_loading": "加载配置中...",
     "status_loading_short": "加载中",
@@ -1202,8 +1213,26 @@
       "source": "源文件编辑"
     },
     "visual": {
-      "notice": "可视化模式覆盖常用字段，未覆盖的配置仍需在源文件模式中查看或编辑。",
+      "notice": "分组模式覆盖常用字段，未覆盖的配置仍需在源文件模式中查看或编辑。",
       "quick_jump": "快速跳转",
+      "groups": {
+        "core": {
+          "title": "基础配置",
+          "description": "服务器、TLS 和远程管理放在一起，先把服务入口定稳。"
+        },
+        "access": {
+          "title": "接入与路由",
+          "description": "认证目录、密钥和请求路由收在同一组，减少来回切换。"
+        },
+        "runtime": {
+          "title": "运行策略",
+          "description": "系统行为、配额和流式选项统一管理，更适合连续调参。"
+        },
+        "advanced": {
+          "title": "高级规则",
+          "description": "负载规则独立成区，保留足够空间给长表单和复杂规则。"
+        }
+      },
       "sections": {
         "server": {
           "title": "服务器配置",
@@ -1378,7 +1407,7 @@
   },
   "system_info": {
     "title": "管理中心信息",
-    "about_title": "CLI Proxy API Management Center",
+    "about_title": "CPA Console",
     "connection_status_title": "连接状态",
     "api_status_label": "API 状态:",
     "config_status_label": "配置状态:",

@@ -1,9 +1,16 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { USAGE_STATS_STALE_TIME_MS, useNotificationStore, useUsageStatsStore } from '@/stores';
 import { usageApi } from '@/services/api/usage';
 import { downloadBlob } from '@/utils/download';
-import { loadModelPrices, saveModelPrices, type ModelPrice } from '@/utils/usage';
+import {
+  buildPresetModelPrices,
+  loadPresetModelPricing,
+  mergeModelPrices,
+  type ModelPricePresetItem,
+  type ModelPriceSourceInfo,
+} from '@/utils/modelPricing';
+import { getModelNamesFromUsage, loadModelPrices, saveModelPrices, type ModelPrice } from '@/utils/usage';
 
 export interface UsagePayload {
   total_requests?: number;
@@ -20,6 +27,9 @@ export interface UseUsageDataReturn {
   error: string;
   lastRefreshedAt: Date | null;
   modelPrices: Record<string, ModelPrice>;
+  manualModelPrices: Record<string, ModelPrice>;
+  presetModelPrices: Record<string, ModelPrice>;
+  modelPriceSources: Record<string, ModelPriceSourceInfo>;
   setModelPrices: (prices: Record<string, ModelPrice>) => void;
   loadUsage: () => Promise<void>;
   handleExport: () => Promise<void>;
@@ -39,7 +49,8 @@ export function useUsageData(): UseUsageDataReturn {
   const lastRefreshedAtTs = useUsageStatsStore((state) => state.lastRefreshedAt);
   const loadUsageStats = useUsageStatsStore((state) => state.loadUsageStats);
 
-  const [modelPrices, setModelPrices] = useState<Record<string, ModelPrice>>({});
+  const [manualModelPrices, setManualModelPrices] = useState<Record<string, ModelPrice>>({});
+  const [presetItems, setPresetItems] = useState<ModelPricePresetItem[]>([]);
   const [exporting, setExporting] = useState(false);
   const [importing, setImporting] = useState(false);
   const importInputRef = useRef<HTMLInputElement | null>(null);
@@ -50,7 +61,14 @@ export function useUsageData(): UseUsageDataReturn {
 
   useEffect(() => {
     void loadUsageStats({ staleTimeMs: USAGE_STATS_STALE_TIME_MS }).catch(() => {});
-    setModelPrices(loadModelPrices());
+    setManualModelPrices(loadModelPrices());
+    void loadPresetModelPricing()
+      .then((items) => {
+        setPresetItems(items);
+      })
+      .catch(() => {
+        setPresetItems([]);
+      });
   }, [loadUsageStats]);
 
   const handleExport = async () => {
@@ -65,7 +83,7 @@ export function useUsageData(): UseUsageDataReturn {
       const filename = `usage-export-${safeTimestamp.replace(/[:.]/g, '-')}.json`;
       downloadBlob({
         filename,
-        blob: new Blob([JSON.stringify(data ?? {}, null, 2)], { type: 'application/json' })
+        blob: new Blob([JSON.stringify(data ?? {}, null, 2)], { type: 'application/json' }),
       });
       showNotification(t('usage_stats.export_success'), 'success');
     } catch (err: unknown) {
@@ -105,7 +123,7 @@ export function useUsageData(): UseUsageDataReturn {
           added: result?.added ?? 0,
           skipped: result?.skipped ?? 0,
           total: result?.total_requests ?? 0,
-          failed: result?.failed_requests ?? 0
+          failed: result?.failed_requests ?? 0,
         }),
         'success'
       );
@@ -130,13 +148,22 @@ export function useUsageData(): UseUsageDataReturn {
   };
 
   const handleSetModelPrices = useCallback((prices: Record<string, ModelPrice>) => {
-    setModelPrices(prices);
+    setManualModelPrices(prices);
     saveModelPrices(prices);
   }, []);
 
   const usage = usageSnapshot as UsagePayload | null;
   const error = storeError || '';
   const lastRefreshedAt = lastRefreshedAtTs ? new Date(lastRefreshedAtTs) : null;
+  const modelNames = useMemo(() => getModelNamesFromUsage(usage), [usage]);
+  const { prices: presetModelPrices, sources: presetSources } = useMemo(
+    () => buildPresetModelPrices(modelNames, presetItems),
+    [modelNames, presetItems]
+  );
+  const { prices: modelPrices, sources: modelPriceSources } = useMemo(
+    () => mergeModelPrices(presetModelPrices, manualModelPrices, presetSources),
+    [manualModelPrices, presetModelPrices, presetSources]
+  );
 
   return {
     usage,
@@ -144,6 +171,9 @@ export function useUsageData(): UseUsageDataReturn {
     error,
     lastRefreshedAt,
     modelPrices,
+    manualModelPrices,
+    presetModelPrices,
+    modelPriceSources,
     setModelPrices: handleSetModelPrices,
     loadUsage,
     handleExport,
@@ -151,6 +181,6 @@ export function useUsageData(): UseUsageDataReturn {
     handleImportChange,
     importInputRef,
     exporting,
-    importing
+    importing,
   };
 }

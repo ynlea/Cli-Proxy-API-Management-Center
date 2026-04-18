@@ -6,15 +6,8 @@ import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import iconGemini from '@/assets/icons/gemini.svg';
 import type { GeminiKeyConfig } from '@/types';
 import { maskApiKey } from '@/utils/format';
-import {
-  buildCandidateUsageSourceIds,
-  calculateStatusBarData,
-  type KeyStats,
-} from '@/utils/usage';
-import {
-  collectUsageDetailsForCandidates,
-  type UsageDetailsBySource,
-} from '@/utils/usageIndex';
+import { buildCandidateUsageSourceIds, calculateStatusBarData, type KeyStats } from '@/utils/usage';
+import { collectUsageDetailsForCandidates, type UsageDetailsBySource } from '@/utils/usageIndex';
 import styles from '@/pages/AiProvidersPage.module.scss';
 import { ProviderList } from '../ProviderList';
 import { ProviderStatusBar } from '../ProviderStatusBar';
@@ -177,7 +170,10 @@ export function GeminiSection({
                     </div>
                     <div className={styles.modelTagList}>
                       {excludedModels.map((model) => (
-                        <span key={model} className={`${styles.modelTag} ${styles.excludedModelTag}`}>
+                        <span
+                          key={model}
+                          className={`${styles.modelTag} ${styles.excludedModelTag}`}
+                        >
                           <span className={styles.modelName}>{model}</span>
                         </span>
                       ))}

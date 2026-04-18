@@ -21,8 +21,7 @@
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius-sm, #{$radius-md});
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 60%),
-    var(--surface-layer);
+    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 60%), var(--surface-layer);
   box-shadow: var(--shadow);
   color: var(--text-primary);
   font-size: 13px;
@@ -68,7 +67,9 @@
   display: inline-flex;
   color: var(--accent-sky);
   flex-shrink: 0;
-  transition: transform $transition-fast, color $transition-fast;
+  transition:
+    transform $transition-fast,
+    color $transition-fast;
 
   [aria-expanded='true'] > & {
     transform: rotate(180deg);
@@ -79,8 +80,7 @@
 .dropdown {
   position: fixed;
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.06), transparent 68%),
-    var(--floating-surface);
+    linear-gradient(180deg, rgba(57, 213, 255, 0.06), transparent 68%), var(--floating-surface);
   border: 1px solid var(--floating-border);
   border-radius: var(--surface-radius, #{$radius-lg});
   padding: 8px;

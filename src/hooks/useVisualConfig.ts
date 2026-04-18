@@ -942,10 +942,7 @@ export function useVisualConfig() {
           ensureMapInDoc(doc, ['quota-exceeded']);
           doc.setIn(['quota-exceeded', 'switch-project'], values.quotaSwitchProject);
           doc.setIn(['quota-exceeded', 'switch-preview-model'], values.quotaSwitchPreviewModel);
-          doc.setIn(
-            ['quota-exceeded', 'antigravity-credits'],
-            values.quotaAntigravityCredits
-          );
+          doc.setIn(['quota-exceeded', 'antigravity-credits'], values.quotaAntigravityCredits);
           deleteIfMapEmpty(doc, ['quota-exceeded']);
         }
 

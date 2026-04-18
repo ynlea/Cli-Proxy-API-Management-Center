@@ -40,7 +40,11 @@ export function RestoreModal({ open, onClose, onRestore, loading, filename }: Re
   }, [open]);
 
   const scopeItems: { key: keyof BackupScope; label: string; hint: string }[] = [
-    { key: 'localStorage', label: t('backup.scope_preferences'), hint: t('backup.scope_preferences_hint') },
+    {
+      key: 'localStorage',
+      label: t('backup.scope_preferences'),
+      hint: t('backup.scope_preferences_hint'),
+    },
     { key: 'config', label: t('backup.scope_config'), hint: t('backup.scope_config_restore_hint') },
     { key: 'usage', label: t('backup.scope_usage'), hint: t('backup.scope_usage_hint') },
   ];

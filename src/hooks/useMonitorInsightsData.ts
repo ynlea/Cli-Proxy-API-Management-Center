@@ -180,10 +180,7 @@ const getCachedMonitorMetadata = (scopeKey: string): MonitorMetadata | null => {
   return monitorMetadataCache.value;
 };
 
-const loadMonitorMetadata = async (
-  scopeKey: string,
-  force = false
-): Promise<MonitorMetadata> => {
+const loadMonitorMetadata = async (scopeKey: string, force = false): Promise<MonitorMetadata> => {
   if (!scopeKey) {
     return { authFileMap: new Map() };
   }
@@ -229,9 +226,7 @@ export async function preloadMonitorInsightsData(force = false): Promise<void> {
   const scopeKey = getMonitorScopeKey();
 
   const tasks: Array<Promise<unknown>> = [
-    useUsageStatsStore
-      .getState()
-      .loadUsageStats({ force, staleTimeMs: USAGE_STATS_STALE_TIME_MS }),
+    useUsageStatsStore.getState().loadUsageStats({ force, staleTimeMs: USAGE_STATS_STALE_TIME_MS }),
     loadMonitorMetadata(scopeKey, force),
   ];
 

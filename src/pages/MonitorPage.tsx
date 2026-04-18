@@ -3,6 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/Button';
 import { SegmentedTabs, type SegmentedTabsItem } from '@/components/ui/SegmentedTabs';
+import {
+  IconChartLine,
+  IconModelCluster,
+  IconScrollText,
+  IconSidebarUsage,
+} from '@/components/ui/icons';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { preloadMonitorInsightsData } from '@/hooks/useMonitorInsightsData';
 import { useUsageStatsStore } from '@/stores';
@@ -61,10 +67,26 @@ export function MonitorPage() {
 
   const tabItems = useMemo<ReadonlyArray<SegmentedTabsItem<MonitorTab>>>(
     () => [
-      { value: 'request-logs', label: t('nav.request_logs') },
-      { value: 'trends', label: t('nav.trends_overview') },
-      { value: 'channels', label: t('nav.channels_models') },
-      { value: 'costs', label: t('nav.costs_consumption') },
+      {
+        value: 'request-logs',
+        label: t('nav.request_logs'),
+        leading: <IconScrollText size={16} />,
+      },
+      {
+        value: 'trends',
+        label: t('nav.trends_overview'),
+        leading: <IconChartLine size={16} />,
+      },
+      {
+        value: 'channels',
+        label: t('nav.channels_models'),
+        leading: <IconModelCluster size={16} />,
+      },
+      {
+        value: 'costs',
+        label: t('nav.costs_consumption'),
+        leading: <IconSidebarUsage size={16} />,
+      },
     ],
     [t]
   );

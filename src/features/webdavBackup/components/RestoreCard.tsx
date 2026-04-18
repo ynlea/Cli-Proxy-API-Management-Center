@@ -14,8 +14,7 @@ import { RestoreModal } from './RestoreModal';
 export function RestoreCard() {
   const { t } = useTranslation();
   const { showConfirmation } = useNotificationStore();
-  const { loadHistory, restoreFromLocal, restore, downloadFile, deleteRemote } =
-    useBackupActions();
+  const { loadHistory, restoreFromLocal, restore, downloadFile, deleteRemote } = useBackupActions();
 
   const isRestoring = useWebdavStore((s) => s.isRestoring);
   const isLoadingHistory = useWebdavStore((s) => s.isLoadingHistory);
@@ -57,7 +56,7 @@ export function RestoreCard() {
       }
       setRestoreTarget(null);
     },
-    [restoreTarget, restoreFile, restore, restoreFromLocal],
+    [restoreTarget, restoreFile, restore, restoreFromLocal]
   );
 
   const handleFileSelected = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +80,7 @@ export function RestoreCard() {
         },
       });
     },
-    [showConfirmation, deleteRemote, refresh, t],
+    [showConfirmation, deleteRemote, refresh, t]
   );
 
   return (
@@ -112,9 +111,7 @@ export function RestoreCard() {
               <div style={{ fontWeight: 500, fontSize: 14, marginBottom: 4 }}>
                 {t('backup.restore_from_local')}
               </div>
-              <div style={{ fontSize: 12, opacity: 0.6 }}>
-                {t('backup.restore_local_hint')}
-              </div>
+              <div style={{ fontSize: 12, opacity: 0.6 }}>{t('backup.restore_local_hint')}</div>
             </div>
             <Button
               variant="secondary"

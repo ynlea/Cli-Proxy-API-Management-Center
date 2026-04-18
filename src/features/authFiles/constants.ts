@@ -1,11 +1,14 @@
 import type { TFunction } from 'i18next';
 import iconAntigravity from '@/assets/icons/antigravity.svg';
+import iconAmp from '@/assets/icons/amp.svg';
 import iconClaude from '@/assets/icons/claude.svg';
 import iconCodex from '@/assets/icons/codex.svg';
 import iconGemini from '@/assets/icons/gemini.svg';
 import iconIflow from '@/assets/icons/iflow.svg';
 import iconKimiDark from '@/assets/icons/kimi-dark.svg';
 import iconKimiLight from '@/assets/icons/kimi-light.svg';
+import iconOpenaiDark from '@/assets/icons/openai-dark.svg';
+import iconOpenaiLight from '@/assets/icons/openai-light.svg';
 import iconQwen from '@/assets/icons/qwen.svg';
 import iconVertex from '@/assets/icons/vertex.svg';
 import type { AuthFileItem } from '@/types';
@@ -27,12 +30,7 @@ export type AuthFileModelItem = {
 };
 export type AuthFileIconAsset = string | { light: string; dark: string };
 
-export type QuotaProviderType =
-  | 'antigravity'
-  | 'claude'
-  | 'codex'
-  | 'gemini-cli'
-  | 'kimi';
+export type QuotaProviderType = 'antigravity' | 'claude' | 'codex' | 'gemini-cli' | 'kimi';
 
 export const QUOTA_PROVIDER_TYPES = new Set<QuotaProviderType>([
   'antigravity',
@@ -114,6 +112,7 @@ export const TYPE_COLORS: Record<string, TypeColorSet> = {
 
 export const AUTH_FILE_ICONS: Record<string, AuthFileIconAsset> = {
   antigravity: iconAntigravity,
+  ampcode: iconAmp,
   aistudio: iconGemini,
   claude: iconClaude,
   codex: iconCodex,
@@ -121,6 +120,7 @@ export const AUTH_FILE_ICONS: Record<string, AuthFileIconAsset> = {
   'gemini-cli': iconGemini,
   iflow: iconIflow,
   kimi: { light: iconKimiLight, dark: iconKimiDark },
+  openai: { light: iconOpenaiLight, dark: iconOpenaiDark },
   qwen: iconQwen,
   vertex: iconVertex,
 };

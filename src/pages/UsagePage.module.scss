@@ -190,33 +190,170 @@
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(circle at top, rgba(57, 213, 255, 0.08), transparent 36%),
-    rgba(3, 5, 15, 0.82);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+    radial-gradient(
+      circle at 18% 16%,
+      color-mix(in srgb, var(--surface-brand) 30%, transparent),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 82% 20%,
+      color-mix(in srgb, var(--surface-positive) 26%, transparent),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg-primary) 84%, transparent),
+      color-mix(in srgb, var(--surface-layer) 92%, transparent)
+    );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+:global([data-theme='dark']) .loadingOverlay {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(157, 174, 233, 0.16), transparent 32%),
+    radial-gradient(circle at 82% 20%, rgba(190, 225, 230, 0.14), transparent 30%),
+    linear-gradient(180deg, rgba(18, 23, 34, 0.9), rgba(13, 17, 25, 0.86));
 }
 
 .loadingOverlayContent {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'kicker kicker'
+    'spinner text'
+    'meter meter';
+  align-items: center;
+  gap: 12px 14px;
+  min-width: min(300px, calc(100vw - 48px));
+  padding: 18px 18px 16px;
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--floating-border) 86%, transparent);
+  background: color-mix(in srgb, var(--surface-raised) 92%, var(--bg-primary));
+  box-shadow:
+    var(--floating-shadow),
+    0 18px 42px color-mix(in srgb, var(--text-primary) 10%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  text-align: left;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -14% 48% auto -10%;
+    height: 54%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--surface-brand) 42%, transparent),
+      transparent 70%
+    );
+    opacity: 0.72;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: attr(data-watermark);
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-family: var(--font-display);
+    font-size: clamp(3.3rem, 8vw, 4.6rem);
+    font-weight: 800;
+    line-height: 0.82;
+    letter-spacing: -0.08em;
+    color: color-mix(in srgb, var(--text-primary) 5%, transparent);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.loadingOverlayKicker {
+  grid-area: kicker;
+  justify-self: start;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  border-radius: $radius-lg;
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  box-shadow: var(--shadow-lg);
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--floating-border) 82%, transparent);
+  background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+  font-family: var(--font-accent);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .loadingOverlaySpinner {
-  border-color: rgba($primary-color, 0.25);
-  border-top-color: var(--primary-color);
-  box-shadow: 0 0 10px rgba($primary-color, 0.25);
+  grid-area: spinner;
+  color: var(--primary-color);
 }
 
 .loadingOverlayText {
-  font-size: 13px;
-  font-weight: 600;
+  grid-area: text;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--text-secondary);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.loadingOverlayMeter {
+  grid-area: meter;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+
+  span {
+    width: 22px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--surface-brand), var(--surface-positive));
+    opacity: 0.34;
+    animation: overlayPulse 1.6s ease-in-out infinite;
+  }
+
+  span:nth-child(1) {
+    width: 68px;
+  }
+
+  span:nth-child(2) {
+    width: 42px;
+    animation-delay: 0.16s;
+  }
+
+  span:nth-child(3) {
+    width: 24px;
+    animation-delay: 0.32s;
+  }
+}
+
+@include mobile {
+  .loadingOverlayContent {
+    min-width: min(280px, calc(100vw - 32px));
+    padding: 16px 16px 14px;
+    border-radius: 20px;
+  }
+}
+
+@keyframes overlayPulse {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scaleX(0.92);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scaleX(1);
+  }
 }
 
 // Stats Grid
@@ -732,6 +869,18 @@
   gap: 16px;
 }
 
+.pricingHint {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 78%, rgba(57, 213, 255, 0.28));
+  background:
+    linear-gradient(135deg, rgba(57, 213, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    color-mix(in srgb, var(--surface-raised) 92%, var(--bg-secondary));
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .priceForm {
   padding: 10px;
   background-color: var(--bg-secondary);
@@ -779,6 +928,35 @@
   }
 }
 
+.priceSourceRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.priceSourceBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 70%, rgba(57, 213, 255, 0.34));
+  background: color-mix(in srgb, var(--surface-raised) 88%, rgba(57, 213, 255, 0.12));
+  color: var(--text-primary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.priceSourceMeta {
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
 .pricesList {
   display: flex;
   flex-direction: column;
@@ -820,6 +998,13 @@
   gap: 3px;
   min-width: 0;
   flex: 1;
+}
+
+.priceHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 
 .priceModel {
@@ -910,9 +1095,7 @@
   padding: 4px 10px;
   border-radius: 6px;
   border: 1px solid var(--border-color);
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
-    var(--bg-primary);
+  background: linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%), var(--bg-primary);
   font-size: 12px;
   color: var(--text-secondary);
 
@@ -1105,8 +1288,7 @@
   gap: 10px;
   padding: 12px;
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
-    var(--bg-secondary);
+    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%), var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
 

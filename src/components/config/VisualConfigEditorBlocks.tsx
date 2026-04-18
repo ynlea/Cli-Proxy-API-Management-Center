@@ -668,7 +668,9 @@ export const PayloadRulesEditor = memo(function PayloadRulesEditor({
                       placeholder={t('config_management.visual.payload_rules.model_name')}
                       ariaLabel={t('config_management.visual.payload_rules.model_name')}
                       value={model.name}
-                      onChange={(nextValue) => updateModel(ruleIndex, modelIndex, { name: nextValue })}
+                      onChange={(nextValue) =>
+                        updateModel(ruleIndex, modelIndex, { name: nextValue })
+                      }
                       disabled={disabled}
                     />
                   </>
@@ -678,7 +680,9 @@ export const PayloadRulesEditor = memo(function PayloadRulesEditor({
                       placeholder={t('config_management.visual.payload_rules.model_name')}
                       ariaLabel={t('config_management.visual.payload_rules.model_name')}
                       value={model.name}
-                      onChange={(nextValue) => updateModel(ruleIndex, modelIndex, { name: nextValue })}
+                      onChange={(nextValue) =>
+                        updateModel(ruleIndex, modelIndex, { name: nextValue })
+                      }
                       disabled={disabled}
                     />
                     <Select
@@ -731,7 +735,9 @@ export const PayloadRulesEditor = memo(function PayloadRulesEditor({
                       placeholder={t('config_management.visual.payload_rules.json_path')}
                       ariaLabel={t('config_management.visual.payload_rules.json_path')}
                       value={param.path}
-                      onChange={(nextValue) => updateParam(ruleIndex, paramIndex, { path: nextValue })}
+                      onChange={(nextValue) =>
+                        updateParam(ruleIndex, paramIndex, { path: nextValue })
+                      }
                       disabled={disabled}
                     />
                     {rawJsonValues ? null : (

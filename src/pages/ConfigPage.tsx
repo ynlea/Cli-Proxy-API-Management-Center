@@ -1,4 +1,13 @@
-import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import type { ReactCodeMirrorRef } from '@uiw/react-codemirror';
@@ -7,14 +16,25 @@ import { usePageTransitionLayer } from '@/components/common/PageTransitionLayer'
 import { PageHero } from '@/components/layout/PageHero';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { SegmentedTabs, type SegmentedTabsItem } from '@/components/ui/SegmentedTabs';
 import {
   IconCheck,
   IconChevronDown,
   IconChevronUp,
+  IconCode,
+  IconDiamond,
   IconRefreshCw,
   IconSearch,
+  IconSettings,
+  IconShield,
+  IconTrendingUp,
 } from '@/components/ui/icons';
-import { VisualConfigEditor } from '@/components/config/VisualConfigEditor';
+import {
+  getVisualSectionGroupDefinitions,
+  VISUAL_SECTION_GROUP_IDS,
+  type VisualSectionGroupId,
+  VisualConfigEditor,
+} from '@/components/config/VisualConfigEditor';
 import { DiffModal } from '@/components/config/DiffModal';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useVisualConfig } from '@/hooks/useVisualConfig';
@@ -22,9 +42,13 @@ import { useNotificationStore, useAuthStore, useThemeStore, useConfigStore } fro
 import { configFileApi } from '@/services/api/configFile';
 import styles from './ConfigPage.module.scss';
 
-type ConfigEditorTab = 'visual' | 'source';
+type ConfigEditorTab = VisualSectionGroupId | 'source';
 
 const LazyConfigSourceEditor = lazy(() => import('@/components/config/ConfigSourceEditor'));
+
+function isVisualConfigTab(value: string | null): value is VisualSectionGroupId {
+  return value !== null && VISUAL_SECTION_GROUP_IDS.some((tab) => tab === value);
+}
 
 function readCommercialModeFromYaml(yamlContent: string): boolean {
   try {
@@ -56,11 +80,14 @@ export function ConfigPage() {
     applyVisualChangesToYaml,
     setVisualValues,
   } = useVisualConfig();
+  const visualGroupTabs = useMemo(() => getVisualSectionGroupDefinitions(t), [t]);
 
   const [activeTab, setActiveTab] = useState<ConfigEditorTab>(() => {
     const saved = localStorage.getItem('config-management:tab');
-    if (saved === 'visual' || saved === 'source') return saved;
-    return 'visual';
+    if (saved === 'source') return saved;
+    if (saved === 'visual') return 'core';
+    if (isVisualConfigTab(saved)) return saved;
+    return 'core';
   });
 
   const [content, setContent] = useState('');
@@ -83,11 +110,16 @@ export function ConfigPage() {
   const floatingActionsRef = useRef<HTMLDivElement>(null);
 
   const disableControls = connectionStatus !== 'connected';
+  const isSourceTab = activeTab === 'source';
+  const activeVisualGroup = !isSourceTab
+    ? visualGroupTabs.find((group) => group.id === activeTab) ?? visualGroupTabs[0]
+    : null;
+  const activeVisualGroupId = activeVisualGroup?.id ?? visualGroupTabs[0]?.id ?? 'core';
   const isDirty = dirty || visualDirty;
   const shouldRenderFloatingActions = isCurrentLayer;
   const hasVisualModeError = !!visualParseError;
   const hasVisualValidationErrors =
-    activeTab === 'visual' &&
+    !isSourceTab &&
     (Object.values(visualValidationErrors).some(Boolean) || visualHasPayloadValidationErrors);
 
   const loadConfig = useCallback(async () => {
@@ -114,7 +146,7 @@ export function ConfigPage() {
   }, [loadConfig]);
 
   useEffect(() => {
-    if (activeTab !== 'visual' || !visualParseError) return;
+    if (isSourceTab || !visualParseError) return;
 
     setActiveTab('source');
     localStorage.setItem('config-management:tab', 'source');
@@ -122,7 +154,7 @@ export function ConfigPage() {
       t('config_management.visual_mode_unavailable_detail', { message: visualParseError }),
       'error'
     );
-  }, [activeTab, showNotification, t, visualParseError]);
+  }, [isSourceTab, showNotification, t, visualParseError]);
 
   const handleConfirmSave = async () => {
     setSaving(true);
@@ -170,7 +202,7 @@ export function ConfigPage() {
   };
 
   const handleSave = async () => {
-    if (activeTab === 'visual' && visualParseError) {
+    if (!isSourceTab && visualParseError) {
       showNotification(t('config_management.visual_mode_save_blocked'), 'error');
       return;
     }
@@ -179,7 +211,7 @@ export function ConfigPage() {
     try {
       const latestServerYaml = await configFileApi.fetchConfigYaml();
 
-      if (activeTab !== 'source') {
+      if (!isSourceTab) {
         const latestDocument = parseDocument(latestServerYaml);
         if (latestDocument.errors.length > 0) {
           showNotification(
@@ -196,13 +228,13 @@ export function ConfigPage() {
 
       // In source mode, save exactly what the user edited. In visual mode, materialize visual changes into the latest YAML.
       const nextMergedYaml =
-        activeTab === 'source' ? content : applyVisualChangesToYaml(latestServerYaml);
+        isSourceTab ? content : applyVisualChangesToYaml(latestServerYaml);
 
       // In visual mode, applyVisualChangesToYaml re-serializes YAML via parseDocument → toString,
       // which may reformat comments/whitespace. Normalize the server YAML through the same pipeline
       // so the diff only shows actual value changes, not cosmetic reformatting.
       let diffOriginal = latestServerYaml;
-      if (activeTab !== 'source') {
+      if (!isSourceTab) {
         try {
           const doc = parseDocument(latestServerYaml);
           diffOriginal = doc.toString({ indent: 2, lineWidth: 120, minContentWidth: 0 });
@@ -241,7 +273,10 @@ export function ConfigPage() {
     (tab: ConfigEditorTab) => {
       if (tab === activeTab) return;
 
-      if (tab === 'source') {
+      const nextIsSourceTab = tab === 'source';
+      const currentIsSourceTab = activeTab === 'source';
+
+      if (nextIsSourceTab && !currentIsSourceTab) {
         // Only rewrite YAML when there are pending visual changes; otherwise preserve raw YAML + comments.
         if (visualDirty) {
           const nextContent = applyVisualChangesToYaml(content);
@@ -250,7 +285,7 @@ export function ConfigPage() {
             setDirty(true);
           }
         }
-      } else {
+      } else if (!nextIsSourceTab && currentIsSourceTab) {
         const result = loadVisualValuesFromYaml(content);
         if (!result.ok) {
           showNotification(
@@ -501,14 +536,54 @@ export function ConfigPage() {
     </div>
   );
 
-  const pageDescription =
-    activeTab === 'visual'
-      ? t('config_management.visual.notice')
-      : t('config_management.description');
-  const activeTabLabel =
-    activeTab === 'visual'
-      ? t('config_management.tabs.visual', { defaultValue: '可视化编辑' })
-      : t('config_management.tabs.source', { defaultValue: '源文件编辑' });
+  const pageDescription = isSourceTab
+    ? t('config_management.description')
+    : activeVisualGroup?.description ??
+      t('config_management.visual.notice', {
+        defaultValue: '分组模式覆盖常用字段，未覆盖的配置仍需在源文件模式中查看或编辑。',
+      });
+  const activeTabLabel = isSourceTab
+    ? t('config_management.tabs.source', { defaultValue: '源文件编辑' })
+    : activeVisualGroup?.title ??
+      t('config_management.tabs.visual', { defaultValue: '分组配置' });
+  const toolbarContextLabel = isSourceTab
+    ? 'YAML'
+    : t('config_management.visual.group_section_total', {
+        defaultValue: `${activeVisualGroup?.sectionIds.length ?? 0} 个区块`,
+      });
+  const topLevelTabs = useMemo<ReadonlyArray<SegmentedTabsItem<ConfigEditorTab>>>(
+    () => [
+      ...visualGroupTabs.map((group) => {
+        const icon =
+          group.id === 'core' ? (
+            <IconSettings size={16} />
+          ) : group.id === 'access' ? (
+            <IconShield size={16} />
+          ) : group.id === 'runtime' ? (
+            <IconTrendingUp size={16} />
+          ) : (
+            <IconDiamond size={16} />
+          );
+
+        return {
+          value: group.id as ConfigEditorTab,
+          label: group.title,
+          title: group.description,
+          leading: icon,
+          trailing: <span className={styles.tabItemBadge}>{group.sectionIds.length}</span>,
+          disabled: saving || loading,
+        };
+      }),
+      {
+        value: 'source' as ConfigEditorTab,
+        label: t('config_management.tabs.source', { defaultValue: '源文件编辑' }),
+        leading: <IconCode size={16} />,
+        trailing: <span className={styles.tabItemBadge}>YAML</span>,
+        disabled: saving || loading,
+      },
+    ],
+    [loading, saving, t, visualGroupTabs]
+  );
 
   return (
     <div className={styles.container}>
@@ -519,30 +594,14 @@ export function ConfigPage() {
         meta={<div className={`${styles.statusBadge} ${getStatusClass()}`}>{getStatusText()}</div>}
         supportClassName={styles.heroSupport}
       >
-        <div className={styles.tabBar}>
-          {(['visual', 'source'] as ConfigEditorTab[]).map((tab) => (
-            <button
-              type="button"
-              key={tab}
-              className={`${styles.tabItem} ${activeTab === tab ? styles.tabActive : ''}`}
-              onClick={() => handleTabChange(tab)}
-              disabled={saving || loading}
-            >
-              <div className={styles.tabCopy}>
-                <span className={styles.tabItemLabel}>
-                  {tab === 'visual'
-                    ? t('config_management.tabs.visual', { defaultValue: '可视化编辑' })
-                    : t('config_management.tabs.source', { defaultValue: '源代码编辑' })}
-                </span>
-                <span className={styles.tabItemHint}>
-                  {tab === 'visual'
-                    ? t('config_management.visual.notice')
-                    : t('config_management.description')}
-                </span>
-              </div>
-            </button>
-          ))}
-        </div>
+        <SegmentedTabs
+          items={topLevelTabs}
+          value={activeTab}
+          onChange={handleTabChange}
+          variant="card"
+          ariaLabel={t('config_management.title')}
+          className={styles.tabBar}
+        />
       </PageHero>
 
       <div className={styles.workspaceShell}>
@@ -561,13 +620,11 @@ export function ConfigPage() {
                 <p className={styles.toolbarHint}>{pageDescription}</p>
               </div>
               <div className={styles.toolbarBadges}>
-                <div className={`${styles.inlineStatus} ${getStatusClass()}`}>{getStatusText()}</div>
-                <span className={styles.toolbarChip}>
-                  {isDirty
-                    ? t('config_management.status_dirty')
-                    : t('config_management.status_loaded')}
-                </span>
-                {activeTab === 'source' && searchQuery && lastSearchedQuery === searchQuery && (
+                <div className={`${styles.inlineStatus} ${getStatusClass()}`}>
+                  {getStatusText()}
+                </div>
+                <span className={styles.toolbarChip}>{toolbarContextLabel}</span>
+                {isSourceTab && searchQuery && lastSearchedQuery === searchQuery && (
                   <span className={styles.toolbarChip}>
                     {searchResults.total > 0
                       ? `${searchResults.current} / ${searchResults.total}`
@@ -580,7 +637,7 @@ export function ConfigPage() {
             </div>
 
             <div className={styles.toolbarActions}>
-              {activeTab === 'source' && (
+              {isSourceTab && (
                 <div className={styles.searchDock}>
                   <div className={styles.searchInputWrapper}>
                     <Input
@@ -625,9 +682,7 @@ export function ConfigPage() {
                     className={styles.iconAction}
                     onClick={handlePrevMatch}
                     disabled={
-                      !searchQuery ||
-                      lastSearchedQuery !== searchQuery ||
-                      searchResults.total === 0
+                      !searchQuery || lastSearchedQuery !== searchQuery || searchResults.total === 0
                     }
                     title={t('config_management.search_prev', { defaultValue: '上一个' })}
                   >
@@ -639,9 +694,7 @@ export function ConfigPage() {
                     className={styles.iconAction}
                     onClick={handleNextMatch}
                     disabled={
-                      !searchQuery ||
-                      lastSearchedQuery !== searchQuery ||
-                      searchResults.total === 0
+                      !searchQuery || lastSearchedQuery !== searchQuery || searchResults.total === 0
                     }
                     title={t('config_management.search_next', { defaultValue: '下一个' })}
                   >
@@ -679,9 +732,10 @@ export function ConfigPage() {
           </div>
 
           <div className={styles.stageSurface}>
-            {activeTab === 'visual' ? (
+            {!isSourceTab ? (
               <div className={styles.visualStage}>
                 <VisualConfigEditor
+                  activeGroupId={activeVisualGroupId}
                   values={visualValues}
                   validationErrors={visualValidationErrors}
                   hasPayloadValidationErrors={visualHasPayloadValidationErrors}

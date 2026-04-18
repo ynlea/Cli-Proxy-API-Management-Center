@@ -1,13 +1,11 @@
 import {
   useCallback,
-  useEffect,
   useId,
   useMemo,
-  useRef,
-  useState,
   type ComponentType,
   type ReactNode,
 } from 'react';
+import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
@@ -51,7 +49,8 @@ type VisualSectionId =
   | 'streaming'
   | 'payload';
 
-type VisualSectionGroupId = 'core' | 'access' | 'runtime' | 'advanced';
+export const VISUAL_SECTION_GROUP_IDS = ['core', 'access', 'runtime', 'advanced'] as const;
+export type VisualSectionGroupId = (typeof VISUAL_SECTION_GROUP_IDS)[number];
 
 type VisualSection = {
   id: VisualSectionId;
@@ -63,15 +62,61 @@ type VisualSection = {
   errorCount: number;
 };
 
-type VisualSectionGroup = {
+type VisualSectionGroupDefinition = {
   id: VisualSectionGroupId;
+  sectionIds: VisualSectionId[];
   title: string;
   description: string;
-  sections: VisualSection[];
-  errorCount: number;
 };
 
+const visualSectionGroupMeta = [
+  {
+    id: 'core',
+    sectionIds: ['server', 'tls', 'remote'],
+    titleKey: 'config_management.visual.groups.core.title',
+    descriptionKey: 'config_management.visual.groups.core.description',
+    defaultTitle: '基础配置',
+    defaultDescription: '服务器、TLS 和远程管理放在一起，先把服务入口定稳。',
+  },
+  {
+    id: 'access',
+    sectionIds: ['auth', 'network'],
+    titleKey: 'config_management.visual.groups.access.title',
+    descriptionKey: 'config_management.visual.groups.access.description',
+    defaultTitle: '接入与路由',
+    defaultDescription: '认证目录、密钥和请求路由收在同一组，减少来回切换。',
+  },
+  {
+    id: 'runtime',
+    sectionIds: ['system', 'quota', 'streaming'],
+    titleKey: 'config_management.visual.groups.runtime.title',
+    descriptionKey: 'config_management.visual.groups.runtime.description',
+    defaultTitle: '运行策略',
+    defaultDescription: '系统行为、配额和流式选项统一管理，更适合连续调参。',
+  },
+  {
+    id: 'advanced',
+    sectionIds: ['payload'],
+    titleKey: 'config_management.visual.groups.advanced.title',
+    descriptionKey: 'config_management.visual.groups.advanced.description',
+    defaultTitle: '高级规则',
+    defaultDescription: '负载规则独立成区，保留足够空间给长表单和复杂规则。',
+  },
+] as const;
+
+export function getVisualSectionGroupDefinitions(
+  t: TFunction
+): VisualSectionGroupDefinition[] {
+  return visualSectionGroupMeta.map((group) => ({
+    id: group.id,
+    sectionIds: [...group.sectionIds],
+    title: t(group.titleKey, { defaultValue: group.defaultTitle }),
+    description: t(group.descriptionKey, { defaultValue: group.defaultDescription }),
+  }));
+}
+
 interface VisualConfigEditorProps {
+  activeGroupId: VisualSectionGroupId;
   values: VisualConfigValues;
   validationErrors?: VisualConfigValidationErrors;
   hasPayloadValidationErrors?: boolean;
@@ -179,6 +224,7 @@ function FieldShell({
 }
 
 export function VisualConfigEditor({
+  activeGroupId,
   values,
   validationErrors,
   hasPayloadValidationErrors = false,
@@ -194,8 +240,6 @@ export function VisualConfigEditor({
   const nonstreamKeepaliveInputId = useId();
   const nonstreamKeepaliveHintId = `${nonstreamKeepaliveInputId}-hint`;
   const nonstreamKeepaliveErrorId = `${nonstreamKeepaliveInputId}-error`;
-  const [activeGroupId, setActiveGroupId] = useState<VisualSectionGroupId>('core');
-  const groupRefs = useRef<Partial<Record<VisualSectionGroupId, HTMLElement | null>>>({});
 
   const isKeepaliveDisabled =
     values.streaming.keepaliveSeconds === '' || values.streaming.keepaliveSeconds === '0';
@@ -340,8 +384,6 @@ export function VisualConfigEditor({
     [countErrors, hasPayloadValidationErrors, t]
   );
 
-  const hasValidationIssues =
-    sections.some((section) => section.errorCount > 0) || hasPayloadValidationErrors;
   const sectionsById = useMemo(
     () =>
       Object.fromEntries(sections.map((section) => [section.id, section])) as Record<
@@ -350,81 +392,9 @@ export function VisualConfigEditor({
       >,
     [sections]
   );
-  const sectionGroups = useMemo<VisualSectionGroup[]>(
-    () => {
-      const groupDefinitions: Array<Omit<VisualSectionGroup, 'sections' | 'errorCount'>> = [
-        {
-          id: 'core',
-          title: t('config_management.visual.groups.core.title', { defaultValue: '基础配置' }),
-          description: t('config_management.visual.groups.core.description', {
-            defaultValue: '服务器、TLS 和远程管理放在一起，先把服务入口定稳。',
-          }),
-        },
-        {
-          id: 'access',
-          title: t('config_management.visual.groups.access.title', { defaultValue: '接入与路由' }),
-          description: t('config_management.visual.groups.access.description', {
-            defaultValue: '认证目录、密钥和请求路由收在同一组，减少来回切换。',
-          }),
-        },
-        {
-          id: 'runtime',
-          title: t('config_management.visual.groups.runtime.title', { defaultValue: '运行策略' }),
-          description: t('config_management.visual.groups.runtime.description', {
-            defaultValue: '系统行为、配额和流式选项统一管理，更适合连续调参。',
-          }),
-        },
-        {
-          id: 'advanced',
-          title: t('config_management.visual.groups.advanced.title', { defaultValue: '高级规则' }),
-          description: t('config_management.visual.groups.advanced.description', {
-            defaultValue: '负载规则独立成区，保留足够空间给长表单和复杂规则。',
-          }),
-        },
-      ];
-
-      return groupDefinitions.map((group) => {
-        const groupSections = sections.filter((section) => section.groupId === group.id);
-        return {
-          ...group,
-          sections: groupSections,
-          errorCount: groupSections.reduce((total, section) => total + section.errorCount, 0),
-        };
-      });
-    },
-    [sections, t]
-  );
-
-  useEffect(() => {
-    if (typeof IntersectionObserver === 'undefined') return undefined;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((left, right) => right.intersectionRatio - left.intersectionRatio);
-
-        if (visibleEntries.length === 0) return;
-        setActiveGroupId(visibleEntries[0].target.id as VisualSectionGroupId);
-      },
-      {
-        rootMargin: '-12% 0px -62% 0px',
-        threshold: [0.12, 0.3, 0.55],
-      }
-    );
-
-    for (const group of sectionGroups) {
-      const element = groupRefs.current[group.id];
-      if (element) observer.observe(element);
-    }
-
-    return () => observer.disconnect();
-  }, [sectionGroups]);
-
-  const handleGroupJump = useCallback((groupId: VisualSectionGroupId) => {
-    setActiveGroupId(groupId);
-    groupRefs.current[groupId]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
+  const groupDefinitions = useMemo(() => getVisualSectionGroupDefinitions(t), [t]);
+  const activeGroup =
+    groupDefinitions.find((group) => group.id === activeGroupId) ?? groupDefinitions[0];
 
   const renderSection = useCallback(
     (sectionId: VisualSectionId) => {
@@ -521,7 +491,9 @@ export function VisualConfigEditor({
                   <Input
                     label={t('config_management.visual.sections.remote.secret_key')}
                     type="password"
-                    placeholder={t('config_management.visual.sections.remote.secret_key_placeholder')}
+                    placeholder={t(
+                      'config_management.visual.sections.remote.secret_key_placeholder'
+                    )}
                     value={values.rmSecretKey}
                     onChange={(e) => onChange({ rmSecretKey: e.target.value })}
                     disabled={disabled}
@@ -587,7 +559,9 @@ export function VisualConfigEditor({
                   />
                   <ToggleRow
                     title={t('config_management.visual.sections.system.usage_statistics')}
-                    description={t('config_management.visual.sections.system.usage_statistics_desc')}
+                    description={t(
+                      'config_management.visual.sections.system.usage_statistics_desc'
+                    )}
                     checked={values.usageStatisticsEnabled}
                     disabled={disabled}
                     onChange={(usageStatisticsEnabled) => onChange({ usageStatisticsEnabled })}
@@ -724,7 +698,9 @@ export function VisualConfigEditor({
                 />
                 <ToggleRow
                   title={t('config_management.visual.sections.quota.antigravity_credits')}
-                  description={t('config_management.visual.sections.quota.antigravity_credits_desc')}
+                  description={t(
+                    'config_management.visual.sections.quota.antigravity_credits_desc'
+                  )}
                   checked={values.quotaAntigravityCredits}
                   disabled={disabled}
                   onChange={(quotaAntigravityCredits) => onChange({ quotaAntigravityCredits })}
@@ -843,7 +819,9 @@ export function VisualConfigEditor({
 
                 <SectionSubsection
                   title={t('config_management.visual.sections.payload.default_raw_rules')}
-                  description={t('config_management.visual.sections.payload.default_raw_rules_desc')}
+                  description={t(
+                    'config_management.visual.sections.payload.default_raw_rules_desc'
+                  )}
                 >
                   <PayloadRulesEditor
                     value={values.payloadDefaultRawRules}
@@ -932,106 +910,7 @@ export function VisualConfigEditor({
 
   return (
     <div className={styles.visualEditor}>
-      <div className={styles.groupPanel}>
-        <div className={styles.groupPanelHeader}>
-          <div className={styles.groupPanelCopy}>
-            <span className={styles.groupPanelEyebrow}>
-              {t('config_management.tabs.visual', { defaultValue: '可视化编辑' })}
-            </span>
-            <h2 className={styles.groupPanelTitle}>
-              {t('config_management.visual.quick_jump', { defaultValue: '快速跳转' })}
-            </h2>
-            <p className={styles.groupPanelDescription}>
-              {t('config_management.visual.group_layout_description', {
-                defaultValue: '按主题整理配置区块，先在分组里定位，再在同一工作区里连续编辑。',
-              })}
-            </p>
-          </div>
-          <div className={styles.groupPanelMeta}>
-            <span className={styles.summaryPill}>
-              {t('config_management.visual.group_count', {
-                defaultValue: `${sectionGroups.length} 组`,
-              })}
-            </span>
-            <span className={styles.summaryPill}>
-              {t('config_management.visual.section_count', {
-                defaultValue: `${sections.length} 个区块`,
-              })}
-            </span>
-            {hasValidationIssues ? (
-              <span className={styles.sectionIssueBadge}>
-                {t('config_management.visual.validation.validation_blocked')}
-              </span>
-            ) : null}
-          </div>
-        </div>
-
-        <div className={styles.groupTabs}>
-          {sectionGroups.map((group) => (
-            <button
-              key={group.id}
-              type="button"
-              className={`${styles.groupTab} ${
-                activeGroupId === group.id ? styles.groupTabActive : ''
-              }`}
-              onClick={() => handleGroupJump(group.id)}
-            >
-              <div className={styles.groupTabCopy}>
-                <span className={styles.groupTabTitle}>{group.title}</span>
-                <span className={styles.groupTabCaption}>{group.description}</span>
-              </div>
-              <div className={styles.groupTabBadges}>
-                <span className={styles.summaryPill}>
-                  {t('config_management.visual.group_section_count', {
-                    defaultValue: `${group.sections.length} 项`,
-                  })}
-                </span>
-                {group.errorCount > 0 ? (
-                  <span className={styles.sectionIssueBadge}>{group.errorCount}</span>
-                ) : null}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.groupSectionStack}>
-        {sectionGroups.map((group) => (
-          <section
-            key={group.id}
-            id={group.id}
-            ref={(node) => {
-              groupRefs.current[group.id] = node;
-            }}
-            className={`${styles.groupSection} ${
-              activeGroupId === group.id ? styles.groupSectionActive : ''
-            }`}
-          >
-            <div className={styles.groupSectionHeader}>
-              <div className={styles.groupSectionCopy}>
-                <span className={styles.groupSectionEyebrow}>
-                  {group.sections.map((section) => section.indexLabel).join(' / ')}
-                </span>
-                <h3 className={styles.groupSectionTitle}>{group.title}</h3>
-                <p className={styles.groupSectionDescription}>{group.description}</p>
-              </div>
-              <div className={styles.groupSectionMeta}>
-                <span className={styles.summaryPill}>
-                  {t('config_management.visual.group_section_total', {
-                    defaultValue: `${group.sections.length} 个区块`,
-                  })}
-                </span>
-                {group.errorCount > 0 ? (
-                  <span className={styles.sectionIssueBadge}>{group.errorCount}</span>
-                ) : null}
-              </div>
-            </div>,
-            <div className={styles.groupSectionBody}>
-              {group.sections.map((section) => renderSection(section.id))}
-            </div>
-          </section>
-        ))}
-      </div>
+      {activeGroup.sectionIds.map((sectionId) => renderSection(sectionId))}
     </div>
   );
 }

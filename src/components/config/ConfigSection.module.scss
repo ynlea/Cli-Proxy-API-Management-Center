@@ -4,19 +4,17 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 18px 0;
-  border-top: 1px solid color-mix(in srgb, var(--border-color) 76%, transparent);
+  gap: 18px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+  background: color-mix(in srgb, var(--surface-raised) 97%, var(--bg-primary));
+  box-shadow: 0 10px 24px rgba(12, 20, 32, 0.04);
   scroll-margin-top: 128px;
 
-  &:first-child {
-    border-top: none;
-    padding-top: 0;
-  }
-
   @include mobile {
-    gap: 12px;
-    padding: 16px 0;
+    gap: 14px;
+    padding: 16px;
     scroll-margin-top: 108px;
   }
 }
@@ -24,7 +22,7 @@
 .header {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 16px;
   min-width: 0;
 
   @include mobile {
@@ -43,32 +41,28 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 34px;
+  min-width: 32px;
   height: 28px;
   padding: 0 8px;
-  border-radius: 4px;
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.08), transparent 72%),
-    color-mix(in srgb, var(--bg-secondary) 90%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
   color: var(--primary-color);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 .iconBadge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
-  background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.08), transparent 72%),
-    color-mix(in srgb, var(--bg-secondary) 90%, transparent);
-  border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
-  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--primary-color) 12%, var(--bg-primary));
+  border: 1px solid color-mix(in srgb, var(--primary-color) 20%, var(--border-color));
+  color: var(--primary-color);
   flex: 0 0 auto;
 }
 
@@ -81,8 +75,8 @@
 
 .title {
   margin: 0;
-  font-size: clamp(17px, 1.6vw, 20px);
-  line-height: 1.15;
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.16;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -91,12 +85,12 @@
   margin: 0;
   color: var(--text-secondary);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.58;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   min-width: 0;
 }

@@ -58,17 +58,21 @@
     "unsaved_changes_message": "You have unsaved changes. Leaving now will discard them. Do you want to leave?"
   },
   "title": {
-    "main": "CLI Proxy API Management Center",
-    "login": "CLI Proxy API Management Center",
-    "abbr": "CPAMC"
+    "main": "CPA Console",
+    "login": "CPA Console",
+    "abbr": "CPA"
   },
   "splash": {
-    "title": "CLI Proxy API",
-    "subtitle": "Management Center"
+    "title": "CPA",
+    "subtitle": "Console",
+    "loading_title": "Preparing the console",
+    "loading_message": "Interface and configuration are being initialized. Please wait a moment."
   },
   "auto_login": {
     "title": "Auto Login in Progress...",
-    "message": "Attempting to connect to server using locally saved connection information"
+    "message": "Attempting to connect to server using locally saved connection information",
+    "success_title": "Session restored",
+    "success_message": "Your connection is ready. Opening the console now."
   },
   "login": {
     "subtitle": "Please enter connection information to access the management interface",
@@ -129,7 +133,7 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "subtitle": "Welcome to CLI Proxy API Management Center",
+    "subtitle": "Welcome to CPA Console",
     "openai_providers": "OpenAI Providers",
     "quick_actions": "Quick Actions",
     "current_config": "Current Configuration",
@@ -959,6 +963,7 @@
     "model_name": "Model Name",
     "model_price_settings": "Model Pricing Settings",
     "saved_prices": "Saved Prices",
+    "effective_prices": "Active Prices",
     "requests_trend": "Request Trends",
     "tokens_trend": "Token Usage Trends",
     "api_details": "API Details",
@@ -1008,11 +1013,17 @@
     "model_price_model_label": "Model",
     "model_price_select_placeholder": "Choose a model",
     "model_price_select_hint": "Models come from usage details",
+    "model_price_auto_hint": "Model names now auto-match preset pricing. Saving only overrides the current model.",
     "model_price_prompt": "Prompt price",
     "model_price_completion": "Completion price",
     "model_price_cache": "Cache price",
     "model_price_save": "Save Price",
     "model_price_empty": "No model prices set",
+    "model_price_source_preset": "Preset",
+    "model_price_source_custom": "Custom",
+    "model_price_source_custom_override": "Custom Override",
+    "model_price_restore_preset": "Restore Preset",
+    "model_price_match_hint": "Matched from {{provider}} / {{model}}",
     "model_price_model": "Model",
     "model_price_saved": "Model price saved",
     "model_price_model_required": "Please choose a model to set pricing",
@@ -1160,7 +1171,7 @@
     "reload": "Reload",
     "reload_confirm_message": "Reloading will discard your unsaved changes. Do you want to continue?",
     "save": "Save",
-    "description": "Edit config.yaml via visual editor or source file",
+    "description": "Edit config.yaml through grouped tabs or the source file",
     "status_idle": "Waiting for action",
     "status_loading": "Loading configuration...",
     "status_loading_short": "Loading",
@@ -1202,8 +1213,26 @@
       "source": "Source File Editor"
     },
     "visual": {
-      "notice": "Visual mode covers common fields. Review or edit unsupported config.yaml entries in source mode.",
+      "notice": "Grouped mode covers common fields. Review or edit unsupported config.yaml entries in source mode.",
       "quick_jump": "Quick Jump",
+      "groups": {
+        "core": {
+          "title": "Core Setup",
+          "description": "Keep server, TLS, and remote management together to stabilize the service entry first."
+        },
+        "access": {
+          "title": "Access & Routing",
+          "description": "Keep authentication paths, keys, and request routing in one place to reduce back-and-forth."
+        },
+        "runtime": {
+          "title": "Runtime Strategy",
+          "description": "Manage system behavior, quota fallback, and streaming options together for continuous tuning."
+        },
+        "advanced": {
+          "title": "Advanced Rules",
+          "description": "Keep payload rules in a dedicated area with enough space for long forms and complex logic."
+        }
+      },
       "sections": {
         "server": {
           "title": "Server Configuration",
@@ -1378,7 +1407,7 @@
   },
   "system_info": {
     "title": "Management Center Info",
-    "about_title": "CLI Proxy API Management Center",
+    "about_title": "CPA Console",
     "connection_status_title": "Connection Status",
     "api_status_label": "API Status:",
     "config_status_label": "Config Status:",

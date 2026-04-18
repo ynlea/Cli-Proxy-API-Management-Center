@@ -44,7 +44,7 @@ export const LANGUAGE_ORDER = defineLanguageOrder(['zh-CN', 'en', 'ru'] as const
 export const LANGUAGE_LABEL_KEYS: Record<Language, string> = {
   'zh-CN': 'language.chinese',
   en: 'language.english',
-  ru: 'language.russian'
+  ru: 'language.russian',
 };
 export const SUPPORTED_LANGUAGES = LANGUAGE_ORDER;
 
@@ -57,14 +57,14 @@ export const OAUTH_CARD_IDS = [
   'anthropic-oauth-card',
   'antigravity-oauth-card',
   'gemini-cli-oauth-card',
-  'kimi-oauth-card'
+  'kimi-oauth-card',
 ];
 export const OAUTH_PROVIDERS = {
   CODEX: 'codex',
   ANTHROPIC: 'anthropic',
   ANTIGRAVITY: 'antigravity',
   GEMINI_CLI: 'gemini-cli',
-  KIMI: 'kimi'
+  KIMI: 'kimi',
 } as const;
 
 // API 端点
@@ -76,5 +76,5 @@ export const API_ENDPOINTS = {
   AUTH_FILES: '/auth-files',
   OAUTH: '/oauth',
   USAGE: '/usage',
-  LOGS: '/logs'
+  LOGS: '/logs',
 } as const;

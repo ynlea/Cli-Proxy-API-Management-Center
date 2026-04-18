@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
-import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
+import { SegmentedTabs, type SegmentedTabsItem } from '@/components/ui/SegmentedTabs';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import {
   IconChevronDown,
@@ -14,9 +14,11 @@ import {
   IconCode,
   IconDownload,
   IconEyeOff,
+  IconFileText,
   IconRefreshCw,
   IconSearch,
   IconSlidersHorizontal,
+  IconScrollText,
   IconTimer,
   IconTrash2,
   IconX,
@@ -89,10 +91,18 @@ export function LogsPage() {
   const [requestLogId, setRequestLogId] = useState<string | null>(null);
   const [requestLogDownloading, setRequestLogDownloading] = useState(false);
 
-  const tabItems = useMemo(
+  const tabItems = useMemo<ReadonlyArray<SegmentedTabsItem<TabType>>>(
     () => [
-      { value: 'logs' as const, label: t('logs.log_content') },
-      { value: 'errors' as const, label: t('logs.error_logs_modal_title') },
+      {
+        value: 'logs' as const,
+        label: t('logs.log_content'),
+        leading: <IconScrollText size={16} />,
+      },
+      {
+        value: 'errors' as const,
+        label: t('logs.error_logs_modal_title'),
+        leading: <IconFileText size={16} />,
+      },
     ],
     [t]
   );

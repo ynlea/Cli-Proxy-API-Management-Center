@@ -6,15 +6,8 @@ import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import iconCodex from '@/assets/icons/codex.svg';
 import type { ProviderKeyConfig } from '@/types';
 import { maskApiKey } from '@/utils/format';
-import {
-  buildCandidateUsageSourceIds,
-  calculateStatusBarData,
-  type KeyStats,
-} from '@/utils/usage';
-import {
-  collectUsageDetailsForCandidates,
-  type UsageDetailsBySource,
-} from '@/utils/usageIndex';
+import { buildCandidateUsageSourceIds, calculateStatusBarData, type KeyStats } from '@/utils/usage';
+import { collectUsageDetailsForCandidates, type UsageDetailsBySource } from '@/utils/usageIndex';
 import styles from '@/pages/AiProvidersPage.module.scss';
 import { ProviderList } from '../ProviderList';
 import { ProviderStatusBar } from '../ProviderStatusBar';
@@ -141,8 +134,12 @@ export function CodexSection({
                 )}
                 {item.websockets !== undefined && (
                   <div className={styles.fieldRow}>
-                    <span className={styles.fieldLabel}>{t('ai_providers.codex_websockets_label')}:</span>
-                    <span className={styles.fieldValue}>{item.websockets ? t('common.yes') : t('common.no')}</span>
+                    <span className={styles.fieldLabel}>
+                      {t('ai_providers.codex_websockets_label')}:
+                    </span>
+                    <span className={styles.fieldValue}>
+                      {item.websockets ? t('common.yes') : t('common.no')}
+                    </span>
                   </div>
                 )}
                 {headerEntries.length > 0 && (
@@ -181,7 +178,10 @@ export function CodexSection({
                     </div>
                     <div className={styles.modelTagList}>
                       {excludedModels.map((model) => (
-                        <span key={model} className={`${styles.modelTag} ${styles.excludedModelTag}`}>
+                        <span
+                          key={model}
+                          className={`${styles.modelTag} ${styles.excludedModelTag}`}
+                        >
                           <span className={styles.modelName}>{model}</span>
                         </span>
                       ))}

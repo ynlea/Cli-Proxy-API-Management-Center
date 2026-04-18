@@ -5,9 +5,7 @@ import { configApi, usageApi } from '@/services/api';
 import { webdavClient } from '../client/webdavClient';
 import { useWebdavStore } from '../store/useWebdavStore';
 import type { BackupPayload, BackupData, BackupScope, WebdavFileInfo } from '../types';
-import {
-  BACKUP_LOCALSTORAGE_KEYS,
-} from '../constants';
+import { BACKUP_LOCALSTORAGE_KEYS } from '../constants';
 import {
   generateBackupFilename,
   isBackupFile,

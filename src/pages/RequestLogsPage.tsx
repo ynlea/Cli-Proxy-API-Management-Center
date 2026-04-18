@@ -33,9 +33,19 @@ export function RequestLogsPage({
     <div className={embedded ? styles.embeddedSection : styles.container}>
       {loading && !usageData && (
         <div className={styles.loadingOverlay} aria-busy="true">
-          <div className={styles.loadingOverlayContent}>
+          <div
+            className={styles.loadingOverlayContent}
+            aria-live="polite"
+            data-watermark={t('title.abbr')}
+          >
+            <span className={styles.loadingOverlayKicker}>{t('title.main')}</span>
             <LoadingSpinner size={28} className={styles.loadingOverlaySpinner} />
             <span className={styles.loadingOverlayText}>{t('common.loading')}</span>
+            <span className={styles.loadingOverlayMeter} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </div>
         </div>
       )}

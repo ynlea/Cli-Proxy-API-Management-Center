@@ -7,11 +7,7 @@ import iconOpenaiLight from '@/assets/icons/openai-light.svg';
 import iconOpenaiDark from '@/assets/icons/openai-dark.svg';
 import type { OpenAIProviderConfig } from '@/types';
 import { maskApiKey } from '@/utils/format';
-import {
-  buildCandidateUsageSourceIds,
-  calculateStatusBarData,
-  type KeyStats,
-} from '@/utils/usage';
+import { buildCandidateUsageSourceIds, calculateStatusBarData, type KeyStats } from '@/utils/usage';
 import { collectUsageDetailsForCandidates, type UsageDetailsBySource } from '@/utils/usageIndex';
 import styles from '@/pages/AiProvidersPage.module.scss';
 import { ProviderList } from '../ProviderList';
@@ -138,7 +134,9 @@ export function OpenAISection({
                         return (
                           <div key={entryIndex} className={styles.apiKeyEntryCard}>
                             <span className={styles.apiKeyEntryIndex}>{entryIndex + 1}</span>
-                            <span className={styles.apiKeyEntryKey}>{maskApiKey(entry.apiKey)}</span>
+                            <span className={styles.apiKeyEntryKey}>
+                              {maskApiKey(entry.apiKey)}
+                            </span>
                             {entry.proxyUrl && (
                               <span className={styles.apiKeyEntryProxy}>{entry.proxyUrl}</span>
                             )}
@@ -161,7 +159,9 @@ export function OpenAISection({
                   </div>
                 )}
                 <div className={styles.fieldRow} style={{ marginTop: '8px' }}>
-                  <span className={styles.fieldLabel}>{t('ai_providers.openai_models_count')}:</span>
+                  <span className={styles.fieldLabel}>
+                    {t('ai_providers.openai_models_count')}:
+                  </span>
                   <span className={styles.fieldValue}>{item.models?.length || 0}</span>
                 </div>
                 {item.models?.length ? (

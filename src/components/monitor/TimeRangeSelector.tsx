@@ -29,15 +29,18 @@ export function TimeRangeSelector({ value, onChange, customRange }: TimeRangeSel
     return formatDateForInput(new Date());
   });
 
-  const handleTimeClick = useCallback((range: TimeRange) => {
-    if (range === 'custom') {
-      setShowCustom(true);
-      onChange(range);
-    } else {
-      setShowCustom(false);
-      onChange(range);
-    }
-  }, [onChange]);
+  const handleTimeClick = useCallback(
+    (range: TimeRange) => {
+      if (range === 'custom') {
+        setShowCustom(true);
+        onChange(range);
+      } else {
+        setShowCustom(false);
+        onChange(range);
+      }
+    },
+    [onChange]
+  );
 
   const handleApplyCustom = useCallback(() => {
     if (startDate && endDate) {
@@ -69,8 +72,8 @@ export function TimeRangeSelector({ value, onChange, customRange }: TimeRangeSel
             {range === 1
               ? t('monitor.time.today')
               : range === 'custom'
-              ? t('monitor.time.custom')
-              : t('monitor.time.last_n_days', { n: range })}
+                ? t('monitor.time.custom')
+                : t('monitor.time.last_n_days', { n: range })}
           </button>
         ))}
       </div>

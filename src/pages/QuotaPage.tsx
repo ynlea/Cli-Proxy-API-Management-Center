@@ -6,8 +6,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { PageHero } from '@/components/layout/PageHero';
-import { SegmentedTabs } from '@/components/ui/SegmentedTabs';
-import { useAuthStore } from '@/stores';
+import { SegmentedTabs, type SegmentedTabsItem } from '@/components/ui/SegmentedTabs';
+import { useAuthStore, useThemeStore } from '@/stores';
 import { authFilesApi, configFileApi } from '@/services/api';
 import {
   QuotaSection,
@@ -17,6 +17,7 @@ import {
   GEMINI_CLI_CONFIG,
   KIMI_CONFIG,
 } from '@/components/quota';
+import { getAuthFileIcon, type ResolvedTheme } from '@/features/authFiles/constants';
 import type { AuthFileItem } from '@/types';
 import styles from './QuotaPage.module.scss';
 
@@ -25,6 +26,7 @@ type QuotaPanelId = 'claude' | 'antigravity' | 'codex' | 'gemini-cli' | 'kimi';
 export function QuotaPage() {
   const { t } = useTranslation();
   const connectionStatus = useAuthStore((state) => state.connectionStatus);
+  const resolvedTheme: ResolvedTheme = useThemeStore((state) => state.resolvedTheme);
 
   const [files, setFiles] = useState<AuthFileItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -99,14 +101,19 @@ export function QuotaPage() {
     ],
     [files, t]
   );
-  const tabItems = useMemo(
+  const tabItems = useMemo<ReadonlyArray<SegmentedTabsItem<QuotaPanelId>>>(
     () =>
-      quotaPanels.map((panel) => ({
-        value: panel.id,
-        label: panel.label,
-        trailing: <span className={styles.panelTabCount}>{panel.count}</span>,
-      })),
-    [quotaPanels]
+      quotaPanels.map((panel) => {
+        const iconSrc = getAuthFileIcon(panel.id, resolvedTheme);
+
+        return {
+          value: panel.id,
+          label: panel.label,
+          leading: iconSrc ? <img src={iconSrc} alt="" /> : null,
+          trailing: <span className={styles.panelTabCount}>{panel.count}</span>,
+        };
+      }),
+    [quotaPanels, resolvedTheme]
   );
   const preferredInitialPanel = useMemo<QuotaPanelId>(
     () => quotaPanels.find((panel) => panel.count > 0)?.id ?? 'claude',

@@ -7,7 +7,12 @@ import type {
   BackupScope,
   AutoBackupInterval,
 } from '../types';
-import { WEBDAV_STORE_KEY, DEFAULT_BASE_PATH, DEFAULT_MAX_BACKUP_COUNT, AUTO_BACKUP_INTERVALS } from '../constants';
+import {
+  WEBDAV_STORE_KEY,
+  DEFAULT_BASE_PATH,
+  DEFAULT_MAX_BACKUP_COUNT,
+  AUTO_BACKUP_INTERVALS,
+} from '../constants';
 
 interface WebdavStoreState {
   // 持久化字段

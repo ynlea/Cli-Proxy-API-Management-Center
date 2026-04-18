@@ -105,7 +105,6 @@
   }
 }
 
-
 .filterAllIconWrap {
   position: relative;
   border-color: color-mix(in srgb, var(--primary-color) 20%, var(--border-color));
@@ -123,7 +122,6 @@
   display: block;
   color: color-mix(in srgb, var(--primary-color) 70%, var(--text-primary));
 }
-
 
 .filterContent {
   display: flex;
@@ -298,19 +296,33 @@
 
 .filterToggleGroup {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
-  min-height: 40px;
+  min-height: 36px;
 }
 
 .filterToggleCard {
   display: flex;
   align-items: center;
-  min-height: 40px;
-  padding: 0 2px;
+  min-height: 36px;
+  padding: 0 10px;
   border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
   background: color-mix(in srgb, var(--bg-secondary) 50%, transparent);
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  label > span:last-child {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
 }
 
 .filterToggle {
@@ -705,7 +717,12 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgba(255, 93, 135, 0.28), rgba(57, 213, 255, 0.36), rgba(117, 255, 122, 0.28))
+      linear-gradient(
+          90deg,
+          rgba(255, 93, 135, 0.28),
+          rgba(57, 213, 255, 0.36),
+          rgba(117, 255, 122, 0.28)
+        )
         top / 100% 2px no-repeat,
       repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
     pointer-events: none;

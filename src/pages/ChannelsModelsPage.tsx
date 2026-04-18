@@ -6,10 +6,7 @@ import { FailureAnalysis } from '@/components/monitor/FailureAnalysis';
 import { HourlyModelChart } from '@/components/monitor/HourlyModelChart';
 import { KpiCards } from '@/components/monitor/KpiCards';
 import { ModelDistributionChart } from '@/components/monitor/ModelDistributionChart';
-import {
-  MONITOR_TIME_RANGES,
-  useMonitorInsightsData,
-} from '@/hooks/useMonitorInsightsData';
+import { MONITOR_TIME_RANGES, useMonitorInsightsData } from '@/hooks/useMonitorInsightsData';
 import styles from './MonitorPage.module.scss';
 
 interface ChannelsModelsPageProps {
@@ -44,9 +41,19 @@ export function ChannelsModelsPage({
     <div className={embedded ? styles.embeddedSection : styles.container}>
       {loading && !usageData && (
         <div className={styles.loadingOverlay} aria-busy="true">
-          <div className={styles.loadingOverlayContent}>
+          <div
+            className={styles.loadingOverlayContent}
+            aria-live="polite"
+            data-watermark={t('title.abbr')}
+          >
+            <span className={styles.loadingOverlayKicker}>{t('title.main')}</span>
             <LoadingSpinner size={28} className={styles.loadingOverlaySpinner} />
             <span className={styles.loadingOverlayText}>{t('common.loading')}</span>
+            <span className={styles.loadingOverlayMeter} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </div>
         </div>
       )}

@@ -69,10 +69,7 @@ export function resolveProvider(
  * @param providerMap 渠道映射表
  * @returns 格式化后的显示名称
  */
-export function formatProviderDisplay(
-  source: string,
-  providerMap: Record<string, string>
-): string {
+export function formatProviderDisplay(source: string, providerMap: Record<string, string>): string {
   if (!source || source === '-' || source === 'unknown') {
     return source || '-';
   }
@@ -123,10 +120,7 @@ export function formatTimestamp(timestamp: number | string): string {
  * @param styles 样式模块对象
  * @returns 样式类名
  */
-export function getRateClassName(
-  rate: number,
-  styles: Record<string, string>
-): string {
+export function getRateClassName(rate: number, styles: Record<string, string>): string {
   if (rate >= 90) return styles.rateHigh || '';
   if (rate >= 70) return styles.rateMedium || '';
   return styles.rateLow || '';
@@ -191,7 +185,7 @@ export function isModelDisabled(
 export function createDisableState(
   source: string,
   model: string,
-  providerMap: Record<string, string>,
+  providerMap: Record<string, string>
 ): DisableState {
   const providerName = resolveProvider(source, providerMap);
   const displayName = providerName
@@ -273,11 +267,7 @@ export function parseDateInputValue(value: string): Date | null {
   const day = Number(match[3]);
   const date = new Date(year, month - 1, day);
 
-  if (
-    date.getFullYear() !== year ||
-    date.getMonth() !== month - 1 ||
-    date.getDate() !== day
-  ) {
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
     return null;
   }
 
@@ -294,8 +284,7 @@ export function getHourlyRangeBounds(
   hourRange: number,
   now: Date = new Date()
 ): { start: Date; end: Date; bucketCount: number } {
-  const bucketCount =
-    Number.isFinite(hourRange) && hourRange > 0 ? Math.floor(hourRange) : 24;
+  const bucketCount = Number.isFinite(hourRange) && hourRange > 0 ? Math.floor(hourRange) : 24;
   const end = new Date(now.getTime());
   end.setMinutes(0, 0, 0);
 
@@ -311,10 +300,7 @@ export function getHourlyRangeBounds(
  * @param apiFilter API 过滤关键词
  * @returns 过滤后的数据
  */
-export function filterDataByApiFilter(
-  data: UsageData | null,
-  apiFilter = ''
-): UsageData | null {
+export function filterDataByApiFilter(data: UsageData | null, apiFilter = ''): UsageData | null {
   if (!data?.apis) return null;
 
   const normalizedApiFilter = apiFilter.trim().toLowerCase();
@@ -361,7 +347,10 @@ export function filterDataByTimeRange(
   Object.entries(apiFilteredData.apis).forEach(([apiKey, apiData]) => {
     if (!apiData?.models) return;
 
-    const filteredModels: Record<string, { details: UsageData['apis'][string]['models'][string]['details'] }> = {};
+    const filteredModels: Record<
+      string,
+      { details: UsageData['apis'][string]['models'][string]['details'] }
+    > = {};
 
     Object.entries(apiData.models).forEach(([modelName, modelData]) => {
       if (!modelData?.details || !Array.isArray(modelData.details)) return;

@@ -29,9 +29,12 @@ export const useProviderStats = (options: UseProviderStatsOptions = {}) => {
     await loadUsageStats({ force: true, staleTimeMs: USAGE_STATS_STALE_TIME_MS });
   }, [loadUsageStats]);
 
-  useInterval(() => {
-    void refreshKeyStats().catch(() => {});
-  }, enabled ? 240_000 : null);
+  useInterval(
+    () => {
+      void refreshKeyStats().catch(() => {});
+    },
+    enabled ? 240_000 : null
+  );
 
   return { keyStats, usageDetails, loadKeyStats, refreshKeyStats, isLoading };
 };

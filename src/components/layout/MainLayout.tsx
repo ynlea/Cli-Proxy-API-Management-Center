@@ -267,7 +267,7 @@ export function MainLayout() {
   const brandCollapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
 
-  const fullBrandName = 'CLI Proxy API Management Center';
+  const fullBrandName = t('title.main');
   const abbrBrandName = t('title.abbr');
   const normalizedPathname =
     location.pathname.length > 1 && location.pathname.endsWith('/')
@@ -605,7 +605,7 @@ export function MainLayout() {
           >
             {sidebarCollapsed ? headerIcons.chevronRight : headerIcons.chevronLeft}
           </button>
-          <img src={INLINE_BRAND_ICON} alt="CPAMC icon" className="brand-logo" />
+          <img src={INLINE_BRAND_ICON} alt="CPA Console logo" className="brand-logo" />
           <div
             className={`brand-header ${brandExpanded ? 'expanded' : 'collapsed'}`}
             onClick={handleBrandClick}

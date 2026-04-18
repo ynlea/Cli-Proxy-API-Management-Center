@@ -32,7 +32,9 @@ export function PageHero({
         </div>
         {meta ? <div className={styles.meta}>{meta}</div> : null}
       </div>
-      {children ? <div className={joinClassNames(styles.support, supportClassName)}>{children}</div> : null}
+      {children ? (
+        <div className={joinClassNames(styles.support, supportClassName)}>{children}</div>
+      ) : null}
     </section>
   );
 }

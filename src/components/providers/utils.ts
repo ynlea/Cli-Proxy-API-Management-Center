@@ -1,4 +1,9 @@
-import type { AmpcodeConfig, AmpcodeModelMapping, AmpcodeUpstreamApiKeyMapping, ApiKeyEntry } from '@/types';
+import type {
+  AmpcodeConfig,
+  AmpcodeModelMapping,
+  AmpcodeUpstreamApiKeyMapping,
+  ApiKeyEntry,
+} from '@/types';
 import { buildCandidateUsageSourceIds, type KeyStatBucket, type KeyStats } from '@/utils/usage';
 import type { AmpcodeFormState, AmpcodeUpstreamApiKeyEntry, ModelEntry } from './types';
 
@@ -199,6 +204,17 @@ export const entriesToAmpcodeUpstreamApiKeys = (
   });
 
   return mappings;
+};
+
+export const isAmpcodeConfigured = (ampcode?: AmpcodeConfig | null): boolean => {
+  if (!ampcode) return false;
+
+  if (String(ampcode.upstreamUrl ?? '').trim()) return true;
+  if (String(ampcode.upstreamApiKey ?? '').trim()) return true;
+  if (Array.isArray(ampcode.upstreamApiKeys) && ampcode.upstreamApiKeys.length > 0) return true;
+  if (Array.isArray(ampcode.modelMappings) && ampcode.modelMappings.length > 0) return true;
+
+  return ampcode.forceModelMappings === true;
 };
 
 export const buildAmpcodeFormState = (ampcode?: AmpcodeConfig | null): AmpcodeFormState => ({

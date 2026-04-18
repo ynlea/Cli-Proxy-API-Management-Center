@@ -7,11 +7,7 @@ import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { providersApi } from '@/services/api';
 import { useDisabledModelsStore } from '@/stores';
-import {
-  resolveProvider,
-  createDisableState,
-  type DisableState,
-} from '@/utils/monitor';
+import { resolveProvider, createDisableState, type DisableState } from '@/utils/monitor';
 import type { SourceInfo } from '@/types/sourceInfo';
 import type { OpenAIProviderConfig } from '@/types';
 
@@ -39,9 +35,12 @@ export function useDisableModel(options: UseDisableModelOptions): UseDisableMode
   const [disableState, setDisableState] = useState<DisableState | null>(null);
   const [disabling, setDisabling] = useState(false);
 
-  const handleDisableClick = useCallback((source: string, model: string) => {
-    setDisableState(createDisableState(source, model, providerMap));
-  }, [providerMap]);
+  const handleDisableClick = useCallback(
+    (source: string, model: string) => {
+      setDisableState(createDisableState(source, model, providerMap));
+    },
+    [providerMap]
+  );
 
   const handleConfirmDisable = useCallback(async () => {
     if (!disableState) return;
@@ -69,13 +68,13 @@ export function useDisableModel(options: UseDisableModelOptions): UseDisableMode
       );
 
       if (!targetProvider) {
-        throw new Error(t('monitor.logs.disable_error_provider_not_found', { provider: providerName }));
+        throw new Error(
+          t('monitor.logs.disable_error_provider_not_found', { provider: providerName })
+        );
       }
 
       const originalModels = targetProvider.models || [];
-      const filteredModels = originalModels.filter(
-        (m) => m.alias !== model && m.name !== model
-      );
+      const filteredModels = originalModels.filter((m) => m.alias !== model && m.name !== model);
 
       if (filteredModels.length < originalModels.length) {
         await providersApi.patchOpenAIProviderByName(targetProvider.name, {
@@ -97,28 +96,31 @@ export function useDisableModel(options: UseDisableModelOptions): UseDisableMode
     setDisableState(null);
   }, []);
 
-  const isModelDisabled = useCallback((source: string, model: string): boolean => {
-    if (isDisabled(source, model)) {
-      return true;
-    }
-
-    if (providerModels) {
-      if (!source || !model) return false;
-
-      if (providerModels[source]) {
-        return !providerModels[source].has(model);
+  const isModelDisabled = useCallback(
+    (source: string, model: string): boolean => {
+      if (isDisabled(source, model)) {
+        return true;
       }
 
-      const entries = Object.entries(providerModels);
-      for (const [key, modelSet] of entries) {
-        if (source.startsWith(key) || key.startsWith(source)) {
-          return !modelSet.has(model);
+      if (providerModels) {
+        if (!source || !model) return false;
+
+        if (providerModels[source]) {
+          return !providerModels[source].has(model);
+        }
+
+        const entries = Object.entries(providerModels);
+        for (const [key, modelSet] of entries) {
+          if (source.startsWith(key) || key.startsWith(source)) {
+            return !modelSet.has(model);
+          }
         }
       }
-    }
 
-    return false;
-  }, [isDisabled, providerModels]);
+      return false;
+    },
+    [isDisabled, providerModels]
+  );
 
   return {
     disableState,

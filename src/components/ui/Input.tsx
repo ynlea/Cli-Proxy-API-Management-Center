@@ -4,21 +4,51 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   hint?: string;
   error?: string;
+  leftElement?: ReactNode;
   rightElement?: ReactNode;
 }
 
-export function Input({ label, hint, error, rightElement, className = '', id, ...rest }: InputProps) {
+export function Input({
+  label,
+  hint,
+  error,
+  leftElement,
+  rightElement,
+  className = '',
+  id,
+  ...rest
+}: InputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const hintId = hint ? `${inputId}-hint` : undefined;
   const errorId = error ? `${inputId}-error` : undefined;
-  const describedBy = [rest['aria-describedby'], errorId, hintId].filter(Boolean).join(' ') || undefined;
-  const inputStyle = rightElement ? { paddingRight: 56 } : undefined;
+  const describedBy =
+    [rest['aria-describedby'], errorId, hintId].filter(Boolean).join(' ') || undefined;
+  const inputStyle =
+    leftElement || rightElement
+      ? {
+          ...(leftElement ? { paddingLeft: 46 } : {}),
+          ...(rightElement ? { paddingRight: 56 } : {}),
+        }
+      : undefined;
 
   return (
     <div className="form-group">
       {label && <label htmlFor={inputId}>{label}</label>}
       <div style={{ position: 'relative' }}>
+        {leftElement && (
+          <div
+            style={{
+              position: 'absolute',
+              left: 12,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              pointerEvents: 'none',
+            }}
+          >
+            {leftElement}
+          </div>
+        )}
         <input
           id={inputId}
           className={`input ${className}`.trim()}
@@ -28,7 +58,9 @@ export function Input({ label, hint, error, rightElement, className = '', id, ..
           {...rest}
         />
         {rightElement && (
-          <div style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)' }}>
+          <div
+            style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)' }}
+          >
             {rightElement}
           </div>
         )}

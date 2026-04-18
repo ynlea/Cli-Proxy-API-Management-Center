@@ -29,7 +29,8 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
 
   // 按小时聚合数据
   const hourlyData = useMemo(() => {
-    if (!data?.apis) return { hours: [], models: [], modelData: {} as Record<string, number[]>, successRates: [] };
+    if (!data?.apis)
+      return { hours: [], models: [], modelData: {} as Record<string, number[]>, successRates: [] };
 
     const { start: cutoffTime, end: currentHour, bucketCount } = getHourlyRangeBounds(hourRange);
 
@@ -126,20 +127,22 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
     });
 
     // 成功率折线放在最前面
-    const datasets: any[] = [{
-      type: 'line' as const,
-      label: t('monitor.hourly.success_rate'),
-      data: hourlyData.successRates,
-      borderColor: '#75ff7a',
-      backgroundColor: '#75ff7a',
-      borderWidth: 2.5,
-      tension: 0.4,
-      yAxisID: 'y1',
-      stack: '',
-      pointRadius: 3,
-      pointBackgroundColor: '#75ff7a',
-      pointBorderColor: '#75ff7a',
-    }];
+    const datasets: any[] = [
+      {
+        type: 'line' as const,
+        label: t('monitor.hourly.success_rate'),
+        data: hourlyData.successRates,
+        borderColor: '#75ff7a',
+        backgroundColor: '#75ff7a',
+        borderWidth: 2.5,
+        tension: 0.4,
+        yAxisID: 'y1',
+        stack: '',
+        pointRadius: 3,
+        pointBackgroundColor: '#75ff7a',
+        pointBorderColor: '#75ff7a',
+      },
+    ];
 
     // 添加模型柱状图
     hourlyData.models.forEach((model, index) => {
@@ -160,127 +163,132 @@ export function HourlyModelChart({ data, loading, isDark }: HourlyModelChartProp
   }, [hourlyData, t]);
 
   // 图表配置
-  const chartOptions = useMemo(() => ({
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-      mode: 'index' as const,
-      intersect: false,
-    },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom' as const,
-        labels: {
-          color: isDark ? '#b7f6ff' : '#4b5875',
-          usePointStyle: true,
+  const chartOptions = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: 'index' as const,
+        intersect: false,
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom' as const,
+          labels: {
+            color: isDark ? '#b7f6ff' : '#4b5875',
+            usePointStyle: true,
+            padding: 12,
+            font: {
+              size: 11,
+            },
+            generateLabels: (chart: any) => {
+              return chart.data.datasets
+                .map((dataset: any, i: number) => {
+                  const isLine = dataset.type === 'line';
+                  // 柱状图数据全为0时不显示标签
+                  if (
+                    !isLine &&
+                    Array.isArray(dataset.data) &&
+                    dataset.data.every((v: number) => v === 0)
+                  ) {
+                    return null;
+                  }
+                  return {
+                    text: dataset.label,
+                    fillStyle: dataset.backgroundColor,
+                    strokeStyle: dataset.borderColor,
+                    lineWidth: 0,
+                    hidden: !chart.isDatasetVisible(i),
+                    datasetIndex: i,
+                    pointStyle: isLine ? 'circle' : 'rect',
+                  };
+                })
+                .filter(Boolean);
+            },
+          },
+        },
+        tooltip: {
+          backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
+          titleColor: isDark ? '#75ff7a' : '#0c1834',
+          bodyColor: isDark ? '#daf9ff' : '#2b3a58',
+          borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
+          borderWidth: 1,
           padding: 12,
-          font: {
-            size: 11,
-          },
-          generateLabels: (chart: any) => {
-            return chart.data.datasets
-              .map((dataset: any, i: number) => {
-                const isLine = dataset.type === 'line';
-                // 柱状图数据全为0时不显示标签
-                if (!isLine && Array.isArray(dataset.data) && dataset.data.every((v: number) => v === 0)) {
-                  return null;
-                }
-                return {
-                  text: dataset.label,
-                  fillStyle: dataset.backgroundColor,
-                  strokeStyle: dataset.borderColor,
-                  lineWidth: 0,
-                  hidden: !chart.isDatasetVisible(i),
-                  datasetIndex: i,
-                  pointStyle: isLine ? 'circle' : 'rect',
-                };
-              })
-              .filter(Boolean);
+          filter: (tooltipItem: any) => {
+            // 值为0的模型不在tooltip中显示
+            return tooltipItem.raw !== 0;
           },
         },
       },
-      tooltip: {
-        backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
-        titleColor: isDark ? '#75ff7a' : '#0c1834',
-        bodyColor: isDark ? '#daf9ff' : '#2b3a58',
-        borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
-        borderWidth: 1,
-        padding: 12,
-        filter: (tooltipItem: any) => {
-          // 值为0的模型不在tooltip中显示
-          return tooltipItem.raw !== 0;
+      scales: {
+        x: {
+          stacked: true,
+          grid: {
+            color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
+          },
+          ticks: {
+            color: isDark ? '#b7f6ff' : '#4b5875',
+            font: {
+              size: 11,
+            },
+          },
         },
-      },
-    },
-    scales: {
-      x: {
-        stacked: true,
-        grid: {
-          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
+        y: {
+          stacked: true,
+          position: 'left' as const,
+          grid: {
+            color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
+          },
+          ticks: {
+            color: isDark ? '#b7f6ff' : '#4b5875',
+            font: {
+              size: 11,
+            },
+          },
+          title: {
+            display: true,
+            text: t('monitor.hourly.requests'),
+            color: isDark ? '#b7f6ff' : '#4b5875',
+            font: {
+              size: 11,
+            },
+          },
         },
-        ticks: {
-          color: isDark ? '#b7f6ff' : '#4b5875',
-          font: {
-            size: 11,
+        y1: {
+          position: 'right' as const,
+          min: 0,
+          max: 100,
+          grid: {
+            drawOnChartArea: false,
+          },
+          ticks: {
+            color: isDark ? '#b7f6ff' : '#4b5875',
+            font: {
+              size: 11,
+            },
+            callback: (value: string | number) => `${value}%`,
+          },
+          title: {
+            display: true,
+            text: t('monitor.hourly.success_rate'),
+            color: isDark ? '#b7f6ff' : '#4b5875',
+            font: {
+              size: 11,
+            },
           },
         },
       },
-      y: {
-        stacked: true,
-        position: 'left' as const,
-        grid: {
-          color: isDark ? 'rgba(57, 213, 255, 0.12)' : 'rgba(12, 24, 52, 0.10)',
-        },
-        ticks: {
-          color: isDark ? '#b7f6ff' : '#4b5875',
-          font: {
-            size: 11,
-          },
-        },
-        title: {
-          display: true,
-          text: t('monitor.hourly.requests'),
-          color: isDark ? '#b7f6ff' : '#4b5875',
-          font: {
-            size: 11,
-          },
-        },
-      },
-      y1: {
-        position: 'right' as const,
-        min: 0,
-        max: 100,
-        grid: {
-          drawOnChartArea: false,
-        },
-        ticks: {
-          color: isDark ? '#b7f6ff' : '#4b5875',
-          font: {
-            size: 11,
-          },
-          callback: (value: string | number) => `${value}%`,
-        },
-        title: {
-          display: true,
-          text: t('monitor.hourly.success_rate'),
-          color: isDark ? '#b7f6ff' : '#4b5875',
-          font: {
-            size: 11,
-          },
-        },
-      },
-    },
-  }), [isDark, t]);
+    }),
+    [isDark, t]
+  );
 
   return (
     <div className={styles.chartCard}>
       <div className={styles.chartHeader}>
         <div>
           <h3 className={styles.chartTitle}>{t('monitor.hourly_model.title')}</h3>
-          <p className={styles.chartSubtitle}>
-            {hourRangeLabel}
-          </p>
+          <p className={styles.chartSubtitle}>{hourRangeLabel}</p>
         </div>
         <div className={styles.chartControls}>
           <button

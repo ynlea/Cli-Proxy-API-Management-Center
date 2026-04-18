@@ -256,6 +256,15 @@ export function IconEyeOff({ size = 20, ...props }: IconProps) {
   );
 }
 
+export function IconPencilLine({ size = 20, ...props }: IconProps) {
+  return (
+    <svg {...baseSvgProps} width={size} height={size} {...props}>
+      <path d="M12 20h9" />
+      <path d="m16.5 3.5 4 4L7 21l-4 1 1-4Z" />
+    </svg>
+  );
+}
+
 export function IconInbox({ size = 20, ...props }: IconProps) {
   return (
     <svg {...baseSvgProps} width={size} height={size} {...props}>

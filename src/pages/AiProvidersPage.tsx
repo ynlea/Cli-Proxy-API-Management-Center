@@ -11,10 +11,13 @@ import {
   useProviderStats,
 } from '@/components/providers';
 import { PageHero } from '@/components/layout/PageHero';
+import { SegmentedTabs, type SegmentedTabsItem } from '@/components/ui/SegmentedTabs';
 import {
+  isAmpcodeConfigured,
   withDisableAllModelsRule,
   withoutDisableAllModelsRule,
 } from '@/components/providers/utils';
+import { getAuthFileIcon, type ResolvedTheme } from '@/features/authFiles/constants';
 import { usePageTransitionLayer } from '@/components/common/PageTransitionLayer';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { ampcodeApi, providersApi } from '@/services/api';
@@ -35,7 +38,7 @@ export function AiProvidersPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showNotification, showConfirmation } = useNotificationStore();
-  const resolvedTheme = useThemeStore((state) => state.resolvedTheme);
+  const resolvedTheme: ResolvedTheme = useThemeStore((state) => state.resolvedTheme);
   const connectionStatus = useAuthStore((state) => state.connectionStatus);
 
   const config = useConfigStore((state) => state.config);
@@ -66,6 +69,8 @@ export function AiProvidersPage() {
 
   const [configSwitchingKey, setConfigSwitchingKey] = useState<string | null>(null);
   const [activeProviderId, setActiveProviderId] = useState<ProviderPanelId>('provider-gemini');
+  const [hasResolvedInitialProvider, setHasResolvedInitialProvider] = useState(false);
+  const [hasManualProviderSelection, setHasManualProviderSelection] = useState(false);
 
   const disableControls = connectionStatus !== 'connected';
   const isSwitching = Boolean(configSwitchingKey);
@@ -229,11 +234,7 @@ export function AiProvidersPage() {
     }
 
     const source =
-      provider === 'codex'
-        ? codexConfigs
-        : provider === 'claude'
-          ? claudeConfigs
-          : vertexConfigs;
+      provider === 'codex' ? codexConfigs : provider === 'claude' ? claudeConfigs : vertexConfigs;
     const current = source[index];
     if (!current) return;
 
@@ -299,7 +300,9 @@ export function AiProvidersPage() {
     const entry = source[index];
     if (!entry) return;
     showConfirmation({
-      title: t(`ai_providers.${type}_delete_title`, { defaultValue: `Delete ${type === 'codex' ? 'Codex' : 'Claude'} Config` }),
+      title: t(`ai_providers.${type}_delete_title`, {
+        defaultValue: `Delete ${type === 'codex' ? 'Codex' : 'Claude'} Config`,
+      }),
       message: t(`ai_providers.${type}_delete_confirm`),
       variant: 'danger',
       confirmText: t('common.confirm'),
@@ -380,31 +383,37 @@ export function AiProvidersPage() {
     () => [
       {
         id: 'provider-gemini' as const,
+        providerType: 'gemini',
         label: t('ai_providers.gemini_title'),
         count: geminiKeys.length,
       },
       {
         id: 'provider-codex' as const,
+        providerType: 'codex',
         label: t('ai_providers.codex_title'),
         count: codexConfigs.length,
       },
       {
         id: 'provider-claude' as const,
+        providerType: 'claude',
         label: t('ai_providers.claude_title'),
         count: claudeConfigs.length,
       },
       {
         id: 'provider-vertex' as const,
+        providerType: 'vertex',
         label: t('ai_providers.vertex_title'),
         count: vertexConfigs.length,
       },
       {
         id: 'provider-ampcode' as const,
+        providerType: 'ampcode',
         label: t('ai_providers.ampcode_title'),
-        count: config?.ampcode ? 1 : 0,
+        count: isAmpcodeConfigured(config?.ampcode) ? 1 : 0,
       },
       {
         id: 'provider-openai' as const,
+        providerType: 'openai',
         label: t('ai_providers.openai_title'),
         count: openaiProviders.length,
       },
@@ -419,6 +428,38 @@ export function AiProvidersPage() {
       vertexConfigs.length,
     ]
   );
+  const tabItems = useMemo<ReadonlyArray<SegmentedTabsItem<ProviderPanelId>>>(
+    () =>
+      providerOverview.map((item) => {
+        const iconSrc = getAuthFileIcon(item.providerType, resolvedTheme);
+
+        return {
+          value: item.id,
+          label: item.label,
+          leading: iconSrc ? <img src={iconSrc} alt="" /> : null,
+          trailing: <span className={styles.providerTabCount}>{item.count}</span>,
+        };
+      }),
+    [providerOverview, resolvedTheme]
+  );
+  const preferredInitialProvider = useMemo<ProviderPanelId>(
+    () => providerOverview.find((item) => item.count > 0)?.id ?? providerOverview[0]?.id ?? 'provider-gemini',
+    [providerOverview]
+  );
+
+  useEffect(() => {
+    if (loading || hasResolvedInitialProvider || hasManualProviderSelection) {
+      return;
+    }
+
+    setActiveProviderId(preferredInitialProvider);
+    setHasResolvedInitialProvider(true);
+  }, [hasManualProviderSelection, hasResolvedInitialProvider, loading, preferredInitialProvider]);
+
+  const handleProviderTabChange = useCallback((nextProviderId: ProviderPanelId) => {
+    setHasManualProviderSelection(true);
+    setActiveProviderId(nextProviderId);
+  }, []);
 
   const renderActiveProviderSection = () => {
     if (activeProviderId === 'provider-gemini') {
@@ -520,22 +561,13 @@ export function AiProvidersPage() {
   return (
     <div className={styles.container}>
       <PageHero title={t('ai_providers.title')}>
-        <div className={styles.overviewStrip}>
-          {providerOverview.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`${styles.overviewCard} ${
-                activeProviderId === item.id ? styles.overviewCardActive : ''
-              }`}
-              onClick={() => setActiveProviderId(item.id)}
-              aria-pressed={activeProviderId === item.id}
-            >
-              <span className={styles.overviewLabel}>{item.label}</span>
-              <span className={styles.overviewCount}>{item.count}</span>
-            </button>
-          ))}
-        </div>
+        <SegmentedTabs
+          items={tabItems}
+          value={activeProviderId}
+          onChange={handleProviderTabChange}
+          variant="card"
+          ariaLabel={t('ai_providers.title')}
+        />
       </PageHero>
 
       <div className={styles.content}>

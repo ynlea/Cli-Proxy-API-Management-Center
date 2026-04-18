@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import {
   buildHourlyTokenBreakdown,
   buildDailyTokenBreakdown,
-  type TokenCategory
+  type TokenCategory,
 } from '@/utils/usage';
 import { buildChartOptions, getHourChartMinWidth } from '@/utils/usage/chartConfig';
 import type { UsagePayload } from './hooks/useUsageData';
@@ -16,7 +16,7 @@ const TOKEN_COLORS: Record<TokenCategory, { border: string; bg: string }> = {
   input: { border: '#39d5ff', bg: 'rgba(57, 213, 255, 0.22)' },
   output: { border: '#75ff7a', bg: 'rgba(117, 255, 122, 0.22)' },
   cached: { border: '#ffe066', bg: 'rgba(255, 224, 102, 0.22)' },
-  reasoning: { border: '#ff5de4', bg: 'rgba(255, 93, 228, 0.2)' }
+  reasoning: { border: '#ff5de4', bg: 'rgba(255, 93, 228, 0.2)' },
 };
 
 const CATEGORIES: TokenCategory[] = ['input', 'output', 'cached', 'reasoning'];
@@ -34,7 +34,7 @@ export function TokenBreakdownChart({
   loading,
   isDark,
   isMobile,
-  hourWindowHours
+  hourWindowHours,
 }: TokenBreakdownChartProps) {
   const { t } = useTranslation();
   const [period, setPeriod] = useState<'hour' | 'day'>('hour');
@@ -48,7 +48,7 @@ export function TokenBreakdownChart({
       input: t('usage_stats.input_tokens'),
       output: t('usage_stats.output_tokens'),
       cached: t('usage_stats.cached_tokens'),
-      reasoning: t('usage_stats.reasoning_tokens')
+      reasoning: t('usage_stats.reasoning_tokens'),
     };
 
     const data = {
@@ -61,8 +61,8 @@ export function TokenBreakdownChart({
         pointBackgroundColor: TOKEN_COLORS[cat].border,
         pointBorderColor: TOKEN_COLORS[cat].border,
         fill: true,
-        tension: 0.35
-      }))
+        tension: 0.35,
+      })),
     };
 
     const baseOptions = buildChartOptions({ period, labels: series.labels, isDark, isMobile });
@@ -72,13 +72,13 @@ export function TokenBreakdownChart({
         ...baseOptions.scales,
         y: {
           ...baseOptions.scales?.y,
-          stacked: true
+          stacked: true,
         },
         x: {
           ...baseOptions.scales?.x,
-          stacked: true
-        }
-      }
+          stacked: true,
+        },
+      },
     };
 
     return { chartData: data, chartOptions: options };
@@ -117,7 +117,10 @@ export function TokenBreakdownChart({
                 className={styles.legendItem}
                 title={dataset.label}
               >
-                <span className={styles.legendDot} style={{ backgroundColor: dataset.borderColor }} />
+                <span
+                  className={styles.legendDot}
+                  style={{ backgroundColor: dataset.borderColor }}
+                />
                 <span className={styles.legendLabel}>{dataset.label}</span>
               </div>
             ))}

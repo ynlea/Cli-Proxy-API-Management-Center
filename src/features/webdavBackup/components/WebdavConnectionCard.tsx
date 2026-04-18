@@ -25,12 +25,9 @@ export function WebdavConnectionCard() {
     setLocalConfig(connection);
   }, [connection]);
 
-  const handleChange = useCallback(
-    (field: string, value: string) => {
-      setLocalConfig((prev) => ({ ...prev, [field]: value }));
-    },
-    []
-  );
+  const handleChange = useCallback((field: string, value: string) => {
+    setLocalConfig((prev) => ({ ...prev, [field]: value }));
+  }, []);
 
   const handleTest = useCallback(async () => {
     setTesting(true);
@@ -85,13 +82,18 @@ export function WebdavConnectionCard() {
   const titleNode = (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
       {t('backup.connection_title')}
-      <span className={`status-badge ${statusBadge}`} style={{ marginBottom: 0 }}>{statusText}</span>
+      <span className={`status-badge ${statusBadge}`} style={{ marginBottom: 0 }}>
+        {statusText}
+      </span>
     </span>
   );
 
   return (
     <Card title={titleNode}>
-      <div className="card-body webdav-conn-form" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div
+        className="card-body webdav-conn-form"
+        style={{ display: 'flex', flexDirection: 'column', gap: 12 }}
+      >
         <style>{`.webdav-conn-form .form-group { margin-bottom: 0; }`}</style>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <Input

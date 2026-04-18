@@ -42,7 +42,6 @@
   padding: 12px 16px;
   background: var(--surface-raised);
   border: 1px solid var(--floating-border);
-  border-top: 6px solid var(--surface-brand);
   border-radius: var(--surface-radius, #{$radius-lg});
   box-shadow: none;
   position: sticky;
@@ -71,16 +70,21 @@
     flex: 0 1 auto;
 
     .brand-logo {
-      height: 42px;
-      width: 42px;
+      height: 60px;
+      width: 60px;
       display: block;
       object-fit: contain;
       flex-shrink: 0;
-      border-radius: 12px;
+      border-radius: 16px;
       border: none;
       background: transparent;
       padding: 0;
       image-rendering: auto;
+
+      @media (max-width: $breakpoint-mobile) {
+        height: 52px;
+        width: 52px;
+      }
     }
   }
 
@@ -133,7 +137,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    min-height: 42px;
+    min-height: 60px;
     gap: 3px;
     font-family: var(--font-display);
     font-weight: 700;
@@ -197,6 +201,7 @@
       min-width: 0;
       margin-right: 0;
       font-size: 11px;
+      min-height: 52px;
 
       .brand-full,
       .brand-abbr {

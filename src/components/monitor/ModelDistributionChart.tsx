@@ -27,13 +27,17 @@ const COLORS = [
 
 type ViewMode = 'request' | 'token';
 
-export function ModelDistributionChart({ data, loading, isDark, timeRange }: ModelDistributionChartProps) {
+export function ModelDistributionChart({
+  data,
+  loading,
+  isDark,
+  timeRange,
+}: ModelDistributionChartProps) {
   const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>('request');
 
-  const timeRangeLabel = timeRange === 1
-    ? t('monitor.today')
-    : t('monitor.last_n_days', { n: timeRange });
+  const timeRangeLabel =
+    timeRange === 1 ? t('monitor.today') : t('monitor.last_n_days', { n: timeRange });
 
   // 计算模型分布数据
   const distributionData = useMemo(() => {
@@ -96,34 +100,37 @@ export function ModelDistributionChart({ data, loading, isDark, timeRange }: Mod
   }, [distributionData, viewMode, isDark]);
 
   // 图表配置
-  const chartOptions = useMemo(() => ({
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '65%',
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
-        titleColor: isDark ? '#75ff7a' : '#0c1834',
-        bodyColor: isDark ? '#daf9ff' : '#2b3a58',
-        borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
-        borderWidth: 1,
-        padding: 12,
-        callbacks: {
-          label: (context: any) => {
-            const value = context.raw;
-            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-            if (viewMode === 'request') {
-              return `${value.toLocaleString()} ${t('monitor.requests')} (${percentage}%)`;
-            }
-            return `${value.toLocaleString()} tokens (${percentage}%)`;
+  const chartOptions = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          backgroundColor: isDark ? 'rgba(4, 8, 18, 0.96)' : 'rgba(248, 251, 255, 0.98)',
+          titleColor: isDark ? '#75ff7a' : '#0c1834',
+          bodyColor: isDark ? '#daf9ff' : '#2b3a58',
+          borderColor: isDark ? 'rgba(57, 213, 255, 0.24)' : 'rgba(74, 123, 255, 0.18)',
+          borderWidth: 1,
+          padding: 12,
+          callbacks: {
+            label: (context: any) => {
+              const value = context.raw;
+              const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+              if (viewMode === 'request') {
+                return `${value.toLocaleString()} ${t('monitor.requests')} (${percentage}%)`;
+              }
+              return `${value.toLocaleString()} tokens (${percentage}%)`;
+            },
           },
         },
       },
-    },
-  }), [isDark, total, viewMode, t]);
+    }),
+    [isDark, total, viewMode, t]
+  );
 
   // 格式化数值
   const formatValue = (value: number) => {
@@ -142,7 +149,10 @@ export function ModelDistributionChart({ data, loading, isDark, timeRange }: Mod
         <div>
           <h3 className={styles.chartTitle}>{t('monitor.distribution.title')}</h3>
           <p className={styles.chartSubtitle}>
-            {timeRangeLabel} · {viewMode === 'request' ? t('monitor.distribution.by_requests') : t('monitor.distribution.by_tokens')}
+            {timeRangeLabel} ·{' '}
+            {viewMode === 'request'
+              ? t('monitor.distribution.by_requests')
+              : t('monitor.distribution.by_tokens')}
             {' · Top 10'}
           </p>
         </div>
@@ -174,7 +184,9 @@ export function ModelDistributionChart({ data, loading, isDark, timeRange }: Mod
             <Doughnut data={chartData} options={chartOptions} />
             <div className={styles.donutCenter}>
               <div className={styles.donutLabel}>
-                {viewMode === 'request' ? t('monitor.distribution.request_share') : t('monitor.distribution.token_share')}
+                {viewMode === 'request'
+                  ? t('monitor.distribution.request_share')
+                  : t('monitor.distribution.token_share')}
               </div>
             </div>
           </div>
@@ -184,10 +196,7 @@ export function ModelDistributionChart({ data, loading, isDark, timeRange }: Mod
               const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
               return (
                 <div key={item.name} className={styles.legendItem}>
-                  <span
-                    className={styles.legendDot}
-                    style={{ backgroundColor: COLORS[index] }}
-                  />
+                  <span className={styles.legendDot} style={{ backgroundColor: COLORS[index] }} />
                   <span className={styles.legendName} title={item.name}>
                     {item.name}
                   </span>
