@@ -10,7 +10,7 @@ import { useAuthStore, useLanguageStore, useNotificationStore } from '@/stores';
 import { detectApiBaseFromLocation, normalizeApiBase } from '@/utils/connection';
 import { LANGUAGE_LABEL_KEYS, LANGUAGE_ORDER } from '@/utils/constants';
 import { isSupportedLanguage } from '@/utils/language';
-import { INLINE_LOGO_JPEG } from '@/assets/logoInline';
+import { INLINE_BRAND_ICON } from '@/assets/brandIcon';
 import type { ApiError } from '@/types';
 import styles from './LoginPage.module.scss';
 
@@ -95,7 +95,7 @@ export function LoginPage() {
     () =>
       LANGUAGE_ORDER.map((lang) => ({
         value: lang,
-        label: t(LANGUAGE_LABEL_KEYS[lang])
+        label: t(LANGUAGE_LABEL_KEYS[lang]),
       })),
     [t]
   );
@@ -149,7 +149,7 @@ export function LoginPage() {
       await login({
         apiBase: baseToUse,
         managementKey: managementKey.trim(),
-        rememberPassword
+        rememberPassword,
       });
       showNotification(t('common.connected_status'), 'success');
       navigate('/', { replace: true });
@@ -160,7 +160,16 @@ export function LoginPage() {
     } finally {
       setLoading(false);
     }
-  }, [apiBase, detectedBase, login, managementKey, navigate, rememberPassword, showNotification, t]);
+  }, [
+    apiBase,
+    detectedBase,
+    login,
+    managementKey,
+    navigate,
+    rememberPassword,
+    showNotification,
+    t,
+  ]);
 
   const handleSubmitKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -196,7 +205,7 @@ export function LoginPage() {
         {showSplash ? (
           /* 启动动画 */
           <div className={styles.splashContent}>
-            <img src={INLINE_LOGO_JPEG} alt="CPAMC" className={styles.splashLogo} />
+            <img src={INLINE_BRAND_ICON} alt="CPAMC icon" className={styles.splashLogo} />
             <h1 className={styles.splashTitle}>{t('splash.title')}</h1>
             <p className={styles.splashSubtitle}>{t('splash.subtitle')}</p>
             <div className={styles.splashLoader}>
@@ -207,7 +216,7 @@ export function LoginPage() {
           /* 登录表单 */
           <div className={styles.formContent}>
             {/* Logo */}
-            <img src={INLINE_LOGO_JPEG} alt="Logo" className={styles.logo} />
+            <img src={INLINE_BRAND_ICON} alt="CPAMC icon" className={styles.logo} />
 
             {/* 登录表单卡片 */}
             <div className={styles.loginCard}>

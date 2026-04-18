@@ -17,7 +17,7 @@ import { configApi, versionApi } from '@/services/api';
 import { apiKeysApi } from '@/services/api/apiKeys';
 import { classifyModels } from '@/utils/models';
 import { STORAGE_KEY_AUTH } from '@/utils/constants';
-import { INLINE_LOGO_JPEG } from '@/assets/logoInline';
+import { INLINE_BRAND_ICON } from '@/assets/brandIcon';
 import iconGemini from '@/assets/icons/gemini.svg';
 import iconClaude from '@/assets/icons/claude.svg';
 import iconOpenaiLight from '@/assets/icons/openai-light.svg';
@@ -344,7 +344,14 @@ export function SystemPage() {
     <div className={styles.container}>
       <PageHero
         title={t('system_info.title')}
-        description={t('system_info.about_title')}
+        description={
+          <span className={styles.heroDescription}>
+            <span className={styles.heroLogoBadge}>
+              <img src={INLINE_BRAND_ICON} alt="" aria-hidden="true" className={styles.heroLogo} />
+            </span>
+            <span className={styles.heroDescriptionText}>{t('system_info.about_title')}</span>
+          </span>
+        }
         meta={
           <div className={styles.heroMetaGrid}>
             <button
@@ -379,7 +386,9 @@ export function SystemPage() {
             </div>
             <div className={styles.heroMetricCard}>
               <div className={styles.heroMetricLabel}>{t('connection.status')}</div>
-              <div className={styles.heroMetricValue}>{t(`common.${auth.connectionStatus}_status`)}</div>
+              <div className={styles.heroMetricValue}>
+                {t(`common.${auth.connectionStatus}_status`)}
+              </div>
               <div className={styles.heroMetricSub}>{auth.apiBase || '-'}</div>
             </div>
           </div>
@@ -387,56 +396,6 @@ export function SystemPage() {
       />
       <div className={styles.contentGrid}>
         <div className={styles.mainColumn}>
-          <Card className={styles.aboutCard}>
-          <div className={styles.aboutHeader}>
-            <img src={INLINE_LOGO_JPEG} alt="CPAMC" className={styles.aboutLogo} />
-            <div className={styles.aboutTitle}>{t('system_info.about_title')}</div>
-          </div>
-
-          <div className={styles.aboutInfoGrid}>
-            <button
-              type="button"
-              className={`${styles.infoTile} ${styles.tapTile}`}
-              onClick={handleInfoVersionTap}
-            >
-              <div className={styles.tileHeader}>
-                <div className={styles.tileLabel}>{t('footer.version')}</div>
-              </div>
-              <div className={styles.tileValue}>{appVersion}</div>
-            </button>
-
-            <div className={styles.infoTile}>
-              <div className={styles.tileHeader}>
-                <div className={styles.tileLabel}>{t('footer.api_version')}</div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className={styles.tileAction}
-                  onClick={() => void handleVersionCheck()}
-                  loading={checkingVersion}
-                  title={t('system_info.version_check_button')}
-                  aria-label={t('system_info.version_check_button')}
-                >
-                  {t('system_info.version_check_button')}
-                </Button>
-              </div>
-              <div className={styles.tileValue}>{apiVersion}</div>
-            </div>
-
-            <div className={styles.infoTile}>
-              <div className={styles.tileLabel}>{t('footer.build_date')}</div>
-              <div className={styles.tileValue}>{buildTime}</div>
-            </div>
-
-            <div className={styles.infoTile}>
-              <div className={styles.tileLabel}>{t('connection.status')}</div>
-              <div className={styles.tileValue}>{t(`common.${auth.connectionStatus}_status`)}</div>
-              <div className={styles.tileSub}>{auth.apiBase || '-'}</div>
-            </div>
-          </div>
-          </Card>
-
           <Card
             title={t('system_info.models_title')}
             extra={
@@ -482,7 +441,9 @@ export function SystemPage() {
                             title={model.description || ''}
                           >
                             <span className={styles.modelName}>{model.name}</span>
-                            {model.alias && <span className={styles.modelAlias}>{model.alias}</span>}
+                            {model.alias && (
+                              <span className={styles.modelAlias}>{model.alias}</span>
+                            )}
                           </span>
                         ))}
                       </div>

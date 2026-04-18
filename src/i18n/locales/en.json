@@ -152,7 +152,10 @@
     "caring_afternoon": "Steady progress — you're doing great.",
     "caring_evening": "Wrapping up nicely — almost there.",
     "caring_night": "Burning the midnight oil? Don't forget to rest.",
-    "system_overview": "System Overview"
+    "system_overview": "System Overview",
+    "recent_7d_usage": "Recent 7-Day Usage",
+    "peak_requests": "Peak Requests",
+    "active_days": "Active Days"
   },
   "basic_settings": {
     "title": "Basic Settings",

@@ -135,9 +135,9 @@ export function StatCards({ usage, loading, modelPrices, nowMs, sparklines }: St
       key: 'requests',
       label: t('usage_stats.total_requests'),
       icon: <IconSatellite size={16} />,
-      accent: '#3b82f6',
-      accentSoft: 'rgba(59, 130, 246, 0.18)',
-      accentBorder: 'rgba(59, 130, 246, 0.35)',
+      accent: '#7a90e8',
+      accentSoft: 'rgba(122, 144, 232, 0.22)',
+      accentBorder: 'rgba(122, 144, 232, 0.38)',
       value: loading ? '-' : (usage?.total_requests ?? 0).toLocaleString(),
       meta: (
         <>
@@ -163,9 +163,9 @@ export function StatCards({ usage, loading, modelPrices, nowMs, sparklines }: St
       key: 'tokens',
       label: t('usage_stats.total_tokens'),
       icon: <IconDiamond size={16} />,
-      accent: '#8b5cf6',
-      accentSoft: 'rgba(139, 92, 246, 0.18)',
-      accentBorder: 'rgba(139, 92, 246, 0.35)',
+      accent: '#d97db1',
+      accentSoft: 'rgba(217, 125, 177, 0.2)',
+      accentBorder: 'rgba(217, 125, 177, 0.34)',
       value: loading ? '-' : formatCompactNumber(usage?.total_tokens ?? 0),
       meta: (
         <>
@@ -185,9 +185,9 @@ export function StatCards({ usage, loading, modelPrices, nowMs, sparklines }: St
       key: 'rpm',
       label: t('usage_stats.rpm_30m'),
       icon: <IconTimer size={16} />,
-      accent: '#22c55e',
-      accentSoft: 'rgba(34, 197, 94, 0.18)',
-      accentBorder: 'rgba(34, 197, 94, 0.32)',
+      accent: '#77bfae',
+      accentSoft: 'rgba(119, 191, 174, 0.2)',
+      accentBorder: 'rgba(119, 191, 174, 0.34)',
       value: loading ? '-' : formatPerMinuteValue(rateStats.rpm),
       meta: (
         <span className={styles.statMetaItem}>
@@ -201,9 +201,9 @@ export function StatCards({ usage, loading, modelPrices, nowMs, sparklines }: St
       key: 'tpm',
       label: t('usage_stats.tpm_30m'),
       icon: <IconTrendingUp size={16} />,
-      accent: '#f97316',
-      accentSoft: 'rgba(249, 115, 22, 0.18)',
-      accentBorder: 'rgba(249, 115, 22, 0.32)',
+      accent: '#ee8fa4',
+      accentSoft: 'rgba(238, 143, 164, 0.2)',
+      accentBorder: 'rgba(238, 143, 164, 0.34)',
       value: loading ? '-' : formatPerMinuteValue(rateStats.tpm),
       meta: (
         <span className={styles.statMetaItem}>
@@ -217,9 +217,9 @@ export function StatCards({ usage, loading, modelPrices, nowMs, sparklines }: St
       key: 'cost',
       label: t('usage_stats.total_cost'),
       icon: <IconDollarSign size={16} />,
-      accent: '#f59e0b',
-      accentSoft: 'rgba(245, 158, 11, 0.18)',
-      accentBorder: 'rgba(245, 158, 11, 0.32)',
+      accent: '#d7a06c',
+      accentSoft: 'rgba(215, 160, 108, 0.2)',
+      accentBorder: 'rgba(215, 160, 108, 0.34)',
       value: loading ? '-' : hasPrices ? formatUsd(totalCost) : '--',
       meta: (
         <>

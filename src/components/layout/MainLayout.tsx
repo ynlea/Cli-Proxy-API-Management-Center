@@ -24,7 +24,7 @@ import {
   IconSidebarSystem,
   IconSidebarUsage,
 } from '@/components/ui/icons';
-import { INLINE_LOGO_JPEG } from '@/assets/logoInline';
+import { INLINE_BRAND_ICON } from '@/assets/brandIcon';
 import {
   useAuthStore,
   useConfigStore,
@@ -183,44 +183,44 @@ const THEME_CARDS: Array<{
     key: 'auto',
     labelKey: 'theme.auto',
     colors: {
-      bg: 'linear-gradient(90deg, #dbeafe 0 50%, #172c55 50% 100%)',
-      card: 'linear-gradient(90deg, #2563eb 0 50%, #1d4ed8 50% 100%)',
-      border: '#f59e0b',
-      text: '#eef5ff',
-      textMuted: 'linear-gradient(90deg, #ffedd5 0 50%, #93c5fd 50% 100%)',
+      bg: 'linear-gradient(90deg, #fbfdff 0 50%, #242b38 50% 100%)',
+      card: 'linear-gradient(90deg, #dfe7fd 0 50%, #313d58 50% 100%)',
+      border: '#8ea4ea',
+      text: '#49566e',
+      textMuted: 'linear-gradient(90deg, #bee1e6 0 50%, #8799cc 50% 100%)',
     },
   },
   {
     key: 'white',
     labelKey: 'theme.white',
     colors: {
-      bg: '#f8e3d1',
-      card: '#c57a3c',
-      border: '#4f74ad',
-      text: '#fff8f0',
-      textMuted: '#ffddb8',
+      bg: '#fffaf7',
+      card: '#f8d8e6',
+      border: '#d6e0fb',
+      text: '#5f5567',
+      textMuted: '#e5efec',
     },
   },
   {
     key: 'light',
     labelKey: 'theme.light',
     colors: {
-      bg: '#dbeafe',
-      card: '#2563eb',
-      border: '#f97316',
-      text: '#eff6ff',
-      textMuted: '#ffedd5',
+      bg: '#fbfdff',
+      card: '#dfe7fd',
+      border: '#8ea4ea',
+      text: '#49566e',
+      textMuted: '#bee1e6',
     },
   },
   {
     key: 'dark',
     labelKey: 'theme.dark',
     colors: {
-      bg: '#172c55',
-      card: '#1d4ed8',
-      border: '#fbbf24',
-      text: '#eef5ff',
-      textMuted: '#93c5fd',
+      bg: '#242b38',
+      card: '#313d58',
+      border: '#8799cc',
+      text: '#edf2ff',
+      textMuted: '#7fa7b5',
     },
   },
 ];
@@ -465,6 +465,13 @@ export function MainLayout() {
     { path: '/monitor', label: t('nav.monitor'), icon: sidebarIcons.monitor },
     { path: '/backup', label: t('nav.backup'), icon: sidebarIcons.backup },
   ];
+  const connectionLabel = t(
+    connectionStatus === 'connected'
+      ? 'common.connected_status'
+      : connectionStatus === 'connecting'
+        ? 'common.connecting_status'
+        : 'common.disconnected_status'
+  );
   const navOrder = navItems.map((item) => item.path);
   const getRouteOrder = (pathname: string) => {
     const trimmedPath =
@@ -556,7 +563,7 @@ export function MainLayout() {
           >
             {sidebarCollapsed ? headerIcons.chevronRight : headerIcons.chevronLeft}
           </button>
-          <img src={INLINE_LOGO_JPEG} alt="CPAMC logo" className="brand-logo" />
+          <img src={INLINE_BRAND_ICON} alt="CPAMC icon" className="brand-logo" />
           <div
             className={`brand-header ${brandExpanded ? 'expanded' : 'collapsed'}`}
             onClick={handleBrandClick}
@@ -568,17 +575,14 @@ export function MainLayout() {
         </div>
 
         <div className="right">
-          <div className="connection">
-            <span className={`status-badge ${statusClass}`}>
-              {t(
-                connectionStatus === 'connected'
-                  ? 'common.connected_status'
-                  : connectionStatus === 'connecting'
-                    ? 'common.connecting_status'
-                    : 'common.disconnected_status'
-              )}
-            </span>
-            <span className="base">{apiBase || '-'}</span>
+          <div className="header-status-rail" aria-label={t('dashboard.system_overview')}>
+            <div className="header-status-chip" title={apiBase || '-'}>
+              <div className="header-status-copy">
+                <span className="header-status-label">{t('common.base_url')}</span>
+                <span className="header-status-value">{apiBase || '-'}</span>
+              </div>
+              <span className={`status-badge ${statusClass}`}>{connectionLabel}</span>
+            </div>
           </div>
 
           <div className="header-actions">

@@ -152,7 +152,10 @@
     "caring_afternoon": "稳步推进中，继续加油。",
     "caring_evening": "今天辛苦了，收尾工作做好哦。",
     "caring_night": "夜深了，别忘了早些休息。",
-    "system_overview": "系统概览"
+    "system_overview": "系统概览",
+    "recent_7d_usage": "最近 7 天用量",
+    "peak_requests": "峰值请求数",
+    "active_days": "活跃天数"
   },
   "basic_settings": {
     "title": "基础设置",

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { UsageData } from '@/pages/MonitorPage';
 import styles from '@/pages/MonitorPage.module.scss';
@@ -93,7 +93,7 @@ export function KpiCards({ data, loading, timeRange: _timeRange }: KpiCardsProps
       const timeSpanDays = Math.max(timeSpanMinutes / (60 * 24), 1);
 
       avgTpm = Math.round(totalTokens / timeSpanMinutes);
-      avgRpm = Math.round(totalRequests / timeSpanMinutes * 10) / 10;
+      avgRpm = Math.round((totalRequests / timeSpanMinutes) * 10) / 10;
       avgRpd = Math.round(totalRequests / timeSpanDays);
     }
 
@@ -116,7 +116,9 @@ export function KpiCards({ data, loading, timeRange: _timeRange }: KpiCardsProps
   const kpiCards = [
     {
       key: 'requests',
-      className: '',
+      accent: '#7a90e8',
+      accentSoft: 'rgba(122, 144, 232, 0.22)',
+      accentBorder: 'rgba(122, 144, 232, 0.38)',
       label: t('monitor.kpi.requests'),
       value: loading ? '--' : formatNumber(stats.totalRequests),
       meta: (
@@ -135,13 +137,19 @@ export function KpiCards({ data, loading, timeRange: _timeRange }: KpiCardsProps
     },
     {
       key: 'tokens',
-      className: styles.green,
+      accent: '#d97db1',
+      accentSoft: 'rgba(217, 125, 177, 0.2)',
+      accentBorder: 'rgba(217, 125, 177, 0.34)',
       label: t('monitor.kpi.tokens'),
       value: loading ? '--' : formatNumber(stats.totalTokens),
       meta: (
         <>
-          <span>{t('monitor.kpi.input')}: {loading ? '--' : formatNumber(stats.inputTokens)}</span>
-          <span>{t('monitor.kpi.output')}: {loading ? '--' : formatNumber(stats.outputTokens)}</span>
+          <span>
+            {t('monitor.kpi.input')}: {loading ? '--' : formatNumber(stats.inputTokens)}
+          </span>
+          <span>
+            {t('monitor.kpi.output')}: {loading ? '--' : formatNumber(stats.outputTokens)}
+          </span>
           {(stats.reasoningTokens > 0 || stats.cachedTokens > 0) && (
             <span>
               {t('monitor.kpi.cached')}: {loading ? '--' : formatNumber(stats.cachedTokens)}
@@ -152,14 +160,20 @@ export function KpiCards({ data, loading, timeRange: _timeRange }: KpiCardsProps
     },
     {
       key: 'throughput',
-      className: styles.purple,
+      accent: '#77bfae',
+      accentSoft: 'rgba(119, 191, 174, 0.2)',
+      accentBorder: 'rgba(119, 191, 174, 0.34)',
       label: t('monitor.kpi.avg_tpm'),
       value: loading ? '--' : formatNumber(stats.avgTpm),
       meta: (
         <>
           <span>{t('monitor.kpi.tokens_per_minute')}</span>
-          <span>{t('monitor.kpi.avg_rpm')}: {loading ? '--' : stats.avgRpm.toFixed(1)}</span>
-          <span>{t('monitor.kpi.avg_rpd')}: {loading ? '--' : formatNumber(stats.avgRpd)}</span>
+          <span>
+            {t('monitor.kpi.avg_rpm')}: {loading ? '--' : stats.avgRpm.toFixed(1)}
+          </span>
+          <span>
+            {t('monitor.kpi.avg_rpd')}: {loading ? '--' : formatNumber(stats.avgRpd)}
+          </span>
         </>
       ),
     },
@@ -170,7 +184,14 @@ export function KpiCards({ data, loading, timeRange: _timeRange }: KpiCardsProps
       {kpiCards.map((card) => (
         <div
           key={card.key}
-          className={`${styles.kpiCard} ${card.className}`.trim()}
+          className={styles.kpiCard}
+          style={
+            {
+              '--accent': card.accent,
+              '--accent-soft': card.accentSoft,
+              '--accent-border': card.accentBorder,
+            } as CSSProperties
+          }
         >
           <div className={styles.kpiTitle}>
             <span className={styles.kpiLabel}>{card.label}</span>
