@@ -31,12 +31,11 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        rgba(255, 255, 255, 0.015) 0 1px,
-        transparent 1px 4px
-      );
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, white 18%, transparent),
+      transparent 16%
+    );
     pointer-events: none;
     z-index: 0;
   }
@@ -57,11 +56,22 @@
   min-height: var(--header-height);
   padding: 12px 16px;
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-      color-mix(in srgb, var(--floating-surface) 88%, var(--bg-primary));
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--accent-sky) 12%, transparent),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-highlight) 32%, transparent),
+      transparent 72%
+    ),
+    color-mix(in srgb, var(--floating-surface) 88%, var(--bg-primary));
   border: 1px solid var(--floating-border);
   border-radius: var(--surface-radius, #{$radius-lg});
   box-shadow: var(--floating-shadow);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
   position: sticky;
   top: var(--header-offset);
   z-index: 20;
@@ -74,7 +84,12 @@
     right: 0;
     top: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--accent-red), var(--accent-sky), var(--primary-color));
+    background: linear-gradient(
+      90deg,
+      var(--accent-earth),
+      var(--accent-sky),
+      var(--primary-color)
+    );
     opacity: 0.78;
     pointer-events: none;
   }
@@ -107,9 +122,15 @@
       border-radius: var(--surface-radius-sm, #{$radius-md});
       border: 1px solid var(--border-primary);
       box-shadow: var(--shadow);
-      background: color-mix(in srgb, var(--surface-highlight) 24%, var(--bg-primary));
-      padding: 5px;
-      image-rendering: pixelated;
+      background:
+        radial-gradient(
+          circle at top,
+          color-mix(in srgb, var(--accent-sky) 16%, transparent),
+          transparent 60%
+        ),
+        color-mix(in srgb, var(--surface-highlight) 24%, var(--bg-primary));
+      padding: 6px;
+      image-rendering: auto;
     }
   }
 
@@ -130,8 +151,12 @@
   .sidebar-toggle-header {
     padding: 0;
     background:
-      linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-        color-mix(in srgb, var(--surface-layer) 84%, var(--bg-secondary));
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-highlight) 44%, transparent),
+        transparent 72%
+      ),
+      color-mix(in srgb, var(--surface-layer) 88%, var(--bg-secondary));
     border: 1px solid var(--border-primary);
     border-radius: var(--surface-radius-sm, #{$radius-md});
     color: var(--accent-sky);
@@ -150,7 +175,13 @@
     box-shadow: var(--shadow);
 
     &:hover {
-      background: rgba(57, 213, 255, 0.08);
+      background:
+        linear-gradient(
+          180deg,
+          color-mix(in srgb, var(--accent-sky) 16%, transparent),
+          color-mix(in srgb, var(--accent-earth) 6%, transparent)
+        ),
+        color-mix(in srgb, var(--surface-layer) 92%, var(--bg-secondary));
       color: var(--primary-color);
       box-shadow: var(--shadow-lg);
     }
@@ -174,7 +205,7 @@
     overflow: hidden;
     white-space: nowrap;
     flex-shrink: 0;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.02em;
 
     .brand-full {
       display: inline-block;
@@ -262,9 +293,15 @@
     border: 1px solid var(--border-primary);
     border-radius: var(--surface-radius-sm, #{$radius-md});
     background:
-      linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-        color-mix(in srgb, var(--surface-layer) 84%, var(--bg-primary));
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-highlight) 40%, transparent),
+        transparent 72%
+      ),
+      color-mix(in srgb, var(--surface-layer) 88%, var(--bg-primary));
     box-shadow: var(--shadow);
+    backdrop-filter: var(--glass-backdrop-filter);
+    -webkit-backdrop-filter: var(--glass-backdrop-filter);
 
     .language-menu,
     .theme-menu {
@@ -306,12 +343,12 @@
         transform $transition-fast;
 
       &:hover {
-        background: rgba(57, 213, 255, 0.08);
+        background: color-mix(in srgb, var(--surface-highlight) 68%, transparent);
       }
 
       &:focus-visible {
         outline: none;
-        background: rgba(57, 213, 255, 0.08);
+        background: color-mix(in srgb, var(--surface-highlight) 68%, transparent);
         box-shadow: var(--shadow);
       }
 
@@ -353,7 +390,7 @@
         transform $transition-fast;
 
       &:hover {
-        background: rgba(57, 213, 255, 0.08);
+        background: color-mix(in srgb, var(--surface-highlight) 72%, transparent);
       }
 
       &:focus-visible {
@@ -362,19 +399,21 @@
       }
 
       &.active {
-        border-color: rgba($primary-color, 0.34);
-        background: rgba(117, 255, 122, 0.1);
+        border-color: color-mix(in srgb, var(--primary-color) 46%, var(--border-primary));
+        background: color-mix(in srgb, var(--primary-color) 10%, transparent);
       }
     }
 
     .theme-card-preview {
       width: 78px;
       height: 56px;
-      border-radius: 16px 12px 18px 14px;
+      border-radius: 14px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+        0 8px 18px rgba(15, 23, 42, 0.12);
     }
 
     .theme-card-header {
@@ -411,14 +450,14 @@
       }
     }
 
-      .theme-card-label {
-        font-size: 11px;
-        color: var(--text-primary);
-        font-weight: 600;
-        white-space: nowrap;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
+    .theme-card-label {
+      font-size: 11px;
+      color: var(--text-primary);
+      font-weight: 600;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
 
     svg {
       display: block;
@@ -468,9 +507,20 @@
     border: 1px solid var(--border-primary);
     border-radius: var(--surface-radius-sm, #{$radius-md});
     background:
-      linear-gradient(180deg, rgba(74, 123, 255, 0.06), transparent 72%),
-        color-mix(in srgb, var(--surface-layer) 84%, var(--bg-primary));
+      radial-gradient(
+        circle at top left,
+        color-mix(in srgb, var(--accent-earth) 10%, transparent),
+        transparent 36%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-highlight) 34%, transparent),
+        transparent 72%
+      ),
+      color-mix(in srgb, var(--surface-layer) 88%, var(--bg-primary));
     box-shadow: var(--shadow);
+    backdrop-filter: var(--glass-backdrop-filter);
+    -webkit-backdrop-filter: var(--glass-backdrop-filter);
 
     .status-badge {
       flex-shrink: 0;
@@ -551,7 +601,7 @@
   width: 236px;
   background:
     linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-      color-mix(in srgb, var(--surface-raised) 86%, var(--bg-primary));
+    color-mix(in srgb, var(--surface-raised) 86%, var(--bg-primary));
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius, #{$radius-lg});
   padding: $spacing-md;
@@ -613,7 +663,7 @@
       border-radius: var(--surface-radius-sm, #{$radius-md});
       background:
         linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-          color-mix(in srgb, var(--surface-layer) 78%, var(--bg-secondary));
+        color-mix(in srgb, var(--surface-layer) 78%, var(--bg-secondary));
       box-shadow:
         inset 0 0 0 1px rgba(57, 213, 255, 0.12),
         0 0 14px rgba(57, 213, 255, 0.05);
@@ -642,21 +692,23 @@
       .nav-icon {
         background:
           linear-gradient(180deg, rgba(57, 213, 255, 0.08), transparent 72%),
-            color-mix(in srgb, var(--surface-highlight) 32%, var(--bg-primary));
-        box-shadow: inset 0 0 0 1px rgba(57, 213, 255, 0.18), 0 0 16px rgba(57, 213, 255, 0.06);
+          color-mix(in srgb, var(--surface-highlight) 32%, var(--bg-primary));
+        box-shadow:
+          inset 0 0 0 1px rgba(57, 213, 255, 0.18),
+          0 0 16px rgba(57, 213, 255, 0.06);
       }
     }
 
     &.active {
-      background:
-        linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04));
+      background: linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04));
       color: var(--primary-color);
       border-color: rgba($primary-color, 0.28);
 
       .nav-icon {
-        background:
-          linear-gradient(180deg, rgba(117, 255, 122, 0.12), rgba(57, 213, 255, 0.04));
-        box-shadow: inset 0 0 0 1px rgba($primary-color, 0.18), 0 0 18px rgba($primary-color, 0.08);
+        background: linear-gradient(180deg, rgba(117, 255, 122, 0.12), rgba(57, 213, 255, 0.04));
+        box-shadow:
+          inset 0 0 0 1px rgba($primary-color, 0.18),
+          0 0 18px rgba($primary-color, 0.08);
       }
     }
   }
@@ -696,7 +748,7 @@
   height: 100%;
   background:
     linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
-      color-mix(in srgb, var(--surface-raised) 88%, var(--bg-primary));
+    color-mix(in srgb, var(--surface-raised) 88%, var(--bg-primary));
   border: 1px solid var(--border-primary);
   border-radius: var(--surface-radius, #{$radius-lg});
   box-shadow: var(--shadow);

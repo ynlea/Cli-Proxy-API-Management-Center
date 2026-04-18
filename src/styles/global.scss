@@ -9,6 +9,8 @@
 @use './components.scss';
 @use './layout.scss';
 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap');
+
 html,
 body {
   min-height: 100%;
@@ -16,14 +18,21 @@ body {
 
 body {
   background:
-    radial-gradient(circle at top, rgba(57, 213, 255, 0.08), transparent 24%),
-    linear-gradient(180deg, #0b0f1f, var(--bg-secondary) 18%, #02040d 100%);
+    radial-gradient(circle at 10% 10%, var(--page-spot-1), transparent 0 24%),
+    radial-gradient(circle at 90% 16%, var(--page-spot-2), transparent 0 20%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-primary) 96%, white), var(--bg-secondary));
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-sans);
-  line-height: 1.45;
+  line-height: 1.5;
   position: relative;
   letter-spacing: 0.01em;
-  transition: background-color $transition-normal, color $transition-normal;
+  font-feature-settings:
+    'ss03' 1,
+    'tnum' 1;
+  transition:
+    background $transition-normal,
+    color $transition-normal;
 }
 
 html.modal-open,
@@ -52,29 +61,26 @@ body.modal-open .content {
 #root::before {
   z-index: -2;
   background:
-    radial-gradient(circle at 12% 18%, rgba(255, 79, 216, 0.14), transparent 0 22%),
-    radial-gradient(circle at 86% 14%, rgba(57, 213, 255, 0.14), transparent 0 18%),
-    radial-gradient(circle at 24% 88%, rgba(117, 255, 122, 0.12), transparent 0 20%),
-    linear-gradient(180deg, rgba(74, 123, 255, 0.08), transparent 42%);
+    radial-gradient(circle at 14% 18%, var(--page-spot-1), transparent 0 24%),
+    radial-gradient(circle at 84% 16%, var(--page-spot-2), transparent 0 18%),
+    radial-gradient(circle at 28% 88%, var(--page-spot-3), transparent 0 22%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-sky) 8%, transparent), transparent 44%);
 }
 
 #root::after {
   z-index: -1;
-  opacity: 0.86;
+  opacity: 0.72;
   background:
+    linear-gradient(180deg, color-mix(in srgb, white 32%, transparent), transparent 18%),
     repeating-linear-gradient(
       0deg,
       rgba(255, 255, 255, calc(var(--scanline-opacity) * 0.35)) 0 1px,
       transparent 1px 4px
     ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(57, 213, 255, calc(var(--grid-opacity) * 0.22)) 0 1px,
-      transparent 1px 32px
-    ),
+    repeating-linear-gradient(90deg, var(--grid-color) 0 1px, transparent 1px 32px),
     repeating-linear-gradient(
       0deg,
-      rgba(57, 213, 255, calc(var(--grid-opacity) * 0.18)) 0 1px,
+      color-mix(in srgb, var(--grid-color) 82%, transparent) 0 1px,
       transparent 1px 32px
     );
 }
@@ -82,7 +88,9 @@ body.modal-open .content {
 a {
   color: var(--accent-sky);
   text-decoration-color: color-mix(in srgb, var(--accent-sky) 35%, transparent);
-  transition: color $transition-fast, text-decoration-color $transition-fast;
+  transition:
+    color $transition-fast,
+    text-decoration-color $transition-fast;
 
   &:hover {
     color: var(--primary-color);
@@ -104,11 +112,11 @@ h4,
 h5,
 h6 {
   font-family: var(--font-display);
-  letter-spacing: 0.03em;
+  letter-spacing: -0.02em;
 }
 
 ::selection {
-  background: rgba(57, 213, 255, 0.3);
+  background: color-mix(in srgb, var(--primary-color) 24%, transparent);
   color: var(--text-primary);
 }
 
@@ -119,17 +127,17 @@ h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(6, 10, 23, 0.72);
+  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(57, 213, 255, 0.22);
-  border-radius: 0;
-  border: 2px solid rgba(6, 10, 23, 0.72);
+  background: color-mix(in srgb, var(--accent-sky) 18%, var(--text-quaternary));
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--bg-secondary) 88%, transparent);
   background-clip: padding-box;
 
   &:hover {
-    background: rgba(57, 213, 255, 0.42);
+    background: color-mix(in srgb, var(--accent-sky) 32%, var(--text-tertiary));
   }
 }
 

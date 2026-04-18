@@ -21,7 +21,12 @@
   background:
     radial-gradient(
       circle at top right,
-      color-mix(in srgb, var(--primary-color) 12%, transparent),
+      color-mix(in srgb, var(--accent-earth) 10%, transparent),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      color-mix(in srgb, var(--accent-sky) 12%, transparent),
       transparent 34%
     ),
     linear-gradient(
@@ -39,11 +44,11 @@
     height: min(220px, 42vw);
     background: radial-gradient(
       circle,
-      color-mix(in srgb, var(--primary-color) 10%, transparent),
+      color-mix(in srgb, var(--accent-sky) 10%, transparent),
       transparent 70%
     );
     pointer-events: none;
-    opacity: 0.62;
+    opacity: 0.72;
   }
 
   &::after {
@@ -53,12 +58,12 @@
     background:
       linear-gradient(
           90deg,
-          rgba(255, 93, 135, 0.28),
-          rgba(57, 213, 255, 0.36),
-          rgba(117, 255, 122, 0.24)
+          color-mix(in srgb, var(--accent-earth) 48%, transparent),
+          color-mix(in srgb, var(--accent-sky) 56%, transparent),
+          color-mix(in srgb, var(--accent-leaf) 44%, transparent)
         )
         top / 100% 2px no-repeat,
-      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+      linear-gradient(180deg, color-mix(in srgb, white 16%, transparent), transparent 18%);
     pointer-events: none;
   }
 

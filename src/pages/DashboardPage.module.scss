@@ -22,15 +22,19 @@
 
 .orb1 {
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.06), transparent 38%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-sky) 10%, transparent),
+      transparent 38%
+    ),
     repeating-linear-gradient(
       90deg,
-      rgba(57, 213, 255, 0.08) 0 1px,
+      color-mix(in srgb, var(--grid-color) 52%, transparent) 0 1px,
       transparent 1px 48px
     ),
     repeating-linear-gradient(
       0deg,
-      rgba(57, 213, 255, 0.08) 0 1px,
+      color-mix(in srgb, var(--grid-color) 52%, transparent) 0 1px,
       transparent 1px 48px
     );
   opacity: 0.34;
@@ -40,8 +44,11 @@
   inset: 24px auto auto 58%;
   width: 320px;
   height: 320px;
-  background:
-    radial-gradient(circle, rgba(255, 79, 216, 0.14), transparent 66%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent-earth) 18%, transparent),
+    transparent 66%
+  );
   filter: blur(10px);
   animation: pulse 6s ease-in-out infinite;
 }
@@ -58,7 +65,12 @@
   background:
     radial-gradient(
       circle at top right,
-      color-mix(in srgb, var(--primary-color) 10%, transparent),
+      color-mix(in srgb, var(--accent-earth) 10%, transparent),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      color-mix(in srgb, var(--accent-sky) 12%, transparent),
       transparent 34%
     ),
     linear-gradient(
@@ -75,8 +87,11 @@
     inset: 0 auto auto 0;
     width: min(220px, 42vw);
     height: min(220px, 42vw);
-    background:
-      radial-gradient(circle, color-mix(in srgb, var(--primary-color) 10%, transparent), transparent 70%);
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent-sky) 10%, transparent),
+      transparent 70%
+    );
     pointer-events: none;
     opacity: 0.7;
   }
@@ -88,12 +103,12 @@
     background:
       linear-gradient(
           90deg,
-          rgba(255, 93, 135, 0.26),
-          rgba(57, 213, 255, 0.34),
-          rgba(117, 255, 122, 0.24)
+          color-mix(in srgb, var(--accent-earth) 48%, transparent),
+          color-mix(in srgb, var(--accent-sky) 56%, transparent),
+          color-mix(in srgb, var(--accent-leaf) 44%, transparent)
         )
         top / 100% 2px no-repeat,
-      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 4px);
+      linear-gradient(180deg, color-mix(in srgb, white 14%, transparent), transparent 18%);
     pointer-events: none;
   }
 
@@ -129,11 +144,15 @@
   border-radius: 8px;
   border: 1px solid color-mix(in srgb, var(--primary-color) 24%, var(--border-color));
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.05), transparent 72%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-highlight) 58%, transparent),
+      transparent 72%
+    ),
     color-mix(in srgb, var(--bg-primary) 90%, transparent);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--text-secondary);
 
   &::after {
@@ -186,7 +205,11 @@
   border: 1px solid color-mix(in srgb, var(--border-color) 82%, transparent);
   border-radius: 8px;
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-highlight) 52%, transparent),
+      transparent 72%
+    ),
     color-mix(in srgb, var(--bg-primary) 90%, transparent);
 }
 
@@ -271,7 +294,11 @@
   border-radius: 12px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
   background:
-    linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-highlight) 48%, transparent),
+      transparent 72%
+    ),
     color-mix(in srgb, var(--surface-raised) 94%, var(--bg-primary));
   box-shadow: var(--shadow);
 }
@@ -331,12 +358,11 @@
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        rgba(255, 255, 255, 0.012) 0 1px,
-        transparent 1px 4px
-      );
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.012) 0 1px,
+      transparent 1px 4px
+    );
     pointer-events: none;
   }
 
@@ -508,7 +534,9 @@
   color: var(--accent-sky);
   text-decoration: none;
   letter-spacing: 0.04em;
-  transition: color $transition-fast, box-shadow $transition-fast;
+  transition:
+    color $transition-fast,
+    box-shadow $transition-fast;
 
   &:hover {
     color: var(--primary-color);
