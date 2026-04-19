@@ -33,6 +33,18 @@
   width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
+
+  @include mobile {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 .tabItem {
@@ -74,6 +86,7 @@
   @include mobile {
     flex: 1 0 auto;
     justify-content: center;
+    padding: 8px 12px;
   }
 }
 
@@ -99,6 +112,15 @@
     background:
       linear-gradient(180deg, rgba(117, 255, 122, 0.08), rgba(57, 213, 255, 0.04)),
       color-mix(in srgb, var(--bg-secondary) 92%, transparent);
+  }
+
+  @include mobile {
+    flex: 0 0 min(220px, 72vw);
+    min-width: min(220px, 72vw);
+    min-height: 64px;
+    padding: 12px 14px;
+    gap: 10px;
+    scroll-snap-align: start;
   }
 }
 
@@ -206,4 +228,8 @@
 .cardItem .label {
   font-size: 14px;
   line-height: 1.35;
+
+  @include mobile {
+    font-size: 13px;
+  }
 }

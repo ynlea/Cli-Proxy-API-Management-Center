@@ -64,6 +64,12 @@
     position: relative;
     z-index: 1;
   }
+
+  @include mobile {
+    gap: 14px;
+    padding: 16px;
+    border-radius: 10px;
+  }
 }
 
 .header {
@@ -91,6 +97,15 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+
+  @include mobile {
+    width: 100%;
+
+    :global(.btn.btn-sm) {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 }
 
 .titleRow {
@@ -316,6 +331,7 @@
 
   @include mobile {
     gap: 12px;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -333,6 +349,10 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+
+  @include mobile {
+    gap: 16px;
+  }
 }
 
 .monitorPanel {
@@ -368,6 +388,7 @@
 
   @include mobile {
     gap: 16px;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -413,6 +434,16 @@
   border-radius: 8px;
   padding: 4px;
   border: 1px solid color-mix(in srgb, var(--border-color) 84%, transparent);
+
+  @include mobile {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 .timeButton {
@@ -437,6 +468,11 @@
     border-color: rgba($primary-color, 0.38);
     color: var(--text-primary);
     font-weight: 600;
+  }
+
+  @include mobile {
+    flex: 0 0 auto;
+    padding: 8px 12px;
   }
 }
 

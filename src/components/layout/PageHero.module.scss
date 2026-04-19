@@ -23,6 +23,10 @@
   @media (max-width: 1120px) {
     grid-template-columns: 1fr;
   }
+
+  @include mobile {
+    gap: 14px;
+  }
 }
 
 .headerSingle {
@@ -36,6 +40,11 @@
   gap: 10px;
   min-width: 0;
   max-width: 52rem;
+
+  @include mobile {
+    gap: 8px;
+    max-width: none;
+  }
 }
 
 .eyebrow {
@@ -52,6 +61,11 @@
   line-height: 1;
   letter-spacing: -0.03em;
   text-wrap: balance;
+
+  @include mobile {
+    font-size: clamp(22px, 7vw, 30px);
+    line-height: 1.05;
+  }
 }
 
 .description {
@@ -60,6 +74,11 @@
   color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.65;
+
+  @include mobile {
+    font-size: 13px;
+    line-height: 1.55;
+  }
 }
 
 .meta {
@@ -76,10 +95,18 @@
     max-width: none;
     justify-self: stretch;
   }
+
+  @include mobile {
+    gap: 10px;
+  }
 }
 
 .support {
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  @include mobile {
+    gap: 10px;
+  }
 }

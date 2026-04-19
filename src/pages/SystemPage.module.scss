@@ -1,4 +1,6 @@
+@use '../styles/mixins' as *;
 @use '../styles/pageShell' as pageShell;
+@use '../styles/variables' as *;
 
 .container {
   @include pageShell.pageContainer;
@@ -12,6 +14,10 @@
   @media (max-width: 620px) {
     grid-template-columns: 1fr;
   }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
 }
 
 .heroDescription {
@@ -20,6 +26,11 @@
   gap: 14px;
   max-width: 100%;
   flex-wrap: wrap;
+
+  @include mobile {
+    align-items: flex-start;
+    gap: 12px;
+  }
 }
 
 .heroLogoBadge {
@@ -35,12 +46,23 @@
     color-mix(in srgb, var(--bg-primary) 94%, transparent);
   box-shadow: var(--shadow);
   flex-shrink: 0;
+
+  @include mobile {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+  }
 }
 
 .heroLogo {
   width: 40px;
   height: 40px;
   display: block;
+
+  @include mobile {
+    width: 34px;
+    height: 34px;
+  }
 }
 
 .heroDescriptionText {
@@ -49,6 +71,10 @@
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.02em;
+
+  @include mobile {
+    font-size: clamp(16px, 5vw, 20px);
+  }
 }
 
 .heroMetricCard {
@@ -62,6 +88,11 @@
   background:
     linear-gradient(180deg, rgba(57, 213, 255, 0.04), transparent 72%),
     color-mix(in srgb, var(--bg-primary) 90%, transparent);
+
+  @include mobile {
+    min-height: 0;
+    padding: 12px;
+  }
 }
 
 .heroMetricAction {
@@ -110,6 +141,10 @@
   @media (max-width: 1180px) {
     grid-template-columns: 1fr;
   }
+
+  @include mobile {
+    gap: 16px;
+  }
 }
 
 .mainColumn,
@@ -147,6 +182,14 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
+  @include mobile {
+    justify-content: stretch;
+
+    > * {
+      width: 100%;
+    }
+  }
 }
 
 .infoGrid {
@@ -170,6 +213,12 @@
     .value {
       color: var(--text-primary);
       font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    }
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
     }
   }
 }
@@ -251,6 +300,11 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: $spacing-md;
 
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+  }
+
   .versionItem {
     padding: $spacing-md;
     background:
@@ -277,6 +331,11 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: $spacing-md;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+  }
 }
 
 .linkCard {
@@ -305,6 +364,11 @@
     box-shadow:
       inset 0 0 0 1px rgba($primary-color, 0.08),
       var(--shadow);
+  }
+
+  @include mobile {
+    align-items: flex-start;
+    padding: $spacing-md;
   }
 }
 
@@ -354,25 +418,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
 
-@media (max-width: 768px) {
-  .heroDescription {
-    gap: 12px;
-  }
-
-  .heroLogoBadge {
-    width: 50px;
-    height: 50px;
-    border-radius: 16px;
-  }
-
-  .heroLogo {
-    width: 36px;
-    height: 36px;
-  }
-
-  .heroDescriptionText {
-    font-size: clamp(16px, 5vw, 20px);
+  @include mobile {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
   }
 }

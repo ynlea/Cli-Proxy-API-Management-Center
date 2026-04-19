@@ -1,0 +1,74 @@
+{
+  "id": "mobile-layout-adaptation",
+  "name": "mobile-layout-adaptation",
+  "title": "Adapt mobile layout for admin console",
+  "description": "Improve the React admin shell and key pages for mobile phones by reworking responsive layout, spacing, action density, and small-screen navigation behavior.",
+  "status": "in_progress",
+  "dev_type": "frontend",
+  "scope": "ui",
+  "priority": "P2",
+  "creator": "ynlea",
+  "assignee": "ynlea",
+  "createdAt": "2026-04-19",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "current_phase": 0,
+  "next_action": [
+    {
+      "phase": 1,
+      "action": "implement"
+    },
+    {
+      "phase": 2,
+      "action": "check"
+    },
+    {
+      "phase": 3,
+      "action": "finish"
+    },
+    {
+      "phase": 4,
+      "action": "create-pr"
+    }
+  ],
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [
+    {
+      "name": "Tighten mobile shell and header density",
+      "status": "in_progress"
+    },
+    {
+      "name": "Adapt shared page hero and segmented tabs for phones",
+      "status": "pending"
+    },
+    {
+      "name": "Tune priority pages for small-screen readability",
+      "status": "pending"
+    }
+  ],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "src/components/layout/MainLayout.tsx",
+    "src/styles/layout.scss",
+    "src/components/layout/PageHero.tsx",
+    "src/components/layout/PageHero.module.scss",
+    "src/components/ui/SegmentedTabs.tsx",
+    "src/components/ui/SegmentedTabs.module.scss",
+    "src/pages/DashboardPage.tsx",
+    "src/pages/DashboardPage.module.scss",
+    "src/pages/MonitorPage.tsx",
+    "src/pages/MonitorPage.module.scss",
+    "src/pages/AiProvidersPage.tsx",
+    "src/pages/AiProvidersPage.module.scss",
+    "src/pages/QuotaPage.tsx",
+    "src/pages/QuotaPage.module.scss",
+    "src/pages/SystemPage.tsx",
+    "src/pages/SystemPage.module.scss"
+  ],
+  "notes": "Focus on small-screen hierarchy, action density, spacing, and responsive restructuring before visual polish.",
+  "meta": {}
+}

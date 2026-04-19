@@ -28,6 +28,10 @@
   @include mobile {
     width: 100%;
     justify-content: stretch;
+
+    > * {
+      flex: 1 1 auto;
+    }
   }
 }
 
@@ -36,6 +40,11 @@
   align-items: center;
   gap: $spacing-sm;
   line-height: 24px;
+
+  @include mobile {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
 }
 
 .countBadge {
@@ -103,6 +112,10 @@
     outline: none;
     border-color: var(--primary-color);
   }
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 .statsInfo {
@@ -118,6 +131,14 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
+
+  @include mobile {
+    width: 100%;
+    height: auto;
+    min-height: 38px;
+    white-space: normal;
+    line-height: 1.4;
+  }
 }
 
 .antigravityGrid,
@@ -144,6 +165,12 @@
   flex-wrap: wrap;
   align-items: flex-end;
   margin-bottom: $spacing-md;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $spacing-sm;
+  }
 }
 
 .antigravityControl,
@@ -155,11 +182,19 @@
   flex-direction: column;
   gap: 4px;
 
+  @include mobile {
+    width: 100%;
+  }
+
   label {
     font-size: 12px;
     color: var(--text-secondary);
     font-weight: 500;
     white-space: nowrap;
+
+    @include mobile {
+      white-space: normal;
+    }
   }
 }
 

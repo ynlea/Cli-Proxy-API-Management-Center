@@ -10,6 +10,10 @@
   @if $minHeight {
     min-height: 100%;
   }
+
+  @include mobile {
+    gap: 16px;
+  }
 }
 
 @mixin framedSurface($padding: clamp(18px, 3vw, 24px), $radius: 12px) {
@@ -24,6 +28,11 @@
   > * {
     position: relative;
     z-index: 1;
+  }
+
+  @include mobile {
+    padding: 16px;
+    border-radius: 10px;
   }
 }
 

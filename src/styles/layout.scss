@@ -97,8 +97,9 @@
     flex: 1 1 auto;
 
     @media (max-width: $breakpoint-mobile) {
-      grid-template-columns: 1fr;
-      gap: $spacing-sm;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
   }
 
@@ -404,7 +405,14 @@
 
     @media (max-width: $breakpoint-mobile) {
       gap: 2px;
+      padding: 4px;
       justify-self: end;
+
+      .btn.btn-sm {
+        min-width: 36px;
+        min-height: 36px;
+        padding: 8px;
+      }
 
       .language-menu-popover {
         right: auto;
@@ -502,15 +510,38 @@
   @media (max-width: $breakpoint-mobile) {
     .header-status-rail {
       min-width: 0;
+      width: 100%;
     }
 
     .header-status-chip {
       width: 100%;
       min-width: 0;
+      min-height: 0;
+      padding: 8px 10px;
+      gap: 8px;
+      border-radius: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .header-status-copy {
+      width: 100%;
+      gap: 2px;
     }
 
     .header-status-value {
       max-width: none;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .header-status-chip {
+      .status-badge {
+        align-self: flex-start;
+      }
     }
   }
 }
@@ -536,7 +567,7 @@
     overflow: visible;
     gap: 0;
     grid-template-columns: 1fr;
-    padding: calc(var(--header-height) + 28px) 12px 12px;
+    padding: calc(var(--header-height) + 18px) 10px max(10px, env(safe-area-inset-bottom));
 
     @supports (min-height: 100dvh) {
       min-height: calc(100dvh - var(--header-height));
@@ -557,7 +588,7 @@
   @media (max-width: $breakpoint-mobile) {
     display: block;
     position: fixed;
-    inset: calc(var(--header-height) + 24px) 0 0;
+    inset: calc(var(--header-height) + 16px) 0 0;
     z-index: $z-dropdown - 1;
 
     &.visible {
@@ -677,15 +708,15 @@
   @media (max-width: $breakpoint-mobile) {
     position: fixed;
     z-index: $z-dropdown;
-    left: 12px;
-    top: calc(var(--header-height) + 24px);
-    bottom: 12px;
-    width: min(280px, calc(100vw - 24px));
+    left: 10px;
+    top: calc(var(--header-height) + 16px);
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: min(286px, calc(100vw - 20px));
     transform: translateX(calc(-100% - 20px));
     box-shadow: var(--shadow-lg);
 
     &.collapsed {
-      width: min(280px, calc(100vw - 24px));
+      width: min(286px, calc(100vw - 20px));
       padding: $spacing-md;
 
       .nav-item {
@@ -725,6 +756,7 @@
   @media (max-width: $breakpoint-mobile) {
     min-height: calc(100vh - var(--header-height) - 48px);
     min-height: calc(100dvh - var(--header-height) - 48px);
+    border-radius: 10px;
   }
 }
 
@@ -818,8 +850,8 @@
   }
 
   @media (max-width: $breakpoint-mobile) {
-    padding: 16px;
-    gap: 18px;
+    padding: 14px;
+    gap: 16px;
   }
 }
 

@@ -1,0 +1,6 @@
+{"file": ".trellis/workflow.md", "reason": "Project workflow and conventions"}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend development guide"}
+{"file": "src/components/layout/MainLayout.tsx", "reason": "Shared shell entry for header, sidebar, and content layout"}
+{"file": "src/components/ui/SegmentedTabs.module.scss", "reason": "Shared segmented tab layout for dense mobile controls"}
+{"file": "src/styles/layout.scss", "reason": "Shared responsive shell styles and mobile breakpoint behavior"}
+{"file": "src/components/layout/PageHero.module.scss", "reason": "Shared page hero spacing and responsive layout"}
