@@ -1,4 +1,6 @@
-export const AUTH_STAGE_MEDIA_URL = './media/login-loop.mp4';
+import authStageMediaUrl from '@/assets/login-loop.mp4';
+
+export const AUTH_STAGE_MEDIA_URL = authStageMediaUrl;
 
 export const AUTH_STAGE_MEDIA_MIME_TYPE = 'video/mp4';
 
@@ -42,6 +44,11 @@ export function prewarmAuthStageMedia() {
 
   const authStageBaseUrl = new URL(window.location.href);
   const authStageMediaUrl = new URL(AUTH_STAGE_MEDIA_URL, authStageBaseUrl);
+  if (authStageMediaUrl.protocol === 'data:') {
+    authStageMediaWarmed = true;
+    return;
+  }
+
   const isCrossOriginMedia = authStageMediaUrl.origin !== authStageBaseUrl.origin;
 
   if (isCrossOriginMedia) {
