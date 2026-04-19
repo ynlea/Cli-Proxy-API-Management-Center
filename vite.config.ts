@@ -1,9 +1,11 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import path from 'path';
 import { execSync } from 'child_process';
 import fs from 'fs';
+
+const MANAGEMENT_HTML_NAME = 'management.html';
 
 // Get version from environment, git tag, or package.json
 function getVersion(): string {
@@ -35,13 +37,41 @@ function getVersion(): string {
   return 'dev';
 }
 
+function emitManagementHtml(): Plugin {
+  let outDir = 'dist';
+
+  return {
+    name: 'emit-management-html',
+    apply: 'build',
+    configResolved(config) {
+      outDir = config.build.outDir;
+    },
+    closeBundle() {
+      const distDir = path.resolve(__dirname, outDir);
+      const indexHtmlPath = path.join(distDir, 'index.html');
+      const managementHtmlPath = path.join(distDir, MANAGEMENT_HTML_NAME);
+
+      if (!fs.existsSync(indexHtmlPath)) {
+        return;
+      }
+
+      if (fs.existsSync(managementHtmlPath)) {
+        fs.rmSync(managementHtmlPath);
+      }
+
+      fs.renameSync(indexHtmlPath, managementHtmlPath);
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     viteSingleFile({
       removeViteModuleLoader: true
-    })
+    }),
+    emitManagementHtml()
   ],
   define: {
     __APP_VERSION__: JSON.stringify(getVersion())

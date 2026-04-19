@@ -34,10 +34,7 @@ jobs:
           VERSION: ${{ github.ref_name }}
 
       - name: Prepare release assets
-        run: |
-          cd dist
-          mv index.html management.html
-          ls -lh management.html
+        run: ls -lh dist/management.html
 
       - name: Generate release notes
         run: |
